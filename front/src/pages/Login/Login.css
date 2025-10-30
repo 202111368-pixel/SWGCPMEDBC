@@ -1,5 +1,5 @@
+/* Fondo animado */
 .login-background {
-  background-image: url('../assets/img1.jpg'); 
   background-size: cover;
   background-position: center;
   height: 100vh;
@@ -10,7 +10,7 @@
   animation: backgroundMove 12s ease-in-out infinite alternate;
 }
 
-/* Movimiento sutil del fondo (efecto IA) */
+/* Movimiento sutil del fondo */
 @keyframes backgroundMove {
   0% {
     background-position: center top;

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
+import backgroundImage from '../../assets/img1.jpg'; // ✅ Importamos la imagen correctamente
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -22,7 +23,10 @@ function Login() {
   };
 
   return (
-    <div className="login-background">
+    <div
+      className="login-background"
+      style={{ backgroundImage: `url(${backgroundImage})` }} // ✅ Usa la imagen importada
+    >
       <div className="login-card">
         <h2>Iniciar Sesión</h2>
         <form onSubmit={handleLogin}>
