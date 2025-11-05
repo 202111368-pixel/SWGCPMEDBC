@@ -46,7 +46,6 @@ exports.loginUser = async (req, res) => {
   });
 };
 
-// (Opcional) Listar usuarios para probar
 exports.getUsers = (req, res) => {
   res.json(usuarios);
 };
