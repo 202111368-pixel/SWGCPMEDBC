@@ -1,5 +1,350 @@
-.page-container {
+/* ===========================================
+   SECCIÓN HERO (FONDO PRINCIPAL)
+   =========================================== */
+.hero {
+  width: 100%;
+  height: 90vh;
+  background-image: url('../../assets/melamina1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  animation: cambiarFondo 20s infinite alternate ease-in-out;
+}
+
+@keyframes cambiarFondo {
+  0% {
+    background-image: url('../../assets/melamina1.jpg');
+  }
+  50% {
+    background-image: url('../../assets/melamina2.jpg');
+  }
+  100% {
+    background-image: url('../../assets/melamina3.jpg');
+  }
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  padding: 80px 20px;
-  font-family: Arial, sans-serif;
+  color: white;
+  padding: 0 20px;
+}
+
+.overlay h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  font-weight: 400;
+}
+
+.overlay h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.overlay p {
+  max-width: 700px;
+  margin-bottom: 30px;
+  font-size: 1.2rem;
+}
+
+.overlay button {
+  background-color: #b97a3b;
+  border: none;
+  color: white;
+  padding: 12px 28px;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.overlay button:hover {
+  background-color: #a66a2f;
+}
+
+/* ===========================================
+   SECCIÓN SOBRE NOSOTROS
+   =========================================== */
+.about-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  padding: 80px 10%;
+  flex-wrap: wrap;
+  background-color: #fff;
+}
+
+.about-image {
+  position: relative;
+  flex: 1;
+  max-width: 420px;
+}
+
+.about-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+  display: block;
+}
+
+.experience-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(185, 122, 59, 0.85);
+  color: #fff;
+  text-align: center;
+  padding: 30px 60px;
+  border-radius: 10px;
+  animation: pulse 2s infinite;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.experience-overlay h2 {
+  font-size: 3rem;
+  margin: 0;
+  font-weight: bold;
+}
+
+.experience-overlay p {
+  font-size: 1.2rem;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+@keyframes pulse {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+  50% { transform: translate(-50%, -50%) scale(1.08); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+}
+
+.about-content {
+  flex: 1.2;
+  color: #333;
+}
+
+.about-content h4 {
+  color: #b97a3b;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.about-content h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.about-content p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.stats {
+  display: flex;
+  gap: 50px;
+  margin-bottom: 20px;
+}
+
+.stats h2 {
+  color: #1a1a1a;
+  font-size: 2rem;
+  margin: 0;
+}
+
+.description {
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+button {
+  background-color: #b97a3b;
+  border: none;
+  color: white;
+  padding: 12px 28px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #a66a2f;
+}
+
+
+.clientes-slider {
+  margin: 70px auto;
+  width: 90%;
+  text-align: center;
+}
+
+.clientes-titulo {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 40px;
+  color: #333;
+}
+
+.cliente-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+  margin: 10px;
+}
+
+.cliente-card:hover {
+  transform: scale(1.05);
+}
+
+.cliente-card img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 10px auto;
+}
+
+.cliente-card h3 {
+  margin: 10px 0;
+  font-weight: 600;
+  color: #333;
+}
+
+.estrellas {
+  color: #fbc02d;
+  margin-bottom: 10px;
+}
+
+.cliente-card p {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+
+/* ===========================================
+    Todos los derechos reservados.
+   =========================================== */
+.footer {
+  background-color: #b0763b;
+  color: #fff;
+  padding: 60px 0 30px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 40px;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.footer-column h2.footer-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.footer-column h3 {
+  margin-bottom: 15px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.footer-column p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #f8f8f8;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-column ul li {
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-column ul li a {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-column ul li a:hover {
+  color: #ffd700;
+}
+
+.footer-socials {
+  margin-top: 15px;
+}
+
+.footer-socials a {
+  display: inline-block;
+  background: #fff;
+  color: #b0763b;
+  margin-right: 10px;
+  padding: 8px;
+  border-radius: 50%;
+  font-size: 14px;
+  transition: 0.3s ease;
+}
+
+.footer-socials a:hover {
+  background: #222;
+  color: #fff;
+}
+
+.footer-button {
+  background-color: #fff;
+  color: #b0763b;
+  border: none;
+  padding: 10px 20px;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: 0.3s;
+}
+
+.footer-button:hover {
+  background-color: #222;
+  color: #fff;
+}
+
+.footer-divider {
+  margin: 30px auto 10px;
+  width: 90%;
+  border: 0;
+  border-top: 1px solid rgba(255,255,255,0.4);
+}
+
+.footer-copy {
+  text-align: center;
+  font-size: 14px;
+  opacity: 0.9;
 }
