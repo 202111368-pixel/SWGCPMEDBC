@@ -44,10 +44,8 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* 🔹 Página principal: Login y Registro */}
         <Route path="/" element={<Login />} />
 
-        {/* 🔹 Panel principal con Sidebar */}
         <Route
           path="/admin/*"
           element={

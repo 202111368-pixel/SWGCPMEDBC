@@ -23,4 +23,4 @@ const PORT = 5000;
 app.listen(PORT, () => console.log(`🚀 Servidor corriendo en el puerto ${PORT}`));
 //para postman primero 
 //http://localhost:5000/api/users/register 
-//y luego el login  ----   //http://localhost:5000/api/users/login
+//y luego el login  ----   //http://localhost:5000/api/users/login(no tocar aun no se confirma)

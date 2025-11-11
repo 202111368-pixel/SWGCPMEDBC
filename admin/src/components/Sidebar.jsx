@@ -16,111 +16,119 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
-        <h2>ADMIN</h2>
+        <h2>correo</h2>  {/* ahi tiene que colcoar el correo segun lo que ingreso al login */}
       </div>
 
       <ul className="sidebar-menu">
+        {/* ALMACÉN */}
         <li>
           <button onClick={() => toggleMenu('almacen')}>
             <FaWarehouse /> Almacén
           </button>
           {activeMenu === 'almacen' && (
             <ul className="submenu">
-              <li><Link to="#">Categoría</Link></li>
-              <li><Link to="#">Presentación</Link></li>
-              <li><Link to="#">Marca</Link></li>
-              <li><Link to="#">Producto</Link></li>
-              <li><Link to="#">Perecederos</Link></li>
+              <li><Link to="/admin/Almacen/categoria">Categoría</Link></li>
+              <li><Link to="/admin/almacen/presentacion">Presentación</Link></li>
+              <li><Link to="/admin/almacen/marca">Marca</Link></li>
+              <li><Link to="/admin/almacen/producto">Producto</Link></li>
+              <li><Link to="/admin/almacen/perecederos">Perecederos</Link></li>
             </ul>
           )}
         </li>
 
+        {/* COTIZACIONES */}
         <li>
           <button onClick={() => toggleMenu('cotizaciones')}>
             <FaFileInvoice /> Cotizaciones
           </button>
           {activeMenu === 'cotizaciones' && (
             <ul className="submenu">
-              <li><Link to="#">Generar Cotización</Link></li>
-              <li><Link to="#">Ver Cotización</Link></li>
+              <li><Link to="/admin/cotizaciones/generar">Generar Cotización</Link></li>
+              <li><Link to="/admin/cotizaciones/ver">Ver Cotización</Link></li>
             </ul>
           )}
         </li>
 
+        {/* COMPRAS */}
         <li>
           <button onClick={() => toggleMenu('compras')}>
             <FaShoppingCart /> Compras
           </button>
           {activeMenu === 'compras' && (
             <ul className="submenu">
-              <li><Link to="#">Proveedores</Link></li>
-              <li><Link to="#">Realizar Compra</Link></li>
-              <li><Link to="#">Consultar por Fecha</Link></li>
-              <li><Link to="#">Consultar por Mes</Link></li>
-              <li><Link to="#">Historial de Precios</Link></li>
+              <li><Link to="/admin/compras/proveedores">Proveedores</Link></li>
+              <li><Link to="/admin/compras/realizar">Realizar Compra</Link></li>
+              <li><Link to="/admin/compras/fecha">Consultar por Fecha</Link></li>
+              <li><Link to="/admin/compras/mes">Consultar por Mes</Link></li>
+              <li><Link to="/admin/compras/historial-precios">Historial de Precios</Link></li>
             </ul>
           )}
         </li>
 
+        {/* CAJA */}
         <li>
           <button onClick={() => toggleMenu('caja')}>
             <FaCashRegister /> Caja
           </button>
           {activeMenu === 'caja' && (
             <ul className="submenu">
-              <li><Link to="#">Administrar Caja</Link></li>
-              <li><Link to="#">Historial Caja</Link></li>
+              <li><Link to="/admin/caja/administrar">Administrar Caja</Link></li>
+              <li><Link to="/admin/caja/historial">Historial Caja</Link></li>
             </ul>
           )}
         </li>
 
+        {/* VENTAS */}
         <li>
           <button onClick={() => toggleMenu('ventas')}>
             <FaChartLine /> Ventas
           </button>
           {activeMenu === 'ventas' && (
             <ul className="submenu">
-              <li><Link to="#">Clientes</Link></li>
-              <li><Link to="#">Realizar Ventas</Link></li>
-              <li><Link to="#">Consultar del Día</Link></li>
-              <li><Link to="#">Consultar por Fecha</Link></li>
-              <li><Link to="#">Consultar por Mes</Link></li>
+              <li><Link to="/admin/ventas/clientes">Clientes</Link></li>
+              <li><Link to="/admin/ventas/realizar">Realizar Ventas</Link></li>
+              <li><Link to="/admin/ventas/dia">Consultar del Día</Link></li>
+              <li><Link to="/admin/ventas/fecha">Consultar por Fecha</Link></li>
+              <li><Link to="/admin/ventas/mes">Consultar por Mes</Link></li>
             </ul>
           )}
         </li>
 
+        {/* CONFIGURACIÓN */}
         <li>
           <button onClick={() => toggleMenu('config')}>
             <FaCog /> Configuración
           </button>
           {activeMenu === 'config' && (
             <ul className="submenu">
-              <li><Link to="#">Monedas</Link></li>
+              <li><Link to="/admin/configuracion">Configuración</Link></li>
             </ul>
           )}
         </li>
 
+        {/* PRODUCTOS */}
         <li>
           <button onClick={() => toggleMenu('productos')}>
             <FaBoxOpen /> Productos
           </button>
           {activeMenu === 'productos' && (
             <ul className="submenu">
-              <li><Link to="#">Apartar Productos</Link></li>
-              <li><Link to="#">Apartados del Día</Link></li>
-              <li><Link to="#">Apartados por Fecha</Link></li>
-              <li><Link to="#">Apartados por Mes</Link></li>
+              <li><Link to="/admin/productos/apartar">Apartar Productos</Link></li>
+              <li><Link to="/admin/productos/dia">Apartados del Día</Link></li>
+              <li><Link to="/admin/productos/fecha">Apartados por Fecha</Link></li>
+              <li><Link to="/admin/productos/mes">Apartados por Mes</Link></li>
             </ul>
           )}
         </li>
 
+        {/* INVENTARIO */}
         <li>
           <button onClick={() => toggleMenu('inventario')}>
             <FaBoxes /> Inventario
           </button>
           {activeMenu === 'inventario' && (
             <ul className="submenu">
-              <li><Link to="#">Abrir Nuevo Inventario</Link></li>
+              <li><Link to="/admin/inventario/nuevo">Abrir Nuevo Inventario</Link></li>
             </ul>
           )}
         </li>
