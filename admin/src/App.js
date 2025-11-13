@@ -7,10 +7,8 @@ import Login from "./pages/Login";
 
 // Almacén
 import Categoria from './pages/Almacen/Categoria';
-import Presentacion from './pages/Almacen/Presentacion';
 import Marca from './pages/Almacen/Marca';
 import Producto from './pages/Almacen/Producto';
-import Perecederos from './pages/Almacen/Perecederos';
 
 // Cotizaciones
 import GenerarCotizacion from './pages/Cotizaciones/GenerarCotizacion';
@@ -55,10 +53,8 @@ const App = () => {
                 <Routes>
                   {/* Almacén */}
                   <Route path="almacen/categoria" element={<Categoria />} />
-                  <Route path="almacen/presentacion" element={<Presentacion />} />
                   <Route path="almacen/marca" element={<Marca />} />
                   <Route path="almacen/producto" element={<Producto />} />
-                  <Route path="almacen/perecederos" element={<Perecederos />} />
 
                   {/* Cotizaciones */}
                   <Route path="cotizaciones/generar" element={<GenerarCotizacion />} />

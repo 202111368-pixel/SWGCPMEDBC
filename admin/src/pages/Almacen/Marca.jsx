@@ -278,7 +278,7 @@ const Categoria = () => {
     <div className="categoria-page">
       <div className="categoria-content">
         <div className="categoria-header">
-          <h2>Categoría de Categoria</h2>
+          <h2>Marca</h2>
           <div className="header-buttons">
             <button className="btn-agregar" onClick={handleAgregar}>
               <FaPlus /> Agregar Nueva

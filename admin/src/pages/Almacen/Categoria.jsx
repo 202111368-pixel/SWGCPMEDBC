@@ -92,7 +92,7 @@ const Categoria = () => {
   };
 
   const handleEliminar = (id) => {
-    if (window.confirm("¿Seguro que deseas eliminar este proveedor?")) {
+    if (window.confirm("¿Seguro que deseas eliminar este categoria?")) {
       setCategorias(categorias.filter((cat) => cat.id !== id));
     }
   };

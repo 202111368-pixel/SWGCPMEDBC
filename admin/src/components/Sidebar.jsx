@@ -28,10 +28,8 @@ const Sidebar = () => {
           {activeMenu === 'almacen' && (
             <ul className="submenu">
               <li><Link to="/admin/Almacen/categoria">Categoría</Link></li>
-              <li><Link to="/admin/almacen/presentacion">Presentación</Link></li>
               <li><Link to="/admin/almacen/marca">Marca</Link></li>
               <li><Link to="/admin/almacen/producto">Producto</Link></li>
-              <li><Link to="/admin/almacen/perecederos">Perecederos</Link></li>
             </ul>
           )}
         </li>
