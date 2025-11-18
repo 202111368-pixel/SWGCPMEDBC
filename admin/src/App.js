@@ -17,9 +17,6 @@ import VerCotizacion from './pages/Cotizaciones/VerCotizacion';
 // Compras
 import Proveedores from './pages/Compras/Proveedores';
 import RealizarCompra from './pages/Compras/RealizarCompra';
-import ComprasFecha from './pages/Compras/ComprasFecha';
-import ComprasMes from './pages/Compras/ComprasMes';
-import HistorialPrecios from './pages/Compras/HistorialPrecios';
 
 // Caja
 import AdministrarCaja from './pages/Caja/AdministrarCaja';
@@ -63,9 +60,6 @@ const App = () => {
                   {/* Compras */}
                   <Route path="compras/proveedores" element={<Proveedores />} />
                   <Route path="compras/realizar" element={<RealizarCompra />} />
-                  <Route path="compras/fecha" element={<ComprasFecha />} />
-                  <Route path="compras/mes" element={<ComprasMes />} />
-                  <Route path="compras/historial-precios" element={<HistorialPrecios />} />
 
                   {/* Caja */}
                   <Route path="caja/administrar" element={<AdministrarCaja />} />

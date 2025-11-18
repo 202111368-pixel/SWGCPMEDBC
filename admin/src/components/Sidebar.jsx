@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   FaWarehouse, FaFileInvoice, FaShoppingCart, FaCashRegister,
@@ -8,6 +8,16 @@ import '../styles/Sidebar.css';
 
 const Sidebar = () => {
   const [activeMenu, setActiveMenu] = useState(null);
+  const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      const parsed = JSON.parse(userData);
+      setEmail(parsed.email || "correo@no-encontrado.com");  {/* CORREGIR EL CORREO QUE DEJE INGRESA DESDE LOGIN 
+                                                              CON EL CORREO O CON EL CORREO DE LA URP */}
+    }
+  }, []);
 
   const toggleMenu = (menu) => {
     setActiveMenu(activeMenu === menu ? null : menu);
@@ -16,10 +26,12 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
-        <h2>correo</h2>  {/* ahi tiene que colcoar el correo segun lo que ingreso al login */}
+        {/* AQUÍ MUESTRA EL CORREO */}
+        <h2>{email}</h2>
       </div>
 
       <ul className="sidebar-menu">
+
         {/* ALMACÉN */}
         <li>
           <button onClick={() => toggleMenu('almacen')}>
@@ -56,9 +68,6 @@ const Sidebar = () => {
             <ul className="submenu">
               <li><Link to="/admin/compras/proveedores">Proveedores</Link></li>
               <li><Link to="/admin/compras/realizar">Realizar Compra</Link></li>
-              <li><Link to="/admin/compras/fecha">Consultar por Fecha</Link></li>
-              <li><Link to="/admin/compras/mes">Consultar por Mes</Link></li>
-              <li><Link to="/admin/compras/historial-precios">Historial de Precios</Link></li>
             </ul>
           )}
         </li>
@@ -92,7 +101,7 @@ const Sidebar = () => {
           )}
         </li>
 
-        {/* CONFIGURACIÓN */}
+        {/* CONFIG */}
         <li>
           <button onClick={() => toggleMenu('config')}>
             <FaCog /> Configuración
@@ -130,6 +139,7 @@ const Sidebar = () => {
             </ul>
           )}
         </li>
+
       </ul>
     </div>
   );

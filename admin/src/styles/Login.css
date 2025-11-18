@@ -1,62 +1,100 @@
-.login-container {
+.login-wrapper {
+  display: flex;
+  height: 100vh;
+}
+
+.login-left {
+  width: 50%;
+  background: #0a1a33; 
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: linear-gradient(135deg, #ff9966, #ff5e62);
+  overflow: hidden;
+}
+
+.svg-figures {
+  width: 100%;
+  height: 100%;
+}
+
+.fig {
+  animation: float 3s ease-in-out infinite;
+}
+
+.fig-orange { animation-delay: 0s; }
+.fig-purple { animation-delay: 0.3s; }
+.fig-black  { animation-delay: 0.6s; }
+.fig-yellow { animation-delay: 0.9s; }
+
+@keyframes float {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+.login-right {
+  width: 50%;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .login-box {
-  background-color: #fff;
-  padding: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  width: 320px;
-  text-align: center;
+  width: 380px;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
 }
 
-.login-box h2 {
-  margin-bottom: 1rem;
-  color: #333;
+h1 {
+  font-size: 34px;
 }
 
-.login-box input {
+.subtitle {
+  color: #555;
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: bold;
+}
+
+input {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
+  padding: 12px;
+  margin-top: 5px;
+  margin-bottom: 15px;
   border-radius: 8px;
+  border: 1px solid #aaa;
 }
 
-.login-box button {
+.btn-login {
   width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.login-box button:hover {
-  background-color: #0056b3;
-}
-
-.google-btn {
-  background-color: #db4437;
+  padding: 14px;
+  background: #0a1a33;
   color: white;
   border: none;
-  padding: 10px;
   border-radius: 8px;
-  width: 100%;
   cursor: pointer;
-}
-
-.google-btn:hover {
-  background-color: #c23321;
 }
 
 .divider {
-  margin: 1rem 0;
-  color: #666;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.btn-google {
+  width: 100%;
+  padding: 12px;
+  background: #db4437;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.footer-text {
+  margin-top: 20px;
+  text-align: center;
 }

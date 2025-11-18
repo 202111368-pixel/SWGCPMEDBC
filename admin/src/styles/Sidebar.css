@@ -15,6 +15,7 @@
 .sidebar-header h2 {
   margin: 0;
   font-size: 18px;
+  color: #58c3ff; 
 }
 
 .sidebar-menu {
@@ -32,32 +33,54 @@
   text-align: left;
   background: none;
   border: none;
-  color: white;
+  color: #b6d9ff;  
   padding: 12px 20px;
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 14px;
+  font-size: 15px;
   cursor: pointer;
+
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), 
+              background 0.2s ease-in-out;
 }
 
 .sidebar-menu button:hover {
-  background-color: #1a2743;
+  transform: translateX(6px) scale(1.03);
+  background-color: rgba(88, 195, 255, 0.15);
+  color: #ffffff;
 }
 
 .submenu {
   background-color: #1b2a49;
   list-style: none;
   padding-left: 20px;
+
+  animation: aparecer 0.35s ease forwards;
 }
 
 .submenu li a {
-  color: #cbd3e6;
+  color: #8ecbff;
   text-decoration: none;
   display: block;
   padding: 8px 0;
+
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              color 0.2s ease-in-out;
 }
 
 .submenu li a:hover {
-  color: #fff;
+  transform: translateX(7px);
+  color: #ffffff;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
