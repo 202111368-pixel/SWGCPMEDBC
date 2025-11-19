@@ -1,0 +1,248 @@
+.clientes-page {
+  width: 90%;
+  max-width: 1200px;
+  margin: 2rem auto;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem 2rem;
+  border: 1px solid #e2e8f0;
+}
+
+.clientes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn-agregar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #16a34a;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.btn-agregar:hover {
+  background-color: #15803d;
+  transform: scale(1.03);
+}
+
+.clientes-buscador {
+  display: flex;
+  align-items: center;
+  background: #f9fafb;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  margin-bottom: 1.5rem;
+}
+.icono-buscar {
+  color: #6b7280;
+  margin-right: 0.4rem;
+}
+.clientes-buscador input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.95rem;
+}
+
+.tabla-clientes {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.tabla-clientes th,
+.tabla-clientes td {
+  padding: 0.7rem 0.9rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tabla-clientes th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+}
+
+.sin-clientes {
+  text-align: center;
+  color: #6b7280;
+  padding: 1rem;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-cliente {
+  background: #fff;
+  width: 650px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 10px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  padding: 1.5rem 2rem;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+
+.modal-header h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.cerrar-modal {
+  color: #9ca3af;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.cerrar-modal:hover {
+  color: #ef4444;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.5rem;
+}
+
+.campo label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: block;
+  margin-bottom: 0.3rem;
+  color: #374151;
+}
+
+.campo input,
+.campo textarea {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #f9fafb;
+  font-size: 0.9rem;
+  color: #111827;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.campo input:focus,
+.campo textarea:focus {
+  border-color: #0ea5e9;
+}
+
+.campo textarea {
+  min-height: 70px;
+  resize: vertical;
+}
+
+.input-limite {
+  display: flex;
+  align-items: center;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #f9fafb;
+}
+.input-limite button {
+  background: #f3f4f6;
+  border: none;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: #374151;
+  transition: 0.2s;
+}
+.input-limite button:hover {
+  background: #e5e7eb;
+}
+.input-limite span {
+  padding: 0 0.5rem;
+  font-weight: 600;
+  color: #111827;
+}
+.input-limite input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  text-align: right;
+  padding-right: 0.5rem;
+  font-weight: 600;
+}
+
+.campo.direccion {
+  grid-column: span 2;
+}
+
+.modal-botones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1.3rem;
+}
+
+.btn-cancelar,
+.btn-guardar {
+  padding: 0.55rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.btn-cancelar {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+}
+.btn-cancelar:hover {
+  background: #e5e7eb;
+}
+
+.btn-guardar {
+  background: #2563eb;
+  border: 1px solid #1d4ed8;
+  color: #fff;
+}
+.btn-guardar:hover {
+  background: #1d4ed8;
+}

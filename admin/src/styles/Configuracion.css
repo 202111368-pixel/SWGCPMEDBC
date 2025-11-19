@@ -1,0 +1,46 @@
+.configuracion-page {
+  width: 90%;
+  max-width: 1200px;
+  margin: 2rem auto;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  padding: 1.5rem 2rem;
+  border: 1px solid #e2e8f0;
+}
+
+.config-tabla-container {
+  margin-top: 1.5rem;
+}
+
+.config-tabla-container h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.8rem;
+}
+
+.config-tabla-clientes {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.config-tabla-clientes th,
+.config-tabla-clientes td {
+  padding: 0.7rem 0.9rem;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.config-tabla-clientes th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+}
+
+.config-sin-clientes {
+  text-align: center;
+  color: #6b7280;
+  padding: 1rem 0;
+}

@@ -20,7 +20,6 @@ import RealizarCompra from './pages/Compras/RealizarCompra';
 
 // Caja
 import AdministrarCaja from './pages/Caja/AdministrarCaja';
-import HistorialCaja from './pages/Caja/HistorialCaja';
 
 // Configuración
 import Configuracion from './pages/Configuracion/Configuracion';
@@ -30,10 +29,9 @@ import NuevoInventario from './pages/Inventario/NuevoInventario';
 
 // Ventas
 import Clientes from './pages/Ventas/Clientes';
-import RealizarVenta from './pages/Ventas/RealizarVenta';
-import VentasDia from './pages/Ventas/VentasDia';
-import VentasFecha from './pages/Ventas/VentasFecha';
-import VentasMes from './pages/Ventas/VentasMes';
+
+// ⛔ Quité esto porque causa error y no existe el archivo
+// import Productos from './pages/Productos/Producto';
 
 const App = () => {
   return (
@@ -63,7 +61,6 @@ const App = () => {
 
                   {/* Caja */}
                   <Route path="caja/administrar" element={<AdministrarCaja />} />
-                  <Route path="caja/historial" element={<HistorialCaja />} />
 
                   {/* Configuración */}
                   <Route path="configuracion" element={<Configuracion />} />
@@ -73,10 +70,12 @@ const App = () => {
 
                   {/* Ventas */}
                   <Route path="ventas/clientes" element={<Clientes />} />
-                  <Route path="ventas/realizar" element={<RealizarVenta />} />
-                  <Route path="ventas/dia" element={<VentasDia />} />
-                  <Route path="ventas/fecha" element={<VentasFecha />} />
-                  <Route path="ventas/mes" element={<VentasMes />} />
+
+                  {/* Productos */}
+                  {/* ⛔ Comentado hasta que exista el componente
+                  <Route path="productos/productos" element={<Productos />} />
+                  */}
+                 
                 </Routes>
               </div>
             </div>
