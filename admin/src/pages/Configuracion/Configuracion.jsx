@@ -4,7 +4,6 @@ import "../../styles/Configuracion.css";
 const Configuracion = () => {
   const [clientesGuardados, setClientesGuardados] = useState([]);
 
-  // Cargar clientes desde localStorage cuando se abre Configuración
   useEffect(() => {
     const data = localStorage.getItem("clientesConfiguracion");
     if (data) {

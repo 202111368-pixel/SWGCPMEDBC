@@ -40,6 +40,7 @@ const Clientes = () => {
   const guardarEnLocalStorage = (lista) => {
     localStorage.setItem("clientesConfiguracion", JSON.stringify(lista));
   };
+  
 
   const clientesFiltrados = clientes.filter((c) =>
     c.nombre.toLowerCase().includes(busqueda.toLowerCase())
