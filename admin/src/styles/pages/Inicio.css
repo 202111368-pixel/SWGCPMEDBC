@@ -1,0 +1,54 @@
+.page-container {
+  background-color: #faf6ef;
+  padding: 25px 35px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  min-height: 90vh;
+  color: #3a2303;
+  font-family: "Poppins", sans-serif;
+}
+
+.page-title {
+  font-size: 24px;
+  color: #4b2e05;
+  border-left: 6px solid #b78b50;
+  padding-left: 10px;
+  margin-bottom: 10px;
+}
+
+.page-description {
+  font-size: 14px;
+  color: #7a5a28;
+  margin-bottom: 20px;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 15px;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 15px 20px;
+  border: 1px solid #e3c79a;
+}
+
+.card h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  color: #4b2e05;
+}
+
+.card p {
+  margin: 0;
+  font-size: 13px;
+  color: #5a4322;
+}
+
+.empty-state {
+  text-align: center;
+  color: #7a5a28;
+  font-style: italic;
+}

@@ -1,113 +1,321 @@
-import React, { useState } from "react";
-import { FaPlus, FaSave, FaTimes, FaEdit, FaTrash } from "react-icons/fa";
-import "../../styles/Proveedores.css";
+import React, { useState, useMemo } from "react";
+import "../../styles/pages/Compras.css";
 
 const Proveedores = () => {
-  const [mostrarModal, setMostrarModal] = useState(false);
   const [proveedores, setProveedores] = useState([]);
-  const [modoEdicion, setModoEdicion] = useState(false);
-  const [editarIndex, setEditarIndex] = useState(null);
+  const [busqueda, setBusqueda] = useState("");
+  const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const [editingId, setEditingId] = useState(null);
 
-  const [proveedor, setProveedor] = useState({
-    nombre: "",
-    dni: "",
+  const [form, setForm] = useState({
+    razonSocial: "",
     ruc: "",
+    tipoProveedor: "Tableros de melamina",
+    rubro: "",
     telefono: "",
+    email: "",
+    direccion: "",
     contacto: "",
-    telefonoContacto: "",
+    condicionesPago: "Contado",
+    notas: "",
   });
 
   const handleChange = (e) => {
-    setProveedor({ ...proveedor, [e.target.name]: e.target.value });
-  };
-
-  const abrirNuevo = () => {
-    setProveedor({
-      nombre: "",
-      dni: "",
-      ruc: "",
-      telefono: "",
-      contacto: "",
-      telefonoContacto: "",
+    const { name, value } = e.target;
+    setForm({
+      ...form,
+      [name]: value,
     });
-    setModoEdicion(false);
-    setMostrarModal(true);
   };
 
-  const handleGuardar = () => {
-    if (modoEdicion) {
-      const listaActualizada = [...proveedores];
-      listaActualizada[editarIndex] = proveedor;
-      setProveedores(listaActualizada);
-    } else {
-      setProveedores([...proveedores, proveedor]);
+  const resetForm = () => {
+    setForm({
+      razonSocial: "",
+      ruc: "",
+      tipoProveedor: "Tableros de melamina",
+      rubro: "",
+      telefono: "",
+      email: "",
+      direccion: "",
+      contacto: "",
+      condicionesPago: "Contado",
+      notas: "",
+    });
+    setEditingId(null);
+  };
+
+  const toggleFormulario = () => {
+    setMostrarFormulario(!mostrarFormulario);
+    if (mostrarFormulario) {
+      resetForm();
     }
-    setMostrarModal(false);
   };
 
-  const handleEditar = (index) => {
-    setProveedor(proveedores[index]);
-    setEditarIndex(index);
-    setModoEdicion(true);
-    setMostrarModal(true);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!form.razonSocial || !form.ruc) {
+      alert("Completa al menos Razón Social y RUC.");
+      return;
+    }
+
+    if (editingId === null) {
+      const nuevo = {
+        id: proveedores.length > 0 ? proveedores[proveedores.length - 1].id + 1 : 1,
+        ...form,
+      };
+      setProveedores([...proveedores, nuevo]);
+    } else {
+      const actualizados = proveedores.map((p) =>
+        p.id === editingId ? { ...p, ...form } : p
+      );
+      setProveedores(actualizados);
+    }
+
+    resetForm();
   };
 
-  const handleEliminar = (index) => {
-    const nuevaLista = proveedores.filter((_, i) => i !== index);
-    setProveedores(nuevaLista);
+  const handleEdit = (proveedor) => {
+    setMostrarFormulario(true);
+    setEditingId(proveedor.id);
+    setForm({
+      razonSocial: proveedor.razonSocial,
+      ruc: proveedor.ruc,
+      tipoProveedor: proveedor.tipoProveedor || "Tableros de melamina",
+      rubro: proveedor.rubro || "",
+      telefono: proveedor.telefono || "",
+      email: proveedor.email || "",
+      direccion: proveedor.direccion || "",
+      contacto: proveedor.contacto || "",
+      condicionesPago: proveedor.condicionesPago || "Contado",
+      notas: proveedor.notas || "",
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  const handleDelete = (id) => {
+    if (!window.confirm("¿Seguro que deseas eliminar este proveedor?")) return;
+    const filtrados = proveedores.filter((p) => p.id !== id);
+    setProveedores(filtrados);
+
+    if (editingId === id) {
+      resetForm();
+    }
+  };
+
+  const proveedoresFiltrados = useMemo(() => {
+    const q = busqueda.toLowerCase().trim();
+    if (!q) return proveedores;
+    return proveedores.filter((p) => {
+      return (
+        p.razonSocial.toLowerCase().includes(q) ||
+        (p.ruc && p.ruc.toLowerCase().includes(q)) ||
+        (p.contacto && p.contacto.toLowerCase().includes(q))
+      );
+    });
+  }, [proveedores, busqueda]);
 
   return (
-    <div className="proveedores-container">
+    <div className="page-container">
+      <h2 className="page-title">Proveedores</h2>
+      <p className="page-description">
+        Registro y gestión de proveedores de tableros de melamina, cantos y herrajes para D’Bary Company.
+      </p>
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h2>Proveedores</h2>
-        <button className="btn-nuevo" onClick={abrirNuevo}>
-          <FaPlus /> Agregar Nuevo Proveedor
-        </button>
+      <div className="card">
+        <div className="card-header">
+          <h3>{editingId ? "Editar proveedor" : "Gestión de proveedores"}</h3>
+
+          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+            <input
+              type="text"
+              placeholder="Buscar por razón social, RUC o contacto..."
+              value={busqueda}
+              onChange={(e) => setBusqueda(e.target.value)}
+              className="input-busqueda"
+            />
+            <button type="button" className="btn" onClick={toggleFormulario}>
+              {mostrarFormulario ? "Cerrar" : "Nuevo proveedor +"}
+            </button>
+          </div>
+        </div>
+
+        {mostrarFormulario && (
+          <form onSubmit={handleSubmit} className="proveedor-form">
+            <div className="form-group">
+              <label>Razón Social</label>
+              <input
+                type="text"
+                name="razonSocial"
+                value={form.razonSocial}
+                onChange={handleChange}
+                placeholder="Ej. Maderas y Tableros del Sur SAC"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>RUC</label>
+              <input
+                type="text"
+                name="ruc"
+                value={form.ruc}
+                onChange={handleChange}
+                placeholder="Ej. 20123456789"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Tipo de proveedor</label>
+              <select
+                name="tipoProveedor"
+                value={form.tipoProveedor}
+                onChange={handleChange}
+              >
+                <option value="Tableros de melamina">Tableros de melamina</option>
+                <option value="Cantos y tapacantos">Cantos y tapacantos</option>
+                <option value="Herrajes">Herrajes y accesorios</option>
+                <option value="Servicios externos">Servicios externos</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>Rubro / Línea</label>
+              <input
+                type="text"
+                name="rubro"
+                value={form.rubro}
+                onChange={handleChange}
+                placeholder="Ej. Melamina alto tránsito, línea premium"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Teléfono</label>
+              <input
+                type="text"
+                name="telefono"
+                value={form.telefono}
+                onChange={handleChange}
+                placeholder="Ej. 987 654 321"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Correo electrónico</label>
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="Ej. ventas@proveedor.com"
+              />
+            </div>
+
+            <div className="form-group form-group-full">
+              <label>Dirección</label>
+              <input
+                type="text"
+                name="direccion"
+                value={form.direccion}
+                onChange={handleChange}
+                placeholder="Ej. Av. Industrial 123, Ate"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Contacto principal</label>
+              <input
+                type="text"
+                name="contacto"
+                value={form.contacto}
+                onChange={handleChange}
+                placeholder="Ej. Juan Pérez - Ejecutivo comercial"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Condiciones de pago</label>
+              <select
+                name="condicionesPago"
+                value={form.condicionesPago}
+                onChange={handleChange}
+              >
+                <option value="Contado">Contado</option>
+                <option value="Crédito 15 días">Crédito 15 días</option>
+                <option value="Crédito 30 días">Crédito 30 días</option>
+                <option value="Crédito 45 días">Crédito 45 días</option>
+              </select>
+            </div>
+
+            <div className="form-group form-group-full">
+              <label>Notas / acuerdos</label>
+              <textarea
+                name="notas"
+                value={form.notas}
+                onChange={handleChange}
+                placeholder="Ej. Descuento especial por volumen, entrega sin costo en Lima."
+              />
+            </div>
+
+            <div className="form-actions">
+              <button type="submit" className="btn btn-primary">
+                {editingId ? "Actualizar proveedor" : "Guardar proveedor"}
+              </button>
+            </div>
+          </form>
+        )}
       </div>
 
-      <div style={{ display: "flex", justifyContent: "flex-end", width: "100%", marginTop: "25px" }}>
-        <div style={{ width: "80%" }}>
+      <div className="card table-wrapper">
+        <div className="card-header">
+          <h3>Listado de proveedores</h3>
+        </div>
 
-          <div className="buscador">
-            <label><b>Buscar:</b></label>
-            <input type="text" placeholder="Escriba para filtrar..." />
-          </div>
-
-          <table className="tabla-proveedores">
+        <div className="table-container">
+          <table>
             <thead>
               <tr>
-                <th>No</th>
-                <th>Proveedor</th>
+                <th>#</th>
+                <th>Razón Social</th>
                 <th>RUC</th>
-                <th>Teléfono</th>
+                <th>Tipo</th>
                 <th>Contacto</th>
-                <th>Opciones</th>
+                <th>Teléfono</th>
+                <th>Condición de pago</th>
+                <th>Acciones</th>
               </tr>
             </thead>
-
             <tbody>
-              {proveedores.length === 0 ? (
+              {proveedoresFiltrados.length === 0 ? (
                 <tr>
-                  <td colSpan="6" style={{ textAlign: "center" }}>
-                    No hay proveedores registrados.
+                  <td colSpan="8" className="empty-state">
+                    No hay proveedores registrados o no coinciden con la búsqueda.
                   </td>
                 </tr>
               ) : (
-                proveedores.map((p, index) => (
-                  <tr key={index}>
+                proveedoresFiltrados.map((p, index) => (
+                  <tr key={p.id}>
                     <td>{index + 1}</td>
-                    <td>{p.nombre}</td>
+                    <td>{p.razonSocial}</td>
                     <td>{p.ruc}</td>
-                    <td>{p.telefono}</td>
-                    <td>{p.contacto}</td>
-                    <td>
-                      <button className="btn-editar" onClick={() => handleEditar(index)}>
-                        <FaEdit />
+                    <td>{p.tipoProveedor}</td>
+                    <td>{p.contacto || "-"}</td>
+                    <td>{p.telefono || "-"}</td>
+                    <td>{p.condicionesPago || "-"}</td>
+                    <td className="actions-cell">
+                      <button
+                        type="button"
+                        className="btn btn-secondary btn-small"
+                        onClick={() => handleEdit(p)}
+                      >
+                        Editar
                       </button>
-                      <button className="btn-eliminar" onClick={() => handleEliminar(index)}>
-                        <FaTrash />
+                      <button
+                        type="button"
+                        className="btn btn-danger btn-small"
+                        onClick={() => handleDelete(p.id)}
+                      >
+                        Eliminar
                       </button>
                     </td>
                   </tr>
@@ -115,107 +323,8 @@ const Proveedores = () => {
               )}
             </tbody>
           </table>
-
         </div>
       </div>
-
-      {mostrarModal && (
-        <div className="modal-overlay">
-          <div className="modal-proveedor">
-
-            <div className="modal-header">
-              <h3>{modoEdicion ? "Editar Proveedor" : "Ingresar Proveedor"}</h3>
-              <button className="btn-cerrar" onClick={() => setMostrarModal(false)}>
-                <FaTimes />
-              </button>
-            </div>
-
-            <div className="alert-info">
-              <strong>Estimado usuario: </strong> Los campos marcados con * son obligatorios.
-            </div>
-
-            <div className="form-grid">
-
-              <div className="form-group full">
-                <label>Proveedor *</label>
-                <input
-                  type="text"
-                  name="nombre"
-                  placeholder="EJ. DISTRIBUIDORA BONILLA"
-                  value={proveedor.nombre}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>DNI *</label>
-                <input
-                  type="text"
-                  name="dni"
-                  placeholder="EJ. 46591170"
-                  value={proveedor.dni}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>RUC *</label>
-                <input
-                  type="text"
-                  name="ruc"
-                  placeholder="EJ. 10465911706"
-                  value={proveedor.ruc}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div class="form-group">
-                <label>Teléfono *</label>
-                <input
-                  type="text"
-                  name="telefono"
-                  placeholder="EJ. 051944039646"
-                  value={proveedor.telefono}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Contacto</label>
-                <input
-                  type="text"
-                  name="contacto"
-                  placeholder="EJ. ABEL ALVARADO"
-                  value={proveedor.contacto}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Teléfono Contacto</label>
-                <input
-                  type="text"
-                  name="telefonoContacto"
-                  placeholder="EJ. 054628824"
-                  value={proveedor.telefonoContacto}
-                  onChange={handleChange}
-                />
-              </div>
-
-            </div>
-
-            <div className="modal-footer">
-              <button className="btn-guardar" onClick={handleGuardar}>
-                <FaSave /> Guardar
-              </button>
-              <button className="btn-cancelar" onClick={() => setMostrarModal(false)}>
-                Cerrar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
     </div>
   );
 };

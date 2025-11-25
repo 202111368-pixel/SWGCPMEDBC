@@ -1,359 +1,293 @@
-import React, { useState, useEffect } from "react";
-import "../../styles/Clientes.css";
-import {
-  FaUserPlus,
-  FaSearch,
-  FaEdit,
-  FaTrash,
-  FaTimes,
-} from "react-icons/fa";
+import React, { useState, useMemo } from "react";
+import "../../styles/pages/Ventas.css";
 
 const Clientes = () => {
   const [clientes, setClientes] = useState([]);
   const [busqueda, setBusqueda] = useState("");
+  const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const [editingId, setEditingId] = useState(null);
 
-  const [showModal, setShowModal] = useState(false);
-  const [editingId, setEditingId] = useState(null); 
-
-  const [nuevoCliente, setNuevoCliente] = useState({
+  const [form, setForm] = useState({
     nombre: "",
-    dni: "",
-    ruc: "",
+    tipoCliente: "Empresa",
+    documento: "",
     telefono: "",
     email: "",
-    giro: "",
-    limite: 0,
     direccion: "",
+    notas: "",
   });
 
-  useEffect(() => {
-    const data = localStorage.getItem("clientesConfiguracion");
-    if (data) {
-      try {
-        setClientes(JSON.parse(data));
-      } catch (e) {
-        console.error("Error parseando clientesConfiguracion", e);
-      }
-    }
-  }, []);
-
-  const guardarEnLocalStorage = (lista) => {
-    localStorage.setItem("clientesConfiguracion", JSON.stringify(lista));
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({
+      ...form,
+      [name]: value,
+    });
   };
-  
 
-  const clientesFiltrados = clientes.filter((c) =>
-    c.nombre.toLowerCase().includes(busqueda.toLowerCase())
-  );
-
-  const handleNuevoCliente = () => {
-    setEditingId(null);
-    setNuevoCliente({
+  const resetForm = () => {
+    setForm({
       nombre: "",
-      dni: "",
-      ruc: "",
+      tipoCliente: "Empresa",
+      documento: "",
       telefono: "",
       email: "",
-      giro: "",
-      limite: 0,
       direccion: "",
+      notas: "",
     });
-    setShowModal(true);
+    setEditingId(null);
   };
 
-  const handleEditarCliente = (cliente) => {
-    setEditingId(cliente.id);
-    setNuevoCliente({
-      nombre: cliente.nombre,
-      dni: cliente.dni,
-      ruc: cliente.ruc,
-      telefono: cliente.telefono,
-      email: cliente.email,
-      giro: cliente.giro,
-      limite: cliente.limite,
-      direccion: cliente.direccion,
-    });
-    setShowModal(true);
+  const toggleFormulario = () => {
+    setMostrarFormulario(!mostrarFormulario);
+    if (mostrarFormulario) {
+      resetForm();
+    }
   };
 
-  const handleGuardarCliente = () => {
-    if (nuevoCliente.nombre.trim() === "") {
-      alert("El nombre del cliente es obligatorio");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!form.nombre || !form.tipoCliente) {
+      alert("Completa al menos el nombre y el tipo de cliente.");
       return;
     }
 
-    let listaActualizada = [];
-
     if (editingId === null) {
-      const nuevo = { id: Date.now(), ...nuevoCliente };
-      listaActualizada = [...clientes, nuevo];
+      const nuevo = {
+        id: clientes.length > 0 ? clientes[clientes.length - 1].id + 1 : 1,
+        ...form,
+      };
+      setClientes([...clientes, nuevo]);
     } else {
-      listaActualizada = clientes.map((c) =>
-        c.id === editingId ? { ...c, ...nuevoCliente } : c
+      const actualizados = clientes.map((c) =>
+        c.id === editingId ? { ...c, ...form } : c
       );
+      setClientes(actualizados);
     }
 
-    setClientes(listaActualizada);
-    guardarEnLocalStorage(listaActualizada);
-
-    setShowModal(false);
-    setEditingId(null);
+    resetForm();
   };
 
-  const handleEliminarCliente = (id) => {
-    if (window.confirm("¿Seguro que deseas eliminar este cliente?")) {
-      const listaActualizada = clientes.filter((c) => c.id !== id);
-      setClientes(listaActualizada);
-      guardarEnLocalStorage(listaActualizada); 
+  const handleEdit = (cliente) => {
+    setMostrarFormulario(true);
+    setEditingId(cliente.id);
+    setForm({
+      nombre: cliente.nombre,
+      tipoCliente: cliente.tipoCliente,
+      documento: cliente.documento || "",
+      telefono: cliente.telefono || "",
+      email: cliente.email || "",
+      direccion: cliente.direccion || "",
+      notas: cliente.notas || "",
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleDelete = (id) => {
+    if (!window.confirm("¿Seguro que deseas eliminar este cliente?")) return;
+    const filtrados = clientes.filter((c) => c.id !== id);
+    setClientes(filtrados);
+
+    if (editingId === id) {
+      resetForm();
     }
   };
+
+  const clientesFiltrados = useMemo(() => {
+    const q = busqueda.toLowerCase().trim();
+    if (!q) return clientes;
+    return clientes.filter((c) => {
+      return (
+        c.nombre.toLowerCase().includes(q) ||
+        (c.documento && c.documento.toLowerCase().includes(q)) ||
+        (c.email && c.email.toLowerCase().includes(q))
+      );
+    });
+  }, [clientes, busqueda]);
 
   return (
-    <div className="clientes-page">
-      <div className="clientes-header">
-        <h2>Gestión de Clientes</h2>
-        <button className="btn-agregar" onClick={handleNuevoCliente}>
-          <FaUserPlus /> Nuevo Cliente
-        </button>
-      </div>
+    <div className="page-container">
+      <h2 className="page-title">Clientes</h2>
+      <p className="page-description">
+        Registro y gestión de clientes para proyectos y ventas de melamina.
+      </p>
 
-      <div className="clientes-buscador">
-        <FaSearch className="icono-buscar" />
-        <input
-          type="text"
-          placeholder="Buscar cliente..."
-          value={busqueda}
-          onChange={(e) => setBusqueda(e.target.value)}
-        />
-      </div>
+      <div className="card">
+        <div className="card-header">
+          <h3>{editingId ? "Editar cliente" : "Gestión de clientes"}</h3>
 
-      <table className="tabla-clientes">
-        <thead>
-          <tr>
-            <th>Nombre / Empresa</th>
-            <th>DNI</th>
-            <th>RUC</th>
-            <th>Teléfono</th>
-            <th>Email</th>
-            <th>Giro</th>
-            <th>Límite Crediticio</th>
-            <th>Dirección</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {clientesFiltrados.length > 0 ? (
-            clientesFiltrados.map((c) => (
-              <tr key={c.id}>
-                <td>{c.nombre}</td>
-                <td>{c.dni}</td>
-                <td>{c.ruc}</td>
-                <td>{c.telefono}</td>
-                <td>{c.email}</td>
-                <td>{c.giro}</td>
-                <td>S/ {c.limite.toFixed(2)}</td>
-                <td>{c.direccion}</td>
-                <td className="acciones">
-                  <button
-                    className="btn-editar"
-                    onClick={() => handleEditarCliente(c)}
-                  >
-                    <FaEdit />
-                  </button>
-                  <button
-                    className="btn-eliminar"
-                    onClick={() => handleEliminarCliente(c.id)}
-                  >
-                    <FaTrash />
-                  </button>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="9" className="sin-clientes">
-                No se encontraron clientes.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+            <input
+              type="text"
+              placeholder="Buscar por nombre, RUC/DNI o email..."
+              value={busqueda}
+              onChange={(e) => setBusqueda(e.target.value)}
+              style={{
+                padding: "6px 10px",
+                borderRadius: "6px",
+                border: "1px solid #d4a76a",
+                fontSize: "13px",
+                backgroundColor: "#fefaf2",
+              }}
+            />
+            <button type="button" className="btn" onClick={toggleFormulario}>
+              {mostrarFormulario ? "Cerrar" : "Nuevo cliente +"}
+            </button>
+          </div>
+        </div>
 
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-cliente">
-            <div className="modal-header">
-              <h3>{editingId ? "Editar Cliente" : "Nuevo Cliente"}</h3>
-              <FaTimes
-                className="cerrar-modal"
-                onClick={() => {
-                  setShowModal(false);
-                  setEditingId(null);
-                }}
+        {mostrarFormulario && (
+          <form onSubmit={handleSubmit} className="venta-form">
+            <div className="form-group">
+              <label>Nombre / Razón social</label>
+              <input
+                type="text"
+                name="nombre"
+                value={form.nombre}
+                onChange={handleChange}
+                placeholder="Ej. Carpintería Los Cedros / Constructora ABC SAC"
               />
             </div>
 
-            <div className="form-grid">
-              <div className="campo">
-                <label>Nombre Cliente / Empresa *</label>
-                <input
-                  type="text"
-                  placeholder="EJ. ABEL ALVARADO / DATA TRAVEL"
-                  value={nuevoCliente.nombre}
-                  onChange={(e) =>
-                    setNuevoCliente({
-                      ...nuevoCliente,
-                      nombre: e.target.value,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="campo">
-                <label>DNI</label>
-                <input
-                  type="text"
-                  placeholder="EJ. 46591170"
-                  value={nuevoCliente.dni}
-                  onChange={(e) =>
-                    setNuevoCliente({
-                      ...nuevoCliente,
-                      dni: e.target.value,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="campo">
-                <label>RUC</label>
-                <input
-                  type="text"
-                  placeholder="EJ. 10465911706"
-                  value={nuevoCliente.ruc}
-                  onChange={(e) =>
-                    setNuevoCliente({
-                      ...nuevoCliente,
-                      ruc: e.target.value,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="campo">
-                <label>Teléfono</label>
-                <input
-                  type="text"
-                  placeholder="EJ. 051944039646"
-                  value={nuevoCliente.telefono}
-                  onChange={(e) =>
-                    setNuevoCliente({
-                      ...nuevoCliente,
-                      telefono: e.target.value,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="campo">
-                <label>Email</label>
-                <input
-                  type="email"
-                  placeholder="EJ. sistemas@doctorpcarequipa.com"
-                  value={nuevoCliente.email}
-                  onChange={(e) =>
-                    setNuevoCliente({
-                      ...nuevoCliente,
-                      email: e.target.value,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="campo">
-                <label>Giro</label>
-                <input
-                  type="text"
-                  placeholder="EJ. VENTA DE SUMINISTROS"
-                  value={nuevoCliente.giro}
-                  onChange={(e) =>
-                    setNuevoCliente({
-                      ...nuevoCliente,
-                      giro: e.target.value,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="campo limite">
-                <label>Límite Crediticio *</label>
-                <div className="input-limite">
-                  <button
-                    onClick={() =>
-                      setNuevoCliente((prev) => ({
-                        ...prev,
-                        limite: Math.max(prev.limite - 0.05, 0),
-                      }))
-                    }
-                  >
-                    -
-                  </button>
-                  <span>S/</span>
-                  <input
-                    type="number"
-                    step="0.01"
-                    value={nuevoCliente.limite}
-                    onChange={(e) =>
-                      setNuevoCliente({
-                        ...nuevoCliente,
-                        limite: parseFloat(e.target.value) || 0,
-                      })
-                    }
-                  />
-                  <button
-                    onClick={() =>
-                      setNuevoCliente((prev) => ({
-                        ...prev,
-                        limite: prev.limite + 0.05,
-                      }))
-                    }
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              <div className="campo direccion">
-                <label>Dirección</label>
-                <textarea
-                  placeholder="EJ. CALLE MALECÓN IQUIQUE 406 MIRAFLORES, AREQUIPA - PERÚ"
-                  value={nuevoCliente.direccion}
-                  onChange={(e) =>
-                    setNuevoCliente({
-                      ...nuevoCliente,
-                      direccion: e.target.value,
-                    })
-                  }
-                ></textarea>
-              </div>
-            </div>
-
-            <div className="modal-botones">
-              <button
-                className="btn-cancelar"
-                onClick={() => {
-                  setShowModal(false);
-                  setEditingId(null);
-                }}
+            <div className="form-group">
+              <label>Tipo de cliente</label>
+              <select
+                name="tipoCliente"
+                value={form.tipoCliente}
+                onChange={handleChange}
               >
-                Cancelar
-              </button>
-              <button className="btn-guardar" onClick={handleGuardarCliente}>
-                Guardar
+                <option value="Empresa">Empresa</option>
+                <option value="Carpintero">Carpintero / Taller</option>
+                <option value="Cliente final">Cliente final</option>
+                <option value="Arquitecto">Arquitecto / Diseñador</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>DNI / RUC</label>
+              <input
+                type="text"
+                name="documento"
+                value={form.documento}
+                onChange={handleChange}
+                placeholder="Ej. 10456789012 / 20123456789"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Teléfono</label>
+              <input
+                type="text"
+                name="telefono"
+                value={form.telefono}
+                onChange={handleChange}
+                placeholder="Ej. 987 654 321"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Correo electrónico</label>
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="Ej. ventas@cliente.com"
+              />
+            </div>
+
+            <div className="form-group form-group-full">
+              <label>Dirección</label>
+              <input
+                type="text"
+                name="direccion"
+                value={form.direccion}
+                onChange={handleChange}
+                placeholder="Ej. Av. Principal 123, Urb. Las Flores"
+              />
+            </div>
+
+            <div className="form-group form-group-full">
+              <label>Notas</label>
+              <textarea
+                name="notas"
+                value={form.notas}
+                onChange={handleChange}
+                placeholder="Ej. Cliente de proyectos corporativos, prioridad alta, paga con crédito."
+              />
+            </div>
+
+            <div className="form-actions">
+              <button type="submit" className="btn btn-primary">
+                {editingId ? "Actualizar cliente" : "Guardar cliente"}
               </button>
             </div>
-          </div>
+          </form>
+        )}
+      </div>
+
+      <div className="card table-wrapper">
+        <div className="card-header">
+          <h3>Listado de clientes</h3>
         </div>
-      )}
+
+        <div className="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nombre / Razón social</th>
+                <th>Tipo</th>
+                <th>DNI / RUC</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Notas</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {clientesFiltrados.length === 0 ? (
+                <tr>
+                  <td colSpan="8" className="empty-state">
+                    No hay clientes registrados o no coinciden con la búsqueda.
+                  </td>
+                </tr>
+              ) : (
+                clientesFiltrados.map((c, index) => (
+                  <tr key={c.id}>
+                    <td>{index + 1}</td>
+                    <td>{c.nombre}</td>
+                    <td>{c.tipoCliente}</td>
+                    <td>{c.documento || "-"}</td>
+                    <td>{c.telefono || "-"}</td>
+                    <td>{c.email || "-"}</td>
+                    <td style={{ maxWidth: "220px" }}>
+                      {c.notas || "-"}
+                    </td>
+                    <td className="actions-cell">
+                      <button
+                        type="button"
+                        className="btn btn-secondary btn-small"
+                        onClick={() => handleEdit(c)}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-danger btn-small"
+                        onClick={() => handleDelete(c.id)}
+                      >
+                        Eliminar
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };

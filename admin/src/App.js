@@ -1,44 +1,58 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Sidebar from './components/Sidebar';
-import './styles/Sidebar.css';
-import './styles/Login.css'; 
+// src/App.js
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Sidebar from "./components/Sidebar";
+
+import "./styles/Sidebar.css";
+import "./styles/Login.css";
+
 import Login from "./pages/Login";
 
-// Almacén
-import Categoria from './pages/Almacen/Categoria';
-import Marca from './pages/Almacen/Marca';
-import Producto from './pages/Almacen/Producto';
+// 🏠 Inicio
+import Inicio from "./pages/Inicio";
 
-// Cotizaciones
-import GenerarCotizacion from './pages/Cotizaciones/GenerarCotizacion';
-import VerCotizacion from './pages/Cotizaciones/VerCotizacion';
+// 🏢 Almacén
+import Producto from "./pages/Almacen/Producto";
+import Tipos from "./pages/Almacen/Tipos";
+import Ubicacion from "./pages/Almacen/Ubicacion";
 
-// Compras
-import Proveedores from './pages/Compras/Proveedores';
-import RealizarCompra from './pages/Compras/RealizarCompra';
+// 💰 Cotizaciones
+import NuevaCotizacion from "./pages/Cotizaciones/NuevaCotizacion";
+import HistorialCotizacion from "./pages/Cotizaciones/HistorialCotizacion";
 
-// Caja
-import AdministrarCaja from './pages/Caja/AdministrarCaja';
+// 🧾 Ventas
+import RegistrarVenta from "./pages/Ventas/RegistrarVenta";
+import Clientes from "./pages/Ventas/Clientes";
+import ReportesVenta from "./pages/Ventas/ReportesVenta";
 
-// Configuración
-import Configuracion from './pages/Configuracion/Configuracion';
+// 🚛 Compras
+import Proveedores from "./pages/Compras/Proveedores";
+import OrdenesCompra from "./pages/Compras/OrdenesCompra";
 
-// Inventario
-import NuevoInventario from './pages/Inventario/NuevoInventario';
+// 📦 Inventario
+import VerInventario from "./pages/Inventario/VerInventario";
+import Movimientos from "./pages/Inventario/Movimientos";
 
-// Ventas
-import Clientes from './pages/Ventas/Clientes';
+// 🧰 Producción
+import PlanificarProduccion from "./pages/Produccion/PlanificarProduccion";
+import OrdenesProduccion from "./pages/Produccion/OrdenesProduccion";
 
-// ⛔ Quité esto porque causa error y no existe el archivo
-// import Productos from './pages/Productos/Producto';
+// 👷 Personal
+import Empleados from "./pages/Personal/Empleados";
+import Asistencias from "./pages/Personal/Asistencias";
+
+// ⚙️ Configuración
+import Usuarios from "./pages/Configuracion/Usuarios";
+import Ajustes from "./pages/Configuracion/Ajustes";
 
 const App = () => {
   return (
     <Router>
       <Routes>
+        {/* Página de Login */}
         <Route path="/" element={<Login />} />
 
+        {/* Rutas del sistema con Sidebar */}
         <Route
           path="/admin/*"
           element={
@@ -46,36 +60,69 @@ const App = () => {
               <Sidebar />
               <div className="content">
                 <Routes>
-                  {/* Almacén */}
-                  <Route path="almacen/categoria" element={<Categoria />} />
-                  <Route path="almacen/marca" element={<Marca />} />
+                  {/* 🏠 INICIO */}
+                  <Route path="inicio" element={<Inicio />} />
+
+                  {/* 🏢 ALMACÉN */}
                   <Route path="almacen/producto" element={<Producto />} />
+                  <Route path="almacen/tipos" element={<Tipos />} />
+                  <Route path="almacen/ubicacion" element={<Ubicacion />} />
 
-                  {/* Cotizaciones */}
-                  <Route path="cotizaciones/generar" element={<GenerarCotizacion />} />
-                  <Route path="cotizaciones/ver" element={<VerCotizacion />} />
+                  {/* 💰 COTIZACIONES */}
+                  <Route
+                    path="cotizaciones/nueva"
+                    element={<NuevaCotizacion />}
+                  />
+                  <Route
+                    path="cotizaciones/historial"
+                    element={<HistorialCotizacion />}
+                  />
 
-                  {/* Compras */}
-                  <Route path="compras/proveedores" element={<Proveedores />} />
-                  <Route path="compras/realizar" element={<RealizarCompra />} />
-
-                  {/* Caja */}
-                  <Route path="caja/administrar" element={<AdministrarCaja />} />
-
-                  {/* Configuración */}
-                  <Route path="configuracion" element={<Configuracion />} />
-
-                  {/* Inventario */}
-                  <Route path="inventario/nuevo" element={<NuevoInventario />} />
-
-                  {/* Ventas */}
+                  {/* 🧾 VENTAS */}
+                  <Route path="ventas/registrar" element={<RegistrarVenta />} />
                   <Route path="ventas/clientes" element={<Clientes />} />
+                  <Route path="ventas/reportes" element={<ReportesVenta />} />
 
-                  {/* Productos */}
-                  {/* ⛔ Comentado hasta que exista el componente
-                  <Route path="productos/productos" element={<Productos />} />
-                  */}
-                 
+                  {/* 🚛 COMPRAS */}
+                  <Route
+                    path="compras/proveedores"
+                    element={<Proveedores />}
+                  />
+                  <Route path="compras/ordenes" element={<OrdenesCompra />} />
+
+                  {/* 📦 INVENTARIO */}
+                  <Route path="inventario/ver" element={<VerInventario />} />
+                  <Route
+                    path="inventario/movimientos"
+                    element={<Movimientos />}
+                  />
+
+                  {/* 🧰 PRODUCCIÓN */}
+                  <Route
+                    path="produccion/planificar"
+                    element={<PlanificarProduccion />}
+                  />
+                  <Route
+                    path="produccion/ordenes"
+                    element={<OrdenesProduccion />}
+                  />
+
+                  {/* 👷 PERSONAL */}
+                  <Route
+                    path="personal/empleados"
+                    element={<Empleados />}
+                  />
+                  <Route
+                    path="personal/asistencias"
+                    element={<Asistencias />}
+                  />
+
+                  {/* ⚙️ CONFIGURACIÓN */}
+                  <Route
+                    path="configuracion/usuarios"
+                    element={<Usuarios />}
+                  />
+                  <Route path="configuracion/ajustes" element={<Ajustes />} />
                 </Routes>
               </div>
             </div>
