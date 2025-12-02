@@ -53,7 +53,6 @@ const HistorialCotizacion = () => {
             <thead>
               <tr>
                 <th>Cliente</th>
-                <th>RUC</th>
                 <th>Proyecto</th>
                 <th>Fecha</th>
                 <th>Proceso</th>
@@ -73,7 +72,6 @@ const HistorialCotizacion = () => {
                 cotizaciones.map((c) => (
                   <tr key={c.id}>
                     <td>{c.cliente}</td>
-                    <td>{c.ruc}</td>
                     <td>{c.proyecto}</td>
                     <td>{new Date(c.fecha).toLocaleDateString("es-PE")}</td>
                     <td>{c.proceso}</td>

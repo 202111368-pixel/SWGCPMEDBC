@@ -1,145 +1,144 @@
 import React, { useState, useEffect } from "react";
 import "../../styles/pages/Cotizaciones.css";
 
-const NuevaCotizacion = () => {
+const CrearCotizacion = () => {
+  const [cliente, setCliente] = useState("");
+  const [proyecto, setProyecto] = useState("");
+  const [proceso, setProceso] = useState("");
+  const [fecha, setFecha] = useState("");
+  const [validez, setValidez] = useState("");
 
-  const [form, setForm] = useState({
-    cliente: "",
-    ruc: "",
-    proyecto: "",
-    fecha: "",
-    proceso: "",
-    validez: "7 días",
-  });
-
-  const [cotizaciones, setCotizaciones] = useState([]);
+  const [lista, setLista] = useState([]);
   const [editId, setEditId] = useState(null);
 
   useEffect(() => {
-    const almacenadas = JSON.parse(localStorage.getItem("cotizacionesSimple") || "[]");
-    setCotizaciones(almacenadas);
+    const almacenadas =
+      JSON.parse(localStorage.getItem("cotizaciones") || "[]");
+    setLista(almacenadas);
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!form.cliente || !form.proyecto || !form.fecha) {
-      alert("Completa cliente, proyecto y fecha.");
+  const guardarCotizacion = () => {
+    if (!cliente || !proyecto || !proceso || !fecha || !validez) {
+      alert("Completa todos los campos.");
       return;
     }
 
-    let actualizadas = [];
+    let almacenadas =
+      JSON.parse(localStorage.getItem("cotizaciones") || "[]");
 
     if (editId) {
-      actualizadas = cotizaciones.map((c) =>
-        c.id === editId ? { ...c, ...form } : c
+      almacenadas = almacenadas.map((c) =>
+        c.id === editId
+          ? {
+              ...c,
+              cliente,
+              proyecto,
+              proceso,
+              fecha,
+              validez,
+            }
+          : c
       );
 
-      alert("Cotización actualizada.");
-      setEditId(null);
-
+      registrarMovimiento("EDICIÓN", `Se editó la cotización del cliente "${cliente}"`);
     } else {
       const nueva = {
         id: Date.now(),
-        ...form,
-        fechaRegistro: new Date().toISOString(),
+        cliente,
+        proyecto,
+        proceso,
+        fecha,
+        validez,
       };
 
-      actualizadas = [...cotizaciones, nueva];
-      alert("Cotización guardada correctamente.");
+      almacenadas.push(nueva);
+
+      registrarMovimiento("CREACIÓN", `Se creó la cotización del cliente "${cliente}"`);
     }
 
-    localStorage.setItem("cotizacionesSimple", JSON.stringify(actualizadas));
-    setCotizaciones(actualizadas);
+    localStorage.setItem("cotizaciones", JSON.stringify(almacenadas));
+    setLista(almacenadas);
 
-    setForm({
-      cliente: "",
-      ruc: "",
-      proyecto: "",
-      fecha: "",
-      proceso: "",
-      validez: "7 días",
-    });
-
-    // ❌ Se quitó el navigate, ahora NO te envia a otro lado
-    // navigate("/historial-cotizaciones");
+    limpiarFormulario();
   };
 
-  const handleEditar = (item) => {
-    setForm({
-      cliente: item.cliente,
-      ruc: item.ruc,
-      proyecto: item.proyecto,
-      fecha: item.fecha,
-      proceso: item.proceso,
-      validez: item.validez,
+  const registrarMovimiento = (tipo, mensaje) => {
+    const movs =
+      JSON.parse(localStorage.getItem("cotizacionesMovimientos") || "[]");
+
+    movs.push({
+      id: Date.now(),
+      tipo,
+      mensaje,
+      fecha: new Date().toISOString(),
     });
-    setEditId(item.id);
+
+    localStorage.setItem("cotizacionesMovimientos", JSON.stringify(movs));
   };
 
-  const handleEliminar = (id) => {
+  const editarCotizacion = (c) => {
+    setEditId(c.id);
+    setCliente(c.cliente);
+    setProyecto(c.proyecto);
+    setProceso(c.proceso);
+    setFecha(c.fecha);
+    setValidez(c.validez);
+  };
+
+ 
+  const eliminarCotizacion = (id) => {
     if (!window.confirm("¿Seguro que deseas eliminar esta cotización?")) return;
 
-    const actualizadas = cotizaciones.filter((c) => c.id !== id);
+    const almacenadas =
+      JSON.parse(localStorage.getItem("cotizaciones") || "[]");
 
-    localStorage.setItem("cotizacionesSimple", JSON.stringify(actualizadas));
-    setCotizaciones(actualizadas);
+    const eliminada = almacenadas.find((c) => c.id === id);
 
-    alert("Cotización eliminada.");
+    const nuevas = almacenadas.filter((c) => c.id !== id);
+    localStorage.setItem("cotizaciones", JSON.stringify(nuevas));
+    setLista(nuevas);
+
+    registrarMovimiento("ELIMINACIÓN", `Se eliminó la cotización del cliente "${eliminada?.cliente}"`);
+  };
+
+  const limpiarFormulario = () => {
+    setCliente("");
+    setProyecto("");
+    setProceso("");
+    setFecha("");
+    setValidez("");
+    setEditId(null);
   };
 
   return (
     <div className="page-container">
       <h2 className="page-title">Nueva Cotización</h2>
 
-      <div className="card">
-        <h3>Datos de la cotización</h3>
+      <div className="card form-wrapper">
+        <div className="form-grid">
 
-        <form onSubmit={handleSubmit} className="cotizacion-form">
           <div className="form-group">
             <label>Cliente</label>
             <input
-              type="text"
-              name="cliente"
-              value={form.cliente}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>RUC / DNI</label>
-            <input
-              type="text"
-              name="ruc"
-              value={form.ruc}
-              onChange={handleChange}
+              value={cliente}
+              onChange={(e) => setCliente(e.target.value)}
+              placeholder="Ej. Constructora Los Olivos"
             />
           </div>
 
           <div className="form-group">
             <label>Proyecto</label>
             <input
-              type="text"
-              name="proyecto"
-              value={form.proyecto}
-              onChange={handleChange}
+              value={proyecto}
+              onChange={(e) => setProyecto(e.target.value)}
+              placeholder="Ej. Mobiliario de oficina"
             />
           </div>
 
           <div className="form-group">
-            <label>Fecha de emisión</label>
-            <input type="date" name="fecha" value={form.fecha} onChange={handleChange} />
-          </div>
-
-          <div className="form-group">
             <label>Proceso</label>
-            <select name="proceso" value={form.proceso} onChange={handleChange}>
-              <option value="">Seleccione un proceso</option>
+            <select value={proceso} onChange={(e) => setProceso(e.target.value)}>
+              <option value="">Seleccione...</option>
               <option value="Corte">Corte</option>
               <option value="Construcción / Armado">Construcción / Armado</option>
               <option value="Medición en campo">Medición en campo</option>
@@ -150,26 +149,40 @@ const NuevaCotizacion = () => {
           </div>
 
           <div className="form-group">
-            <label>Validez de la oferta</label>
-            <select name="validez" value={form.validez} onChange={handleChange}>
-              <option value="7 días">7 días</option>
-              <option value="15 días">15 días</option>
-              <option value="30 días">30 días</option>
-            </select>
+            <label>Fecha de emisión</label>
+            <input
+              type="date"
+              value={fecha}
+              onChange={(e) => setFecha(e.target.value)}
+            />
           </div>
 
-          <div className="form-actions">
-            <button type="submit" className="btn btn-primary">
-              {editId ? "Actualizar" : "Guardar cotización"}
-            </button>
+          <div className="form-group">
+            <label>Validez</label>
+            <input
+              value={validez}
+              onChange={(e) => setValidez(e.target.value)}
+              placeholder="Ej. 7 días"
+            />
           </div>
-        </form>
+        </div>
+
+        <button className="btn btn-primary" onClick={guardarCotizacion}>
+          {editId ? "Actualizar Cotización" : "Guardar Cotización"}
+        </button>
+
+        {editId && (
+          <button className="btn btn-secondary" onClick={limpiarFormulario}>
+            Cancelar edición
+          </button>
+        )}
       </div>
 
+    
       <div className="card table-wrapper">
-        <h3>Cotizaciones registradas</h3>
+        <h3>Lista</h3>
 
-        <table className="tabla-mejorada">
+        <table>
           <thead>
             <tr>
               <th>Cliente</th>
@@ -182,14 +195,14 @@ const NuevaCotizacion = () => {
           </thead>
 
           <tbody>
-            {cotizaciones.length === 0 ? (
+            {lista.length === 0 ? (
               <tr>
                 <td colSpan="6" className="empty-state">
-                  No hay cotizaciones registradas.
+                  Aún no has registrado ninguna cotización.
                 </td>
               </tr>
             ) : (
-              cotizaciones.map((c) => (
+              lista.map((c) => (
                 <tr key={c.id}>
                   <td>{c.cliente}</td>
                   <td>{c.proyecto}</td>
@@ -197,10 +210,10 @@ const NuevaCotizacion = () => {
                   <td>{c.proceso}</td>
                   <td>{c.validez}</td>
                   <td>
-                    <button className="btn-small edit" onClick={() => handleEditar(c)}>
+                    <button className="btn btn-edit" onClick={() => editarCotizacion(c)}>
                       Editar
                     </button>
-                    <button className="btn-small delete" onClick={() => handleEliminar(c.id)}>
+                    <button className="btn btn-danger" onClick={() => eliminarCotizacion(c.id)}>
                       Eliminar
                     </button>
                   </td>
@@ -210,9 +223,8 @@ const NuevaCotizacion = () => {
           </tbody>
         </table>
       </div>
-
     </div>
   );
 };
 
-export default NuevaCotizacion;
+export default CrearCotizacion;
