@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo } from "react"; 
 import "../../styles/pages/Ventas.css";
 
 const Clientes = () => {
@@ -40,9 +40,7 @@ const Clientes = () => {
 
   const toggleFormulario = () => {
     setMostrarFormulario(!mostrarFormulario);
-    if (mostrarFormulario) {
-      resetForm();
-    }
+    if (mostrarFormulario) resetForm();
   };
 
   const handleSubmit = (e) => {
@@ -88,10 +86,7 @@ const Clientes = () => {
     if (!window.confirm("¿Seguro que deseas eliminar este cliente?")) return;
     const filtrados = clientes.filter((c) => c.id !== id);
     setClientes(filtrados);
-
-    if (editingId === id) {
-      resetForm();
-    }
+    if (editingId === id) resetForm();
   };
 
   const clientesFiltrados = useMemo(() => {
@@ -186,7 +181,7 @@ const Clientes = () => {
               />
             </div>
 
-            <div className="form-group">
+            <div class-name="form-group">
               <label>Correo electrónico</label>
               <input
                 type="email"
@@ -199,13 +194,29 @@ const Clientes = () => {
 
             <div className="form-group form-group-full">
               <label>Dirección</label>
-              <input
-                type="text"
-                name="direccion"
-                value={form.direccion}
-                onChange={handleChange}
-                placeholder="Ej. Av. Principal 123, Urb. Las Flores"
-              />
+              <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                <input
+                  type="text"
+                  name="direccion"
+                  value={form.direccion}
+                  onChange={handleChange}
+                  placeholder="Ej. Av. Principal 123, Urb. Las Flores"
+                  style={{ flex: 1 }}
+                />
+
+                {form.direccion.trim() !== "" && (
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                      form.direccion
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-secondary"
+                  >
+                    Ver GPS
+                  </a>
+                )}
+              </div>
             </div>
 
             <div className="form-group form-group-full">
@@ -214,7 +225,7 @@ const Clientes = () => {
                 name="notas"
                 value={form.notas}
                 onChange={handleChange}
-                placeholder="Ej. Cliente de proyectos corporativos, prioridad alta, paga con crédito."
+                placeholder="Ej. Cliente de proyectos corporativos."
               />
             </div>
 
@@ -246,6 +257,7 @@ const Clientes = () => {
                 <th>Acciones</th>
               </tr>
             </thead>
+
             <tbody>
               {clientesFiltrados.length === 0 ? (
                 <tr>
@@ -285,6 +297,7 @@ const Clientes = () => {
                 ))
               )}
             </tbody>
+
           </table>
         </div>
       </div>

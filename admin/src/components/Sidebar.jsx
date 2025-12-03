@@ -90,7 +90,6 @@ const Sidebar = () => {
             <ul className="submenu">
               <li><Link to="/admin/ventas/registrar">Registrar Venta</Link></li>
               <li><Link to="/admin/ventas/clientes">Clientes</Link></li>
-              <li><Link to="/admin/ventas/reportes">Reportes de Venta</Link></li>
             </ul>
           )}
         </li>
@@ -160,7 +159,6 @@ const Sidebar = () => {
           )}
         </li>
 
-        {/* 🔒 CERRAR SESIÓN */}
         <li className="cerrar-sesion">
           <button onClick={handleLogout}>
             <FaSignOutAlt /> Cerrar Sesión

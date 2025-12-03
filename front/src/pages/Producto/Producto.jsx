@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import "./Producto.css";
 
@@ -10,7 +11,6 @@ import oak from "../../img/oak.jpg";
 import engrosado from "../../img/engrosado.jpg";
 import curvo from "../../img/curvo.jpg";
 import angulo from "../../img/angulo.jpg";
-
 
 const MelaminaIcon = () => (
   <svg width="40" height="40" fill="none" stroke="black" strokeWidth="2" viewBox="0 0 24 24">
@@ -67,23 +67,66 @@ const servicios = [
   { nombre: "CORTE EN ÁNGULO", img: angulo },
 ];
 
-
 const Producto = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <Navbar />
 
       <div className="producto-page">
-
         <h1 className="titulo-principal">Productos Destacados</h1>
 
         <div className="categorias">
-          <div className="categoria active"><MelaminaIcon /><span>Melamina</span></div>
-          <div className="categoria"><AcabadosIcon /><span>Acabados</span></div>
-          <div className="categoria"><DrywallIcon /><span>Drywall y Techos</span></div>
-          <div className="categoria"><MaderaIcon /><span>Madera y tableros</span></div>
-          <div className="categoria"><FerreteriaIcon /><span>Ferretería y Accesorios</span></div>
-          <div className="categoria"><AltaGamaIcon /><span>Tableros Alta Gama</span></div>
+
+          <div
+            className="categoria active"
+            onClick={() => navigate("/admin/ventas/registrar", { state: { categoria: "Melamina" } })}
+          >
+            <MelaminaIcon />
+            <span>Melamina</span>
+          </div>
+
+          <div
+            className="categoria"
+            onClick={() => navigate("/admin/ventas/registrar", { state: { categoria: "Acabados" } })}
+          >
+            <AcabadosIcon />
+            <span>Acabados</span>
+          </div>
+
+          <div
+            className="categoria"
+            onClick={() => navigate("/admin/ventas/registrar", { state: { categoria: "Drywall y Techos" } })}
+          >
+            <DrywallIcon />
+            <span>Drywall y Techos</span>
+          </div>
+
+          <div
+            className="categoria"
+            onClick={() => navigate("/admin/ventas/registrar", { state: { categoria: "Madera y tableros" } })}
+          >
+            <MaderaIcon />
+            <span>Madera y tableros</span>
+          </div>
+
+          <div
+            className="categoria"
+            onClick={() => navigate("/admin/ventas/registrar", { state: { categoria: "Ferretería y Accesorios" } })}
+          >
+            <FerreteriaIcon />
+            <span>Ferretería y Accesorios</span>
+          </div>
+
+          <div
+            className="categoria"
+            onClick={() => navigate("/admin/ventas/registrar", { state: { categoria: "Tableros Alta Gama" } })}
+          >
+            <AltaGamaIcon />
+            <span>Tableros Alta Gama</span>
+          </div>
+
         </div>
 
         <h2 className="titulo-seccion">Nuestros Productos</h2>
@@ -94,7 +137,12 @@ const Producto = () => {
               <img src={p.img} className="producto-img" />
               <div className="producto-info">
                 <p>{p.nombre}</p>
-                <button className="btn-mas">+</button>
+                <button
+                  className="btn-mas"
+                  onClick={() => navigate("/admin/ventas/registrar", { state: { categoria: p.nombre } })}
+                >
+                  +
+                </button>
               </div>
             </div>
           ))}
@@ -106,7 +154,7 @@ const Producto = () => {
           <div className="servicio-info-grande">
             <h3>Nuestros Servicios</h3>
             <p>
-              Te ofrecemos un amplio portafolio de servicios realizados en maquinaria de primera 
+              Te ofrecemos un amplio portafolio de servicios realizados en maquinaria de primera
               tecnología y personal calificado para facilitar el desarrollo de tus proyectos.
             </p>
           </div>

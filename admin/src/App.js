@@ -23,7 +23,6 @@ import HistorialCotizacion from "./pages/Cotizaciones/HistorialCotizacion";
 // 🧾 Ventas
 import RegistrarVenta from "./pages/Ventas/RegistrarVenta";
 import Clientes from "./pages/Ventas/Clientes";
-import ReportesVenta from "./pages/Ventas/ReportesVenta";
 
 // 🚛 Compras
 import Proveedores from "./pages/Compras/Proveedores";
@@ -49,10 +48,8 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Página de Login */}
         <Route path="/" element={<Login />} />
 
-        {/* Rutas del sistema con Sidebar */}
         <Route
           path="/admin/*"
           element={
@@ -81,7 +78,6 @@ const App = () => {
                   {/* 🧾 VENTAS */}
                   <Route path="ventas/registrar" element={<RegistrarVenta />} />
                   <Route path="ventas/clientes" element={<Clientes />} />
-                  <Route path="ventas/reportes" element={<ReportesVenta />} />
 
                   {/* 🚛 COMPRAS */}
                   <Route
