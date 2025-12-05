@@ -6,12 +6,11 @@ function Inicio() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    navigate('/'); // te redirige al login
+    navigate('/'); 
   };
 
   return (
     <div className="inicio-container">
-      {/* NAVBAR */}
       <header className="navbar">
         <div className="navbar-left">
           <h2 className="logo">DBARY <span>COMPANY</span></h2>

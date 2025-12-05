@@ -1,0 +1,102 @@
+.denuncia-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: "Poppins", sans-serif;
+}
+
+.denuncia-container h1 {
+  text-align: center;
+  font-size: 34px;
+  font-weight: 700;
+}
+
+.subtitulo {
+  text-align: center;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.denuncia-box {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+form .form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+}
+
+input[type="text"],
+select,
+textarea,
+input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fafafa;
+  outline: none;
+  font-size: 15px;
+}
+
+textarea {
+  height: 130px;
+  resize: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #6a8efc;
+  background: #fff;
+}
+
+.preview-box {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.preview-box img {
+  width: 100%;
+  max-width: 300px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+
+.btn-denunciar {
+  width: 100%;
+  padding: 14px;
+  background: #e54242;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn-denunciar:hover {
+  background: #cc3333;
+}
+
+.mensaje-exito {
+  margin-top: 20px;
+  padding: 12px;
+  background: #e7f9ec;
+  border-left: 4px solid #2ecc71;
+  color: #2fa760;
+  font-weight: 600;
+  border-radius: 8px;
+  text-align: center;
+}

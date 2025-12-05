@@ -1,175 +1,74 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import "./Producto.css";
 
-import pelikano from "../../img/pelikano.jpg";
-import masisa from "../../img/masisa.jpg";
-import arcilla from "../../img/arcilla.jpg";
-import oak from "../../img/oak.jpg";
-
-import engrosado from "../../img/engrosado.jpg";
-import curvo from "../../img/curvo.jpg";
-import angulo from "../../img/angulo.jpg";
-
-const MelaminaIcon = () => (
-  <svg width="40" height="40" fill="none" stroke="black" strokeWidth="2" viewBox="0 0 24 24">
-    <rect x="3" y="5" width="18" height="14" rx="2" />
-    <line x1="3" y1="12" x2="21" y2="12" />
-  </svg>
-);
-
-const AcabadosIcon = () => (
-  <svg width="40" height="40" fill="none" stroke="black" strokeWidth="2" viewBox="0 0 24 24">
-    <path d="M4 4h16v6H4z" />
-    <path d="M4 14h16v6H4z" />
-  </svg>
-);
-
-const DrywallIcon = () => (
-  <svg width="40" height="40" fill="none" stroke="black" strokeWidth="2" viewBox="0 0 24 24">
-    <rect x="3" y="4" width="8" height="16" />
-    <rect x="13" y="4" width="8" height="16" />
-  </svg>
-);
-
-const MaderaIcon = () => (
-  <svg width="40" height="40" fill="none" stroke="black" strokeWidth="2" viewBox="0 0 24 24">
-    <path d="M4 20V4h10l6 6v10H4z" />
-    <line x1="14" y1="4" x2="14" y2="10" />
-  </svg>
-);
-
-const FerreteriaIcon = () => (
-  <svg width="40" height="40" fill="none" stroke="black" strokeWidth="2" viewBox="0 0 24 24">
-    <path d="M3 21l6-6" />
-    <path d="M14 3l7 7l-4 4l-7-7" />
-    <circle cx="5" cy="19" r="2" />
-  </svg>
-);
-
-const AltaGamaIcon = () => (
-  <svg width="40" height="40" fill="none" stroke="black" strokeWidth="2" viewBox="0 0 24 24">
-    <path d="M3 17l9-14l9 14H3z" />
-  </svg>
-);
-
-const productos = [
-  { nombre: "Pelíkano Mamba", img: pelikano },
-  { nombre: "Masisa Uyuni", img: masisa },
-  { nombre: "Vesto Arcilla", img: arcilla },
-  { nombre: "Hipanos Garden Oak", img: oak },
-];
-
-const servicios = [
-  { nombre: "ENGROSADO DE TABLEROS", img: engrosado },
-  { nombre: "CORTE CURVO", img: curvo },
-  { nombre: "CORTE EN ÁNGULO", img: angulo },
-];
+import cocinas from "../../assets/cocinas.jpg";
+import muebles from "../../assets/Muebles.jpg";
+import placards from "../../assets/Placards.jpg";
+import taller from "../../assets/Taller.jpg";
 
 const Producto = () => {
-  const navigate = useNavigate();
-
   return (
     <>
       <Navbar />
 
-      <div className="producto-page">
-        <h1 className="titulo-principal">Productos Destacados</h1>
+      <div className="producto-container">
 
-        <div className="categorias">
+        <section className="producto-header">
+          <h1 className="producto-title">Nuestros Productos</h1>
+          <p className="producto-subtitle">
+            Calidad, precisión y confianza en cada uno de nuestros trabajos.
+          </p>
+        </section>
 
-          <div
-            className="categoria active"
-            onClick={() => navigate("/admin/ventas/registrar", { state: { categoria: "Melamina" } })}
-          >
-            <MelaminaIcon />
-            <span>Melamina</span>
+        <section className="producto-grid">
+
+          {/* COCINAS */}
+          <div className="producto-card">
+            <img src={cocinas} alt="Cocinas" />
+            <h3>Cocinas Integrales</h3>
+            <p>Diseños modernos y funcionales para tu cocina</p>
+
+            <Link to="/detalles/cocina" className="btn-detalle">
+              Ver Detalles
+            </Link>
           </div>
 
-          <div
-            className="categoria"
-            onClick={() => navigate("/admin/ventas/registrar", { state: { categoria: "Acabados" } })}
-          >
-            <AcabadosIcon />
-            <span>Acabados</span>
+          {/* MUEBLES */}
+          <div className="producto-card">
+            <img src={muebles} alt="Muebles" />
+            <h3>Muebles de Oficina</h3>
+            <p>Escritorios, bibliotecas y archivadores</p>
+
+            <Link to="/detalles/muebles" className="btn-detalle">
+              Ver Detalles
+            </Link>
           </div>
 
-          <div
-            className="categoria"
-            onClick={() => navigate("/admin/ventas/registrar", { state: { categoria: "Drywall y Techos" } })}
-          >
-            <DrywallIcon />
-            <span>Drywall y Techos</span>
+          {/* PLACARDS */}
+          <div className="producto-card">
+            <img src={placards} alt="Placards" />
+            <h3>Placards y Vestidores</h3>
+            <p>Soluciones de almacenamiento personalizadas</p>
+
+            <Link to="/detalles/placards" className="btn-detalle">
+              Ver Detalles
+            </Link>
           </div>
 
-          <div
-            className="categoria"
-            onClick={() => navigate("/admin/ventas/registrar", { state: { categoria: "Madera y tableros" } })}
-          >
-            <MaderaIcon />
-            <span>Madera y tableros</span>
+          {/* TALLER */}
+          <div className="producto-card">
+            <img src={taller} alt="Taller" />
+            <h3>Taller de Fabricación</h3>
+            <p>Proceso artesanal de fabricación</p>
+
+            <Link to="/detalles/taller" className="btn-detalle">
+              Ver Detalles
+            </Link>
           </div>
 
-          <div
-            className="categoria"
-            onClick={() => navigate("/admin/ventas/registrar", { state: { categoria: "Ferretería y Accesorios" } })}
-          >
-            <FerreteriaIcon />
-            <span>Ferretería y Accesorios</span>
-          </div>
-
-          <div
-            className="categoria"
-            onClick={() => navigate("/admin/ventas/registrar", { state: { categoria: "Tableros Alta Gama" } })}
-          >
-            <AltaGamaIcon />
-            <span>Tableros Alta Gama</span>
-          </div>
-
-        </div>
-
-        <h2 className="titulo-seccion">Nuestros Productos</h2>
-
-        <div className="productos-lista">
-          {productos.map((p, i) => (
-            <div key={i} className="producto-card">
-              <img src={p.img} className="producto-img" />
-              <div className="producto-info">
-                <p>{p.nombre}</p>
-                <button
-                  className="btn-mas"
-                  onClick={() => navigate("/admin/ventas/registrar", { state: { categoria: p.nombre } })}
-                >
-                  +
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="servicio-card-grande">
-          <img src={engrosado} className="servicio-img-grande" />
-
-          <div className="servicio-info-grande">
-            <h3>Nuestros Servicios</h3>
-            <p>
-              Te ofrecemos un amplio portafolio de servicios realizados en maquinaria de primera
-              tecnología y personal calificado para facilitar el desarrollo de tus proyectos.
-            </p>
-          </div>
-        </div>
-
-        <div className="servicios-lista">
-          {servicios.map((s, i) => (
-            <div key={i} className="servicio-card">
-              <img src={s.img} className="servicio-img" />
-              <div className="servicio-footer">
-                <p>{s.nombre}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        </section>
 
       </div>
     </>
