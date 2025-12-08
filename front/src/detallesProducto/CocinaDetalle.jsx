@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar/Navbar";
-import cocinas from "../assets/cocinas.jpg";
 import "./Detalles.css";
 
 const CocinaDetalle = () => {
@@ -209,14 +208,6 @@ const CocinaDetalle = () => {
               4
             </label>
           </div>
-        </div>
-
-        <div className="detalle-main-content">
-          <h1>Cocinas Integrales</h1>
-          <img src={cocinas} alt="Cocinas" />
-          <p>
-            Diseños modernos, elegantes y funcionales, creados a medida para cada hogar.
-          </p>
         </div>
       </div>
     </>
