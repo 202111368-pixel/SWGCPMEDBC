@@ -1,11 +1,9 @@
-/* --- General --- */
 .inicio-container {
   font-family: 'Segoe UI', Arial, sans-serif;
   margin: 0;
   padding: 0;
 }
 
-/* --- Navbar --- */
 .navbar {
   display: flex;
   align-items: center;
@@ -19,7 +17,6 @@
   z-index: 1000;
 }
 
-/* Izquierda (logo) */
 .logo {
   font-size: 22px;
   margin: 0;
@@ -28,10 +25,9 @@
 }
 
 .logo span {
-  color: #ffd60a; /* color destacado (puedes cambiarlo) */
+  color: #ffd60a; 
 }
 
-/* Centro (enlaces) */
 .navbar-center {
   display: flex;
   gap: 30px;
@@ -49,7 +45,6 @@
   color: #ffd60a;
 }
 
-/* Derecha (botón cerrar sesión) */
 .logout-btn {
   background-color: #e63946;
   color: white;
@@ -65,7 +60,6 @@
   background-color: #c1121f;
 }
 
-/* --- Contenido principal --- */
 .main-content {
   text-align: center;
   margin-top: 80px;
