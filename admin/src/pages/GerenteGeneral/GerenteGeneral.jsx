@@ -1,5 +1,5 @@
 import React from "react";
-import "../../styles/pages/Inventario.css";
+import "../../styles/pages/GerenteGeneral.css";
 
 const Movimientos = () => {
   return (

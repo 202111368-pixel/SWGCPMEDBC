@@ -1,5 +1,5 @@
 import React from "react";
-import "../../styles/pages/Produccion.css";
+import "../../styles/pages/Cajero.css";
 
 const PlanificarProduccion = () => {
   return (

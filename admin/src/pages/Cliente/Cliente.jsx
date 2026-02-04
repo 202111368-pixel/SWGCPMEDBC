@@ -1,5 +1,5 @@
 import React from "react";
-import "../../styles/pages/Almacen.css";
+import "../../styles/pages/Clientes.css";
 
 const Categorias = () => {
   return (
