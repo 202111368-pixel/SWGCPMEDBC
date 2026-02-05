@@ -1,0 +1,45 @@
+.empleados-container {
+  padding: 25px;
+  background: #faf6ef;
+  border-radius: 10px;
+}
+
+.panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+input, select {
+  padding: 7px;
+  border-radius: 6px;
+  border: 1px solid #d4a76a;
+}
+
+button {
+  background: #b78b50;
+  border: none;
+  color: white;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button.danger {
+  background: #b2452f;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla th {
+  background: #f2d7b2;
+}
+
+.tabla th, .tabla td {
+  padding: 8px;
+  border-bottom: 1px solid #eee0c5;
+}

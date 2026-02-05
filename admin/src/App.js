@@ -27,27 +27,27 @@ const App = () => {
               <Sidebar />
               <div className="content">
                 <Routes>
-                  {/* 🏠 INICIO */}
+                  {/* INICIO */}
                   <Route path="inicio" element={<GerenteGeneral />} />
                   <Route path="gerente-general" element={<GerenteGeneral />} />
 
-                  {/* 🧾 VENTAS */}
+                  {/* VENTAS */}
                   <Route path="ventas/registrar" element={<RegistrarVenta />} />
                   
-                  {/* 👥 CLIENTES */}
+                  {/* CLIENTES */}
                   <Route path="cliente" element={<Cliente />} />
 
-                  {/* 🚛 COMPRAS */}
+                  {/* COMPRAS */}
                   <Route path="compras/ordenes" element={<OrdenesCompra />} />
 
-                  {/* 👷 PERSONAL */}
+                  {/* PERSONAL */}
                   <Route path="personal/empleados" element={<Empleados />} />
                   <Route path="personal/asistencias" element={<Asistencias />} />
 
-                  {/* 💰 CAJERO */}
+                  {/* CAJERO */}
                   <Route path="cajero" element={<Cajero />} />
 
-                  {/* ⚙️ CONFIGURACIÓN */}
+                  {/* CONFIGURACIÓN */}
                   <Route path="configuracion" element={<Configuracion />} />
                 </Routes>
               </div>
