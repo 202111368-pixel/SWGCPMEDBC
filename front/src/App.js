@@ -13,7 +13,6 @@ import Carrito from "./pages/Carrito/Carrito";
 import CocinaDetalle from "./detallesProducto/CocinaDetalle";
 import MueblesDetalle from "./detallesProducto/MueblesDetalle";
 import PlacardsDetalle from "./detallesProducto/PlacardsDetalle";
-import TallerDetalle from "./detallesProducto/TallerDetalle";
 
 function App() {
   return (
@@ -36,7 +35,6 @@ function App() {
         <Route path="/detalles/cocina" element={<CocinaDetalle />} />
         <Route path="/detalles/muebles" element={<MueblesDetalle />} />
         <Route path="/detalles/placards" element={<PlacardsDetalle />} />
-        <Route path="/detalles/taller" element={<TallerDetalle />} />
 
         {/* Ruta no encontrada */}
         <Route path="*" element={<Login />} />

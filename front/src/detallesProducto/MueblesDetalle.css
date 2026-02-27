@@ -1,33 +1,74 @@
 .filtros-container {
+  padding: 40px 0;
+  background: #f5f5f5;
   display: flex;
+  justify-content: center; 
+}
+
+.productos-derecha {
   width: 100%;
+  display: flex;
+  justify-content: center; 
+}
+
+.productos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+
+  max-width: 1100px;   
+  width: 100%;
+}
+
+.producto-card {
+  background: #fff;
   padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  transition: 0.3s ease;
 }
 
-.filtros-izquierda {
-  width: 280px;
-  padding-left: 20px;
+.producto-card:hover {
+  transform: translateY(-5px);
+}
+
+.producto-card img {
+  width: 100%;
+  max-width: 240px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 0 auto 12px auto; 
+  display: block;
+}
+
+.colores {
   display: flex;
-  flex-direction: column;
-  gap: 35px;
-}
-
-.grupo-filtro h3 {
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 8px;
-}
-
-.grupo-filtro label {
-  display: flex;
-  align-items: center;
+  justify-content: center;
   gap: 10px;
-  margin: 6px 0;
-  font-size: 14px;
-  cursor: pointer;
+  margin: 10px 0;
 }
 
-.grupo-filtro input[type="checkbox"] {
+.color-circle {
   width: 16px;
   height: 16px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 1px solid #aaa;
+}
+
+.precio {
+  font-weight: bold;
+  margin: 8px 0;
+}
+
+.btn-producto {
+  width: 100%;
+  padding: 8px;
+  background: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
 }

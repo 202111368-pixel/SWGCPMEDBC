@@ -56,18 +56,6 @@ const Producto = () => {
               Ver Detalles
             </Link>
           </div>
-
-          {/* TALLER */}
-          <div className="producto-card">
-            <img src={taller} alt="Taller" />
-            <h3>Taller de Fabricación</h3>
-            <p>Proceso artesanal de fabricación</p>
-
-            <Link to="/detalles/taller" className="btn-detalle">
-              Ver Detalles
-            </Link>
-          </div>
-
         </section>
 
       </div>
