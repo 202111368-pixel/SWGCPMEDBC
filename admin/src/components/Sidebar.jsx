@@ -32,7 +32,7 @@ const Sidebar = () => {
         {/*INICIO */}
         <li>
           <Link to="/admin/inicio" className="menu-link">
-            <FaChartLine /> <span>Inicio</span>
+            <FaChartLine /> <span>Dashboard </span>
           </Link>
         </li>
 
@@ -79,6 +79,8 @@ const Sidebar = () => {
           </Link>
         </li>
 
+
+        {/* Civil */}
         <li>
           <Link to="/admin/Civil" className="menu-link">
             <FaHardHat /> <span>Ingeniería Civil</span>

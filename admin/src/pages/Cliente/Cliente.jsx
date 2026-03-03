@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "../../styles/pages/Cliente/Cliente.css"; 
-
 import { 
   FaUserPlus, FaSearch, FaEdit, FaTrash, 
   FaPhone, FaTimes, FaUserCog 
@@ -14,8 +13,9 @@ const Cliente = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isEditing, setIsEditing] = useState(false); 
   const [formData, setFormData] = useState({
-    nombre: "", documento: "", tipo: "CARPINTERO", celular: ""
+    id: null, nombre: "", documento: "", tipo: "CARPINTERO", celular: ""
   });
 
   const clientesFiltrados = clientes.filter(c => 
@@ -23,34 +23,49 @@ const Cliente = () => {
     c.documento.includes(searchTerm)
   );
 
+  const manejarModal = (cliente = null) => {
+    if (cliente) {
+      setIsEditing(true);
+      setFormData(cliente);
+    } else {
+      setIsEditing(false);
+      setFormData({ id: null, nombre: "", documento: "", tipo: "CARPINTERO", celular: "" });
+    }
+    setShowModal(true);
+  };
+
+  const guardarCliente = () => {
+    if (!formData.nombre.trim() || !formData.documento.trim()) {
+      alert("Nombre y Documento son obligatorios");
+      return;
+    }
+
+    if (isEditing) {
+      setClientes(clientes.map(c => c.id === formData.id ? formData : c));
+    } else {
+      const nuevoCliente = { ...formData, id: Date.now() };
+      setClientes([...clientes, nuevoCliente]);
+    }
+    setShowModal(false);
+  };
+
   const eliminarCliente = (id) => {
-    if (window.confirm("¿Deseas eliminar este cliente del sistema?")) {
+    if (window.confirm("¿Estás seguro de eliminar este cliente?")) {
       setClientes(clientes.filter(c => c.id !== id));
     }
   };
 
-  const guardarCliente = () => {
-    if (formData.nombre.trim() === "" || formData.documento.trim() === "") {
-      alert("Por favor, ingresa el nombre y el documento.");
-      return;
-    }
-    const nuevoCliente = { ...formData, id: Date.now() };
-    setClientes([...clientes, nuevoCliente]);
-    setShowModal(false);
-    setFormData({ nombre: "", documento: "", tipo: "CARPINTERO", celular: "" });
-  };
-
   return (
-    <div className="clientes-container">
+    <div className="clientes-container fade-in">
       <div className="clientes-header">
         <div className="header-title">
           <FaUserCog className="header-icon" />
           <div>
-            <h1>Clientes</h1>
-            <p>D’Bary Company - Gestión de Profesionales</p>
+            <h1>Directorio de Clientes</h1>
+            <p>Gestión de Clientes y Maestros Carpinteros</p>
           </div>
         </div>
-        <button className="btn-nuevo-cliente" onClick={() => setShowModal(true)}>
+        <button className="btn-nuevo-cliente" onClick={() => manejarModal()}>
           <FaUserPlus /> Nuevo Cliente
         </button>
       </div>
@@ -60,7 +75,7 @@ const Cliente = () => {
           <FaSearch className="search-icon" />
           <input 
             type="text" 
-            placeholder="Buscar por nombre, DNI o RUC..." 
+            placeholder="Buscar por nombre o RUC..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -79,65 +94,59 @@ const Cliente = () => {
             </tr>
           </thead>
           <tbody>
-            {clientesFiltrados.length > 0 ? (
-              clientesFiltrados.map((c) => (
-                <tr key={c.id}>
-                  <td><strong>{c.nombre}</strong></td>
-                  <td><span className="doc-badge">{c.documento}</span></td>
-                  <td><span className={`type-badge ${c.tipo.toLowerCase()}`}>{c.tipo}</span></td>
-                  <td><FaPhone style={{color: '#10b981', marginRight: '8px'}} />{c.celular}</td>
-                  <td>
-                    <button className="btn-action edit" title="Editar"><FaEdit /></button>
-                    <button 
-                      className="btn-action delete" 
-                      onClick={() => eliminarCliente(c.id)}
-                      title="Eliminar"
-                    >
-                      <FaTrash />
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="5" className="text-center">No se encontraron resultados.</td>
+            {clientesFiltrados.map((c) => (
+              <tr key={c.id}>
+                <td><strong>{c.nombre}</strong></td>
+                <td><span className="doc-badge">{c.documento}</span></td>
+                <td><span className={`type-badge ${c.tipo.toLowerCase().replace(" ", "-")}`}>{c.tipo}</span></td>
+                <td><FaPhone className="icon-green" /> {c.celular}</td>
+                <td className="actions-cell">
+                  <button className="btn-action edit" onClick={() => manejarModal(c)}><FaEdit /></button>
+                  <button className="btn-action delete" onClick={() => eliminarCliente(c.id)}><FaTrash /></button>
+                </td>
               </tr>
-            )}
+            ))}
           </tbody>
         </table>
       </div>
 
       {showModal && (
         <div className="modal-overlay">
-          <div className="modal-card">
+          <div className="modal-card bounce-in">
             <div className="modal-header">
-              <h3>Registrar Nuevo Cliente</h3>
-              <button className="close-btn" onClick={() => setShowModal(false)}><FaTimes /></button>
+              <h3>{isEditing ? "Editar Cliente" : "Registrar Nuevo Cliente"}</h3>
+              <button className="close-btn-x" onClick={() => setShowModal(false)}><FaTimes /></button>
             </div>
             <div className="modal-body">
-              <div className="input-group">
+              <div className="form-group">
                 <label>Nombre Completo / Razón Social</label>
                 <input 
                   type="text" 
                   value={formData.nombre}
                   onChange={(e) => setFormData({...formData, nombre: e.target.value.toUpperCase()})}
-                  placeholder="Ej. Juan Perez o Carpintería SAC"
                 />
               </div>
-              <div className="input-group">
-                <label>Número de Documento (DNI/RUC)</label>
-                <input 
-                  type="text" 
-                  value={formData.documento}
-                  onChange={(e) => setFormData({...formData, documento: e.target.value})}
-                />
+              <div className="form-row">
+                <div className="form-group">
+                  <label>DNI / RUC</label>
+                  <input 
+                    type="text" 
+                    value={formData.documento}
+                    onChange={(e) => setFormData({...formData, documento: e.target.value})}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Celular</label>
+                  <input 
+                    type="text" 
+                    value={formData.celular}
+                    onChange={(e) => setFormData({...formData, celular: e.target.value})}
+                  />
+                </div>
               </div>
-              <div className="input-group">
-                <label>Tipo de Cliente</label>
-                <select 
-                  value={formData.tipo}
-                  onChange={(e) => setFormData({...formData, tipo: e.target.value})}
-                >
+              <div className="form-group">
+                <label>Categoría</label>
+                <select value={formData.tipo} onChange={(e) => setFormData({...formData, tipo: e.target.value})}>
                   <option value="CARPINTERO">Carpintero</option>
                   <option value="EMPRESA">Empresa</option>
                   <option value="FINAL">Cliente Final</option>
@@ -145,7 +154,10 @@ const Cliente = () => {
               </div>
             </div>
             <div className="modal-footer">
-              <button className="btn-save" onClick={guardarCliente}>Guardar Cliente</button>
+              <button className="btn-cancel" onClick={() => setShowModal(false)}>Cancelar</button>
+              <button className="btn-save" onClick={guardarCliente}>
+                {isEditing ? "Guardar Cambios" : "Registrar Cliente"}
+              </button>
             </div>
           </div>
         </div>
