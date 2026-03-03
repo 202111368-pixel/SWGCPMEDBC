@@ -63,7 +63,7 @@ const Sidebar = () => {
 
         <hr className="sidebar-divider" />
 
-        {/* clientes */}
+        {/* cliente */}
         <li>
           <Link to="/admin/clientes" className="menu-link">
             <FaUsers /> <span>Clientes</span>

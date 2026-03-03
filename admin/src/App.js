@@ -4,18 +4,20 @@ import Sidebar from "./components/Sidebar";
 import "./styles/Sidebar.css";
 import "./styles/Login.css";
 
-/*Almacen*/ 
+/* Almacen */ 
 import Categoria from "./pages/Almacen/Categoria"; 
 
-/*Producto*/ 
+/* Producto */ 
 import Producto from "./pages/Producto/Producto";
 
-/*Login */
+/* Clientes  */
+import Cliente from "./pages/Cliente/Cliente"; 
+
+/* Login */
 import Login from "./pages/Login";
 
-/*Registrar ventas */
+/*  ventas */
 import RegistrarVenta from "./pages/Ventas/RegistrarVenta";
-
 
 const App = () => {
   return (
@@ -30,7 +32,6 @@ const App = () => {
               <Sidebar />
               <div className="content">
                 <Routes>
-                
                   {/* VENTAS */}
                   <Route path="ventas/registrar" element={<RegistrarVenta />} />
 
@@ -38,9 +39,10 @@ const App = () => {
                   <Route path="categoria" element={<Categoria />} />
                   <Route path="producto" element={<Producto />} />
 
-                  {/* Producto */}
-                  <Route path="producto" element={<Producto />} />
+                  {/* CLIENTES */}
+                  <Route path="clientes" element={<Cliente />} />
 
+                  <Route path="*" element={<div>Página no encontrada en Admin</div>} />
                 </Routes>
               </div>
             </div>
