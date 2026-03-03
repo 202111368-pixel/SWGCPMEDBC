@@ -43,6 +43,8 @@ const Navbar = () => {
         <Link to="/nosotros">Nosotros</Link>
         <Link to="/contacto">Contacto</Link>
         <Link to="/denuncia">Denuncia</Link>
+        <Link to="/blog">Blog</Link>
+        <Link to="/marcas">Marcas</Link>
       </nav>
 
       <div className="navbar-right">

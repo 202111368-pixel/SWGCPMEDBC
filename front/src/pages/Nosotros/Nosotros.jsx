@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import "./Nosotros.css";
-import Taller from "../../assets/Taller.jpg";
+import Taller from "../../assets/nicolas.jpg"; 
 
 const Nosotros = () => {
   return (
@@ -11,7 +11,7 @@ const Nosotros = () => {
       <div className="nosotros-container">
         <section className="nosotros-content">
           <div className="nosotros-text">
-            <h1>Sobre <span>C R E A</span></h1>
+            <h1>Sobre <span>D’Bary Company</span></h1>
 
             <p>
               Somos una empresa familiar con más de 15 años de experiencia en el diseño y 
@@ -44,7 +44,6 @@ const Nosotros = () => {
             <h3>Nuestros Valores</h3>
 
             <div className="valores-list">
-
               <div className="valor-card">
                 <div>
                   <h4>Pasión por la Calidad</h4>
@@ -65,18 +64,16 @@ const Nosotros = () => {
                   <p>Aplicamos las últimas tendencias en diseño y tecnología.</p>
                 </div>
               </div>
-
             </div>
           </div>
 
           <div className="nosotros-img">
-            <img src={Taller} alt="Taller de fabricación" />
+            <img src={Taller} alt="Taller de fabricación de D’Bary Company" loading="lazy" />
             <div className="anos-box">
               <strong>15+</strong>
               <span>Años</span>
             </div>
           </div>
-
         </section>
 
         <section className="nosotros-metricas">
@@ -94,13 +91,12 @@ const Nosotros = () => {
         <section className="nosotros-testimonio">
           <p>
             <em>
-              "El equipo de C R E A transformó completamente nuestra cocina. 
+              "El equipo de D’Bary Company transformó completamente nuestra cocina. 
               El diseño es hermoso y la calidad excepcional. ¡Recomendamos 100%!"
             </em>
           </p>
           <span>- María González, Cliente Satisfecha</span>
         </section>
-
       </div>
     </>
   );

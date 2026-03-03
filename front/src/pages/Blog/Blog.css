@@ -1,0 +1,69 @@
+.post-image-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.post-image-small {
+    width: 300px; 
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.comentarios-section {
+    margin-top: 80px;
+    padding: 40px;
+    background: #fff;
+    border-top: 1px solid #eee;
+}
+
+.comment-form textarea {
+    width: 100%;
+    height: 150px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    background: #f9f9f9;
+}
+
+.form-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-inputs input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+}
+
+.btn-publicar {
+    background-color: #0073aa;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background 0.3s;
+}
+
+.btn-publicar:hover {
+    background-color: #005177;
+}
+
+.lista-comentarios {
+    margin: 40px 0;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.comentario-item {
+    border-bottom: 1px solid #ddd;
+    padding: 15px 0;
+}

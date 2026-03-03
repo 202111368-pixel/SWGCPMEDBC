@@ -8,6 +8,10 @@ import Nosotros from './pages/Nosotros/Nosotros';
 import Contacto from './pages/Contacto/Contacto';
 import Denuncia from './pages/Denuncia/Denuncia';
 import Carrito from "./pages/Carrito/Carrito";
+import Blog from "./pages/Blog/Blog";
+import Marcas from "./pages/Marcas/Marcas";
+
+
 
 // detalles de productos
 import CocinaDetalle from "./detallesProducto/CocinaDetalle";
@@ -27,6 +31,9 @@ function App() {
         <Route path="/nosotros" element={<Nosotros />} />
         <Route path="/contacto" element={<Contacto />} />
         <Route path="/denuncia" element={<Denuncia />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/marcas" element={<Marcas />} />
+
 
         {/*  Carrito */}
         <Route path="/carrito" element={<Carrito />} />

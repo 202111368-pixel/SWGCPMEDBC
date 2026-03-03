@@ -22,6 +22,9 @@ function Inicio() {
           <a href="#">Nosotros</a>
           <a href="#">Contacto</a>
           <a href="#">Denuncia</a>
+          <a href="#">Blog</a>
+          <a href="#">Marcas</a>
+
         </nav>
 
         <div className="navbar-right">

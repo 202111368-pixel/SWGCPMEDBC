@@ -6,7 +6,6 @@ import "./Producto.css";
 import cocinas from "../../assets/cocinas.jpg";
 import muebles from "../../assets/Muebles.jpg";
 import placards from "../../assets/Placards.jpg";
-import taller from "../../assets/Taller.jpg";
 
 const Producto = () => {
   return (
