@@ -1,71 +1,56 @@
-:root {
-  --primary: #2563eb;
-  --success: #10b981;
-  --danger: #ef4444;
-  --bg: #f8fafc;
-  --text-dark: #1e293b;
-  --text-light: #64748b;
-  --white: #ffffff;
-  --border: #e2e8f0;
+.hub-container { padding: 40px; background: #f8fafc; min-height: 100vh; }
+
+.hub-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.hub-branding { display: flex; align-items: center; gap: 15px; }
+.hub-logo-anim { 
+    width: 50px; height: 50px; background: #2563eb; color: white; 
+    border-radius: 12px; display: flex; justify-content: center; align-items: center; 
+    font-size: 1.5rem; box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
 }
 
-.clientes-container { padding: 30px; background-color: var(--bg); min-height: 100vh; }
-
-.clientes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-.header-title { display: flex; align-items: center; gap: 15px; }
-.header-icon { font-size: 2.5rem; color: var(--primary); }
-
-.btn-nuevo-cliente {
-  background: var(--primary); color: white; border: none; padding: 12px 24px;
-  border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px;
+.hub-btn-add {
+    background: #1e293b; color: white; border: none; padding: 12px 25px;
+    border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px;
 }
 
-.table-wrapper { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-.clientes-table { width: 100%; border-collapse: collapse; }
-.clientes-table th { background: #f1f5f9; padding: 15px; text-align: left; font-size: 0.85rem; color: var(--text-light); }
-.clientes-table td { padding: 15px; border-bottom: 1px solid var(--border); }
+.hub-search-bar {
+    background: white; border: 1px solid #e2e8f0; padding: 10px 15px;
+    border-radius: 10px; display: flex; align-items: center; gap: 10px; width: 350px; margin-bottom: 25px;
+}
+.hub-search-bar input { border: none; outline: none; width: 100%; color: #475569; }
 
-.modal-overlay {
-  position: fixed; top:0; left:0; width: 100%; height:100%;
-  background: rgba(15, 23, 42, 0.7); display: flex; justify-content: center; align-items: center; z-index: 2000;
+.hub-table-frame { background: white; border-radius: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow: hidden; }
+.hub-table { width: 100%; border-collapse: collapse; }
+.hub-table th { background: #f1f5f9; padding: 15px; text-align: left; font-size: 12px; text-transform: uppercase; color: #64748b; }
+.hub-table td { padding: 15px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+
+.ia-btn { width: 32px; height: 32px; border: none; border-radius: 6px; margin-left: 5px; cursor: pointer; transition: 0.2s; }
+.ia-btn.hist { background: #eff6ff; color: #2563eb; }
+.ia-btn.edit { background: #fffbeb; color: #d97706; }
+.ia-btn.deli { background: #fef2f2; color: #dc2626; }
+
+.hub-badge-doc { background: #f1f5f9; padding: 4px 8px; border-radius: 4px; font-family: monospace; }
+.hub-tag { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px; }
+.hub-tag.carpintero { background: #fef3c7; color: #92400e; }
+.hub-tag.empresa { background: #dbeafe; color: #1e40af; }
+
+.ia-modal-overlay { 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: rgba(15, 23, 42, 0.6); display: flex; justify-content: center; align-items: center; z-index: 999;
+}
+.ia-modal-card { background: white; width: 450px; border-radius: 15px; overflow: hidden; animation: zoomIn 0.3s; }
+.ia-modal-head { padding: 20px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
+.ia-modal-body { padding: 20px; }
+.ia-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.ia-input-group { margin-bottom: 15px; }
+.ia-input-group label { display: block; font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 5px; }
+.ia-input-group input, select { width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; }
+
+.ia-scanning-zone { text-align: center; padding: 40px; position: relative; overflow: hidden; background: #fafafa; border-radius: 10px; }
+.scanner-line { 
+    position: absolute; top: 0; left: 0; width: 100%; height: 2px; 
+    background: #2563eb; box-shadow: 0 0 10px #2563eb; animation: scan 1.5s infinite; 
 }
 
-.modal-card {
-  background: white; width: 100%; max-width: 500px; border-radius: 12px;
-  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); overflow: hidden;
-}
-
-.modal-header {
-  padding: 20px; border-bottom: 1px solid var(--border);
-  display: flex; justify-content: space-between; align-items: center; background: #fff;
-}
-
-.close-btn-x { background: #f1f5f9; border: none; border-radius: 4px; padding: 5px 10px; cursor: pointer; }
-
-.modal-body { padding: 25px; display: flex; flex-direction: column; gap: 15px; }
-
-.form-group { display: flex; flex-direction: column; gap: 8px; width: 100%; }
-.form-group label { font-weight: 600; font-size: 0.9rem; color: var(--text-dark); }
-.form-group input, .form-group select {
-  padding: 10px; border: 1px solid var(--border); border-radius: 6px; outline: none; font-size: 1rem;
-}
-
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-
-.modal-footer {
-  padding: 15px 25px; background: #f8fafc; border-top: 1px solid var(--border);
-  display: flex; justify-content: flex-end; gap: 12px;
-}
-
-.btn-save { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; }
-.btn-cancel { background: #fff; border: 1px solid var(--border); padding: 10px 20px; border-radius: 6px; cursor: pointer; }
-
-.type-badge { padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: bold; }
-.carpintero { background: #fef3c7; color: #92400e; }
-.empresa { background: #dbeafe; color: #1e40af; }
-.final { background: #d1fae5; color: #065f46; }
-
-.fade-in { animation: fadeIn 0.3s ease; }
-.bounce-in { animation: bounceIn 0.3s ease; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes bounceIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes scan { 0% { top: 0%; } 100% { top: 100%; } }
+@keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }

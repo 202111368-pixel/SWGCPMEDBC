@@ -5,9 +5,11 @@ import {
   FaChartLine,
   FaBox,
   FaUsers,          
-  FaDraftingCompass, 
-  FaHardHat,         
-  FaSignOutAlt
+  FaBoxes, 
+  FaChartBar,         
+  FaSignOutAlt,
+  FaMoneyCheckAlt,
+  FaTools
 } from "react-icons/fa";
 import "../styles/Sidebar.css";
 
@@ -45,10 +47,10 @@ const Sidebar = () => {
         </li>
 
 
-    {/*Almacén */}
+    {/*Pagos */}
         <li>
-          <Link to="/admin/categoria" className="menu-link">
-            <FaBox /> <span>Almacén</span>
+          <Link to="/admin/pagos" className="menu-link">
+            <FaMoneyCheckAlt /> <span>Pagos</span>
           </Link>
         </li>
   
@@ -72,20 +74,28 @@ const Sidebar = () => {
 
         <hr className="sidebar-divider" />
 
-        {/* Arquitecto */}
+        {/* Inventario */}
         <li>
-          <Link to="/admin/Arquitecto" className="menu-link">
-            <FaDraftingCompass /> <span>Arquitecto (Diseño)</span>
+          <Link to="/admin/Inventario" className="menu-link">
+            <FaBoxes /> <span>Inventario </span>
           </Link>
         </li>
 
 
-        {/* Civil */}
-        <li>
-          <Link to="/admin/Civil" className="menu-link">
-            <FaHardHat /> <span>Ingeniería Civil</span>
+        {/* Reportes */}
+       <li>
+          <Link to="/admin/reportes" className="menu-link">
+            <FaChartBar /> <span>Reportes</span>
           </Link>
         </li>
+
+         {/* Configuración  */}
+       <li>
+          <Link to="/admin/configuración " className="menu-link">
+            <FaTools /> <span>Configuración </span>
+          </Link>
+        </li>
+
 
         <hr className="sidebar-divider" />
 

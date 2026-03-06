@@ -1,29 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import "../../styles/pages/Cliente/Cliente.css"; 
 import { 
-  FaUserPlus, FaSearch, FaEdit, FaTrash, 
-  FaPhone, FaTimes, FaUserCog 
+  FaUserPlus, FaSearch, FaEdit, FaTrash, FaPhone, 
+  FaTimes, FaUserCog, FaStore, FaHistory, 
+  FaTools, FaFileInvoiceDollar, FaCheckCircle
 } from "react-icons/fa";
+
+const DB_HISTORIAL = [
+  { id: 501, clienteId: 1, fecha: "2026-02-15", items: "5 Planchas Roble", total: 1250.00, estado: "Entregado" },
+  { id: 502, clienteId: 2, fecha: "2026-03-01", items: "Corte Cocina Integral", total: 450.50, estado: "En Proceso" },
+  { id: 503, clienteId: 1, fecha: "2026-01-10", items: "Accesorios Blum", total: 890.00, estado: "Entregado" },
+];
 
 const Cliente = () => {
   const [clientes, setClientes] = useState([
     { id: 1, nombre: "MUEBLES EL ROBLE S.A.C.", documento: "20601234567", tipo: "EMPRESA", celular: "987654321" },
     { id: 2, nombre: "JUAN CARLOS RIVERA", documento: "45789632", tipo: "CARPINTERO", celular: "912345678" },
+    { id: 3, nombre: "NICOLAS TORRES", documento: "72908451", tipo: "FINAL", celular: "962219340" },
   ]);
 
-  const [showModal, setShowModal] = useState(false);
+  const [ui, setUi] = useState({ modal: false, history: false, scanning: false });
   const [searchTerm, setSearchTerm] = useState("");
   const [isEditing, setIsEditing] = useState(false); 
-  const [formData, setFormData] = useState({
-    id: null, nombre: "", documento: "", tipo: "CARPINTERO", celular: ""
-  });
+  const [selectedCliente, setSelectedCliente] = useState(null);
+  const [pedidosEncontrados, setPedidosEncontrados] = useState([]);
+  const [formData, setFormData] = useState({ id: null, nombre: "", documento: "", tipo: "CARPINTERO", celular: "" });
 
-  const clientesFiltrados = clientes.filter(c => 
-    c.nombre.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    c.documento.includes(searchTerm)
-  );
+  const filteredData = useMemo(() => {
+    return clientes.filter(c => 
+      c.nombre.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      c.documento.includes(searchTerm)
+    );
+  }, [clientes, searchTerm]);
 
-  const manejarModal = (cliente = null) => {
+  const toggleModal = useCallback((cliente = null) => {
     if (cliente) {
       setIsEditing(true);
       setFormData(cliente);
@@ -31,78 +41,80 @@ const Cliente = () => {
       setIsEditing(false);
       setFormData({ id: null, nombre: "", documento: "", tipo: "CARPINTERO", celular: "" });
     }
-    setShowModal(true);
+    setUi(prev => ({ ...prev, modal: !prev.modal }));
+  }, []);
+
+  const handleViewHistory = (cliente) => {
+    setSelectedCliente(cliente);
+    setUi(prev => ({ ...prev, history: true, scanning: true }));
+    
+    setTimeout(() => {
+      const logs = DB_HISTORIAL.filter(p => p.clienteId === cliente.id);
+      setPedidosEncontrados(logs);
+      setUi(prev => ({ ...prev, scanning: false }));
+    }, 1500);
   };
 
-  const guardarCliente = () => {
-    if (!formData.nombre.trim() || !formData.documento.trim()) {
-      alert("Nombre y Documento son obligatorios");
-      return;
-    }
-
+  const processForm = () => {
+    if (!formData.nombre || !formData.documento) return;
     if (isEditing) {
       setClientes(clientes.map(c => c.id === formData.id ? formData : c));
     } else {
-      const nuevoCliente = { ...formData, id: Date.now() };
-      setClientes([...clientes, nuevoCliente]);
+      setClientes([...clientes, { ...formData, id: Date.now() }]);
     }
-    setShowModal(false);
-  };
-
-  const eliminarCliente = (id) => {
-    if (window.confirm("¿Estás seguro de eliminar este cliente?")) {
-      setClientes(clientes.filter(c => c.id !== id));
-    }
+    setUi(prev => ({ ...prev, modal: false }));
   };
 
   return (
-    <div className="clientes-container fade-in">
-      <div className="clientes-header">
-        <div className="header-title">
-          <FaUserCog className="header-icon" />
+    <div className="hub-container fade-in">
+      <div className="hub-header">
+        <div className="hub-branding">
+          <div className="hub-logo-anim"><FaUserCog /></div>
           <div>
-            <h1>Directorio de Clientes</h1>
-            <p>Gestión de Clientes y Maestros Carpinteros</p>
+            <h1>Gestión de Cliente</h1>
           </div>
         </div>
-        <button className="btn-nuevo-cliente" onClick={() => manejarModal()}>
-          <FaUserPlus /> Nuevo Cliente
+        <button className="hub-btn-add" onClick={() => toggleModal()}>
+          <FaUserPlus /> Nuevo Registro
         </button>
       </div>
 
-      <div className="clientes-toolbar">
-        <div className="search-box">
-          <FaSearch className="search-icon" />
+      <div className="hub-controls">
+        <div className="hub-search-bar">
+          <FaSearch />
           <input 
-            type="text" 
-            placeholder="Buscar por nombre o RUC..." 
-            value={searchTerm}
+            placeholder="Buscar por identidad o documento..." 
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
       </div>
 
-      <div className="table-wrapper">
-        <table className="clientes-table">
+      <div className="hub-table-frame">
+        <table className="hub-table">
           <thead>
             <tr>
-              <th>Cliente / Razón Social</th>
+              <th>Identidad</th>
               <th>Documento</th>
-              <th>Tipo</th>
-              <th>Celular</th>
-              <th>Acciones</th>
+              <th>Perfil</th>
+              <th>Contacto</th>
+              <th className="txt-right">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {clientesFiltrados.map((c) => (
-              <tr key={c.id}>
+            {filteredData.map((c) => (
+              <tr key={c.id} className="row-ia">
                 <td><strong>{c.nombre}</strong></td>
-                <td><span className="doc-badge">{c.documento}</span></td>
-                <td><span className={`type-badge ${c.tipo.toLowerCase().replace(" ", "-")}`}>{c.tipo}</span></td>
-                <td><FaPhone className="icon-green" /> {c.celular}</td>
-                <td className="actions-cell">
-                  <button className="btn-action edit" onClick={() => manejarModal(c)}><FaEdit /></button>
-                  <button className="btn-action delete" onClick={() => eliminarCliente(c.id)}><FaTrash /></button>
+                <td><span className="hub-badge-doc">{c.documento}</span></td>
+                <td>
+                    <span className={`hub-tag ${c.tipo.toLowerCase()}`}>
+                        {c.tipo === 'CARPINTERO' ? <FaTools/> : <FaStore/>} {c.tipo}
+                    </span>
+                </td>
+                <td><FaPhone className="clr-green" /> {c.celular}</td>
+                <td className="txt-right">
+                  <button className="ia-btn hist" onClick={() => handleViewHistory(c)}><FaHistory /></button>
+                  <button className="ia-btn edit" onClick={() => toggleModal(c)}><FaEdit /></button>
+                  <button className="ia-btn deli" onClick={() => setClientes(clientes.filter(x => x.id !== c.id))}><FaTrash /></button>
                 </td>
               </tr>
             ))}
@@ -110,54 +122,74 @@ const Cliente = () => {
         </table>
       </div>
 
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-card bounce-in">
-            <div className="modal-header">
-              <h3>{isEditing ? "Editar Cliente" : "Registrar Nuevo Cliente"}</h3>
-              <button className="close-btn-x" onClick={() => setShowModal(false)}><FaTimes /></button>
+      {ui.modal && (
+        <div className="ia-modal-overlay">
+          <div className="ia-modal-card">
+            <div className="ia-modal-head">
+              <h3>{isEditing ? "Actualizar Ficha" : "Nuevo Perfil de Cliente"}</h3>
+              <button onClick={() => setUi({...ui, modal: false})}><FaTimes /></button>
             </div>
-            <div className="modal-body">
-              <div className="form-group">
+            <div className="ia-modal-body">
+              <div className="ia-input-group">
                 <label>Nombre Completo / Razón Social</label>
-                <input 
-                  type="text" 
-                  value={formData.nombre}
-                  onChange={(e) => setFormData({...formData, nombre: e.target.value.toUpperCase()})}
-                />
+                <input value={formData.nombre} onChange={e => setFormData({...formData, nombre: e.target.value.toUpperCase()})} />
               </div>
-              <div className="form-row">
-                <div className="form-group">
-                  <label>DNI / RUC</label>
-                  <input 
-                    type="text" 
-                    value={formData.documento}
-                    onChange={(e) => setFormData({...formData, documento: e.target.value})}
-                  />
+              <div className="ia-grid">
+                <div className="ia-input-group">
+                    <label>DNI / RUC</label>
+                    <input value={formData.documento} onChange={e => setFormData({...formData, documento: e.target.value})} />
                 </div>
-                <div className="form-group">
-                  <label>Celular</label>
-                  <input 
-                    type="text" 
-                    value={formData.celular}
-                    onChange={(e) => setFormData({...formData, celular: e.target.value})}
-                  />
+                <div className="ia-input-group">
+                    <label>WhatsApp / Celular</label>
+                    <input value={formData.celular} onChange={e => setFormData({...formData, celular: e.target.value})} />
                 </div>
               </div>
-              <div className="form-group">
-                <label>Categoría</label>
-                <select value={formData.tipo} onChange={(e) => setFormData({...formData, tipo: e.target.value})}>
-                  <option value="CARPINTERO">Carpintero</option>
-                  <option value="EMPRESA">Empresa</option>
+              <div className="ia-input-group">
+                <label>Categorización de Cliente</label>
+                <select value={formData.tipo} onChange={e => setFormData({...formData, tipo: e.target.value})}>
+                  <option value="CARPINTERO">Maestro Carpintero</option>
+                  <option value="EMPRESA">Empresa / Razón Social</option>
                   <option value="FINAL">Cliente Final</option>
                 </select>
               </div>
             </div>
-            <div className="modal-footer">
-              <button className="btn-cancel" onClick={() => setShowModal(false)}>Cancelar</button>
-              <button className="btn-save" onClick={guardarCliente}>
-                {isEditing ? "Guardar Cambios" : "Registrar Cliente"}
-              </button>
+            <div className="ia-modal-foot">
+              <button className="btn-save-ia" onClick={processForm}>Confirmar Datos</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {ui.history && (
+        <div className="ia-modal-overlay">
+          <div className="ia-modal-card history-view">
+            <div className="ia-modal-head">
+              <h3><FaFileInvoiceDollar /> Historial: {selectedCliente?.nombre}</h3>
+              <button onClick={() => setUi({...ui, history: false})}><FaTimes /></button>
+            </div>
+            <div className="ia-modal-body">
+               {ui.scanning ? (
+                 <div className="ia-scanning-zone">
+                    <div className="scanner-line"></div>
+                    <p>Sincronizando con base de datos...</p>
+                 </div>
+               ) : pedidosEncontrados.length > 0 ? (
+                 <table className="history-table">
+                    <thead><tr><th>Fecha</th><th>Descripción</th><th>Total</th><th>Status</th></tr></thead>
+                    <tbody>
+                        {pedidosEncontrados.map(p => (
+                            <tr key={p.id}>
+                                <td>{p.fecha}</td>
+                                <td>{p.items}</td>
+                                <td>S/ {p.total.toFixed(2)}</td>
+                                <td><span className="st-pill"><FaCheckCircle/> {p.estado}</span></td>
+                            </tr>
+                        ))}
+                    </tbody>
+                 </table>
+               ) : (
+                 <div className="ia-empty-msg">No se detectan pedidos registrados.</div>
+               )}
             </div>
           </div>
         </div>

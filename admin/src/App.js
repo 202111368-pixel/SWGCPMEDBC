@@ -7,8 +7,8 @@ import "./styles/Login.css";
 /* INICIO */ 
 import Inicio from "./pages/Inicio"; 
 
-/* Almacen */ 
-import Categoria from "./pages/Almacen/Categoria"; 
+/* Pagos */ 
+import Pagos from "./pages/Pagos/Pagos"; 
 
 /* Producto */ 
 import Producto from "./pages/Producto/Producto";
@@ -16,17 +16,20 @@ import Producto from "./pages/Producto/Producto";
 /* Clientes  */
 import Cliente from "./pages/Cliente/Cliente"; 
 
-/* Arquitecto  */
-import Arquitecto from "./pages/Arquitecto/Arquitecto"; 
+/* Inventario  */
+import Inventario from "./pages/Inventario/Inventario"; 
 
-/* Civil  */
-import Civil from "./pages/Civil/Civil"; 
+/* Reportes */
+import Reportes from "./pages/Reportes/Reportes";
 
 /* Login */
 import Login from "./pages/Login";
 
 /* Ventas */
 import RegistrarVenta from "./pages/Ventas/RegistrarVenta";
+
+/* Configuración */
+import Configuración from "./pages/Configuración/Configuración";
 
 const App = () => {
   return (
@@ -44,19 +47,22 @@ const App = () => {
                   {/* VENTAS */}
                   <Route path="ventas/registrar" element={<RegistrarVenta />} />
 
-                  {/* ALMACÉN */}
-                  <Route path="categoria" element={<Categoria />} />
+                  {/* Pagos */}
+                  <Route path="Pagos" element={<Pagos />} />
                   <Route path="producto" element={<Producto />} />
 
                   {/* CLIENTES */}
                   <Route path="clientes" element={<Cliente />} />
 
-                  {/* Arquitecto */}
-                  <Route path="arquitecto" element={<Arquitecto />} />
+                  {/* Inventario */}
+                  <Route path="inventario" element={<Inventario />} />
 
-                  {/* Civil */}
-                  <Route path="civil" element={<Civil />} />
+                  {/* Reportes  */}
+                  <Route path="reportes" element={<Reportes />} />
 
+                  {/* Configuración  */}
+                  <Route path="configuración" element={<Configuración />} />
+                  
                   {/* Inicio */}
                   <Route path="inicio" element={<Inicio />} />
 

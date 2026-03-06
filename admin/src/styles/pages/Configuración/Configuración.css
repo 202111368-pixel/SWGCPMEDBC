@@ -1,0 +1,150 @@
+.config-container {
+    padding: 30px;
+    background-color: #f4f7f9;
+    min-height: 100vh;
+}
+
+.config-header {
+    margin-bottom: 30px;
+}
+
+.config-header h1 {
+    font-size: 26px;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.config-header p {
+    color: #666;
+    margin-top: 5px;
+}
+
+.config-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
+.config-section.full-width {
+    grid-column: span 2;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.section-title h3 {
+    font-size: 18px;
+    margin: 0;
+}
+
+.config-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.config-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.item-name {
+    font-weight: 500;
+    color: #444;
+}
+
+.item-input {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.item-input input {
+    width: 60px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.config-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+}
+
+.config-table th {
+    text-align: left;
+    padding: 10px;
+    background: #f8f9fa;
+    font-size: 13px;
+    color: #777;
+}
+
+.config-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #f1f1f1;
+    font-size: 14px;
+}
+
+.btn-primary, .btn-secondary, .btn-order {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px;
+    transition: 0.3s;
+}
+
+.btn-primary { background: #2c3e50; color: white; }
+.btn-secondary { background: #f8f9fa; color: #333; border: 1px solid #ddd; }
+.btn-order { background: #27ae60; color: white; font-size: 16px; }
+
+.btn-delete {
+    background: none;
+    border: none;
+    color: #e74c3c;
+    cursor: pointer;
+}
+
+.requisition-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 5px solid #27ae60;
+}
+
+.requisition-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.req-icon {
+    font-size: 40px;
+    color: #27ae60;
+}
+
+.requisition-content h4 { margin: 0; color: #333; }
+.requisition-content p { margin: 5px 0 0; color: #666; }
+
+@media (max-width: 900px) {
+    .config-grid { grid-template-columns: 1fr; }
+    .config-section.full-width { grid-column: span 1; }
+    .requisition-card { flex-direction: column; text-align: center; gap: 20px; }
+}

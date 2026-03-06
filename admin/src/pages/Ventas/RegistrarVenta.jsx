@@ -1,238 +1,169 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import "../../styles/pages/Ventas/Ventas.css"; 
-import { FaPlus, FaSearch, FaBars, FaTimes, FaEdit, FaTrash, FaFileInvoiceDollar, FaInfoCircle } from "react-icons/fa";
+import { 
+  FaPlus, FaSearch, FaBars, FaTimes, FaEdit, FaTrash, 
+  FaFileInvoiceDollar, FaCalculator, FaPercent, FaTools 
+} from "react-icons/fa";
 
 const RegistrarVenta = () => {
   const [ventas, setVentas] = useState([
-    { id: 1, cliente: "CARPINTERÍA LOS ANDES", documento: "20541236541", fecha: "2026-02-27", tipoComprobante: "FACTURA", medioPago: "EFECTIVO", totalNeto: 350.50 },
-    { id: 2, cliente: "JUAN PÉREZ", documento: "70123456", fecha: "2026-02-27", tipoComprobante: "BOLETA", medioPago: "YAPE", totalNeto: 85.00 },
+    { id: 1, cliente: "CARPINTERÍA LOS ANDES", documento: "20541236541", fecha: "2026-02-27", total: 350.50, descuento: 0 },
   ]);
 
   const [showModal, setShowModal] = useState(false);
   const [menuOpcionesId, setMenuOpcionesId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   
+  const [piezas, setPiezas] = useState([]);
+  const [nuevaPieza, setNuevaPieza] = useState({ largo: "", ancho: "", cant: "" });
+
   const [formData, setFormData] = useState({ 
-    id: null, 
-    cliente: "", 
-    documento: "", 
-    fecha: new Date().toISOString().split("T")[0], 
-    tipoComprobante: "BOLE  TA", 
-    medioPago: "EFECTIVO", 
-    totalNeto: "" 
+    id: null, cliente: "", documento: "", fecha: new Date().toISOString().split("T")[0], 
+    tipoComprobante: "BOLETA", medioPago: "EFECTIVO", total: 0, descuento: 0 
   });
 
-  const abrirModal = (venta = null) => {
-    if (venta) {
-      setFormData(venta);
-    } else {
-      setFormData({ 
-        id: null, 
-        cliente: "", 
-        documento: "", 
-        fecha: new Date().toISOString().split("T")[0], 
-        tipoComprobante: "BOLETA", 
-        medioPago: "EFECTIVO", 
-        totalNeto: "" 
-      });
-    }
-    setShowModal(true);
-    setMenuOpcionesId(null);
-  };
+  const ventasFiltradas = useMemo(() => {
+    return ventas.filter(v => 
+      v.cliente.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      v.documento.includes(searchTerm)
+    );
+  }, [ventas, searchTerm]);
 
-  const cerrarModal = () => setShowModal(false);
+  const agregarPieza = useCallback(() => {
+    const L = Math.abs(Number(nuevaPieza.largo));
+    const A = Math.abs(Number(nuevaPieza.ancho));
+    const C = Math.abs(Number(nuevaPieza.cant));
+
+    if (L <= 0 || A <= 0 || C <= 0) return;
+
+    const aream2 = (L * A * C) / 1000000;
+    const precioSugerido = aream2 * 85; 
+    
+    setPiezas(prev => [...prev, { largo: L, ancho: A, cant: C, id: Date.now(), subtotal: precioSugerido }]);
+    setFormData(prev => ({ ...prev, total: prev.total + precioSugerido }));
+    setNuevaPieza({ largo: "", ancho: "", cant: "" });
+  }, [nuevaPieza]);
+
+  const handleDescuento = (val) => {
+    const num = Math.abs(Number(val));
+    const valorFinal = num > formData.total ? formData.total : num;
+    setFormData({ ...formData, descuento: valorFinal });
+  };
 
   const guardarVenta = () => {
-    if (!formData.cliente.trim() || !formData.fecha || !formData.totalNeto) {
-      alert("Por favor ingrese el Cliente, la Fecha y el Total.");
-      return;
-    }
-
-    const ventaGuardar = {
-      ...formData,
-      totalNeto: Number(formData.totalNeto)
-    };
-
-    if (formData.id) {
-      setVentas(ventas.map(v => v.id === formData.id ? ventaGuardar : v));
-    } else {
-      ventaGuardar.id = Date.now();
-      setVentas([ventaGuardar, ...ventas]);
-    }
-    cerrarModal();
-  };
-
-  const eliminarVenta = (id) => {
-    if (window.confirm("¿Estás seguro de anular esta venta?")) {
-      setVentas(ventas.filter(v => v.id !== id));
-      setMenuOpcionesId(null);
-    }
+    if (!formData.cliente.trim() || formData.total <= 0) return;
+    
+    setVentas(prev => {
+      const ventaFinal = { ...formData, total: formData.total - formData.descuento };
+      if (formData.id) {
+        return prev.map(v => v.id === formData.id ? ventaFinal : v);
+      }
+      return [{ ...ventaFinal, id: Date.now() }, ...prev];
+    });
+    setShowModal(false);
   };
 
   return (
     <div className="ventas-container fade-in-up">
-      
       <div className="ventas-header">
-        <h2>Gestión de Ventas</h2>
-        <button className="btn-agregar pulse-hover" onClick={() => abrirModal()}>
-          <FaPlus style={{ marginRight: "8px" }} /> Agregar Nueva
+        <div className="branding-ventas">
+          <FaFileInvoiceDollar className="icon-main" />
+          <h1>Gestión de Ventas</h1>
+        </div>
+        <button className="btn-agregar" onClick={() => { setShowModal(true); setPiezas([]); setFormData(f => ({...f, id: null, total: 0, descuento: 0})); }}>
+          <FaPlus /> Nueva Venta
         </button>
       </div>
 
       <div className="ventas-toolbar">
-        <div className="search-group">
-          <label>Buscar:</label>
-          <div className="input-with-icon">
-            <input type="text" className="input-animado input-moderno" placeholder="Buscar por cliente o doc..." />
-            <FaSearch className="icon-search" />
-          </div>
+        <div className="input-with-icon">
+          <input type="text" placeholder="Buscar cliente o documento..." onChange={(e) => setSearchTerm(e.target.value)} />
+          <FaSearch className="icon-search" />
         </div>
       </div>
 
-      <div className="table-responsive">
+      <div className="ia-card">
         <table className="ventas-table">
           <thead>
             <tr>
-              <th>Cód. <span>↕</span></th>
-              <th>Cliente <span>↕</span></th>
-              <th>Fecha <span>↕</span></th>
-              <th>Comprobante <span>↕</span></th>
-              <th>Medio Pago <span>↕</span></th>
-              <th>Total (S/) <span>↕</span></th>
-              <th>Opciones <span>↕</span></th>
+              <th>Código</th>
+              <th>Cliente</th>
+              <th>Total Final</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {ventas.length === 0 ? (
-              <tr><td colSpan="7" style={{ textAlign:"center", padding:"20px" }}>No hay ventas registradas.</td></tr>
-            ) : (
-              ventas.map((v, index) => (
-                <tr key={v.id} className="row-animada" style={{ animationDelay: `${index * 0.1}s` }}>
-                  <td><strong>V-{v.id.toString().slice(-4)}</strong></td>
-                  <td>{v.cliente}</td>
-                  <td>{v.fecha}</td>
-                  <td><span className="badge-comprobante">{v.tipoComprobante}</span></td>
-                  <td>{v.medioPago}</td>
-                  <td><strong>S/ {v.totalNeto.toFixed(2)}</strong></td>
-                  <td style={{ position: "relative" }}>
-                    <button 
-                      className="btn-opciones" 
-                      onClick={() => setMenuOpcionesId(menuOpcionesId === v.id ? null : v.id)}
-                    >
-                      <FaBars />
-                    </button>
-                    
-                    {menuOpcionesId === v.id && (
-                      <div className="dropdown-opciones slide-in">
-                        <button onClick={() => abrirModal(v)}><FaEdit className="icon-blue" /> Editar</button>
-                        <button onClick={() => eliminarVenta(v.id)} className="text-danger"><FaTrash /> Anular</button>
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              ))
-            )}
+            {ventasFiltradas.map((v) => (
+              <tr key={v.id} className="row-ia">
+                <td><strong>#V-{v.id.toString().slice(-4)}</strong></td>
+                <td>{v.cliente}</td>
+                <td><span className="monto-ia">S/ {v.total.toFixed(2)}</span></td>
+                <td style={{ position: "relative" }}>
+                  <button className="btn-opciones" onClick={() => setMenuOpcionesId(menuOpcionesId === v.id ? null : v.id)}>
+                    <FaBars />
+                  </button>
+                  {menuOpcionesId === v.id && (
+                    <div className="dropdown-ventas">
+                      <button onClick={() => { setFormData(v); setShowModal(true); }}><FaEdit /> Editar</button>
+                      <button onClick={() => setVentas(ventas.filter(x => x.id !== v.id))} className="text-danger"><FaTrash /> Anular</button>
+                    </div>
+                  )}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
 
       {showModal && (
-        <div className="modal-overlay fade-in">
-          <div className="modal-content bounce-in" style={{ maxWidth: "550px" }}>
+        <div className="modal-overlay">
+          <div className="modal-content-ventas bounce-in">
+            <div className="modal-header-ventas">
+              <h3><FaCalculator /> Detalle Técnico de Venta</h3>
+              <button className="btn-close" onClick={() => setShowModal(false)}><FaTimes /></button>
+            </div>
             
-            <div className="modal-header">
-              <h3><FaFileInvoiceDollar style={{ color: "#2196f3", marginRight:"8px" }}/> Datos de la Venta</h3>
-              <button className="btn-cerrar-modal" onClick={cerrarModal}><FaTimes /></button>
-            </div>
-
-            <div className="modal-body">
-              <div className="alert-info float-anim">
-                <FaInfoCircle className="icon-info" />
-                <span>Los campos con <span className="text-danger">*</span> son obligatorios.</span>
-              </div>
-
+            <div className="modal-body-ventas">
               <div className="form-group">
-                <label>Cliente / Empresa <span className="text-danger">*</span></label>
-                <input 
-                  type="text" 
-                  className="input-moderno"
-                  placeholder="Ej. Juan Pérez" 
-                  value={formData.cliente}
-                  onChange={(e) => setFormData({...formData, cliente: e.target.value.toUpperCase()})}
-                />
+                <label>Cliente / Razón Social</label>
+                <input className="input-ia" value={formData.cliente} onChange={e => setFormData({...formData, cliente: e.target.value.toUpperCase()})} />
               </div>
 
-              <div className="form-grid-2">
-                <div className="form-group">
-                  <label>DNI / RUC</label>
-                  <input 
-                    type="text" 
-                    className="input-moderno"
-                    placeholder="Número" 
-                    value={formData.documento}
-                    onChange={(e) => setFormData({...formData, documento: e.target.value})}
-                  />
+              <div className="despiece-container">
+                <h5><FaTools /> Optimizador de Cortes (m²)</h5>
+                <div className="grid-despiece">
+                  <input type="number" placeholder="Largo" value={nuevaPieza.largo} onChange={e => setNuevaPieza({...nuevaPieza, largo: e.target.value})} />
+                  <input type="number" placeholder="Ancho" value={nuevaPieza.ancho} onChange={e => setNuevaPieza({...nuevaPieza, ancho: e.target.value})} />
+                  <input type="number" placeholder="Cant" value={nuevaPieza.cant} onChange={e => setNuevaPieza({...nuevaPieza, cant: e.target.value})} />
+                  <button className="btn-add-pieza" onClick={agregarPieza}>+</button>
                 </div>
-                <div className="form-group">
-                  <label>Fecha <span className="text-danger">*</span></label>
-                  <input 
-                    type="date" 
-                    className="input-moderno"
-                    value={formData.fecha}
-                    onChange={(e) => setFormData({...formData, fecha: e.target.value})}
-                  />
+                <div className="lista-piezas">
+                  {piezas.map(p => (
+                    <div key={p.id} className="pieza-item">
+                      <span>{p.cant} unid. {p.largo}x{p.ancho}mm</span>
+                      <strong>S/ {p.subtotal.toFixed(2)}</strong>
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              <div className="form-grid-2">
-                <div className="form-group">
-                  <label>Comprobante</label>
-                  <select 
-                    className="input-moderno"
-                    value={formData.tipoComprobante}
-                    onChange={(e) => setFormData({...formData, tipoComprobante: e.target.value})}
-                  >
-                    <option value="BOLETA">Boleta</option>
-                    <option value="FACTURA">Factura</option>
-                    <option value="NOTA DE VENTA">Nota de Venta</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label>Medio de Pago</label>
-                  <select 
-                    className="input-moderno"
-                    value={formData.medioPago}
-                    onChange={(e) => setFormData({...formData, medioPago: e.target.value})}
-                  >
-                    <option value="EFECTIVO">Efectivo</option>
-                    <option value="TARJETA">Tarjeta</option>
-                    <option value="YAPE">Yape / Plin</option>
-                    <option value="TRANSFERENCIA">Transferencia</option>
-                  </select>
-                </div>
+              <div className="promo-box">
+                <span><FaPercent /> Descuento Especial:</span>
+                <input type="number" min="0" value={formData.descuento} onChange={e => handleDescuento(e.target.value)} />
               </div>
 
-             <div className="form-group" style={{ marginTop: "20px" }}>
-                <label>Total de la Venta (S/) <span className="text-danger">*</span></label>
-                <input 
-                  type="number" 
-                  step="0.01"
-                  className="input-moderno input-total pulse-hover"
-                  placeholder="0.00" 
-                  value={formData.totalNeto}
-                  onChange={(e) => setFormData({...formData, totalNeto: e.target.value})}
-                />
+              <div className="total-display">
+                 <span className="label-total">Total a Pagar:</span>
+                 <h1>S/ {(formData.total - formData.descuento).toFixed(2)}</h1>
               </div>
             </div>
-
-            <div className="modal-footer">
-              <button className="btn-guardar btn-animado" onClick={guardarVenta}>Guardar Venta</button>
-              <button className="btn-cerrar btn-animado" onClick={cerrarModal}>Cancelar</button>
+            
+            <div className="modal-footer-ventas">
+              <button className="btn-save-v" onClick={guardarVenta}>Guardar y Finalizar</button>
             </div>
-
           </div>
         </div>
       )}
-
     </div>
   );
 };

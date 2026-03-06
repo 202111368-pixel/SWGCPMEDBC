@@ -33,11 +33,14 @@ const Inicio = () => {
     { title: "Clientes", val: counts.clientes, 
       icon: FaUsers, col: "#2F7E69", path: "/admin/clientes" },
 
-    { title: "Arquitecto", val: counts.arquitecto, 
-      icon: FaDraftingCompass, col: "#6052aa", path: "/admin/Arquitecto" },
+    { title: "Inventario", val: counts.arquitecto, 
+      icon: FaDraftingCompass, col: "#6052aa", path: "/admin/Inventario" },
 
-    { title: "Ing. Civil", val: counts.civil, 
-      icon: FaHardHat, col: "#475569", path: "/admin/Civil" },
+    { title: "Configuración", val: counts.civil, 
+      icon: FaHardHat, col: "#475569", path: "/admin/Configuración" },
+    
+    { title: "Reportes", val: counts.civil, 
+      icon: FaHardHat, col: "#475569", path: "/admin/Reportes" },
   ];
 
   return (
