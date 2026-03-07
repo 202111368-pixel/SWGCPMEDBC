@@ -15,6 +15,7 @@
 }
 
 .producto-card {
+  position: relative;
   background: #fff;
   padding: 20px;
   border-radius: 14px;
@@ -23,27 +24,81 @@
   transition: 0.3s ease;
 }
 
-.producto-card:hover {
-  transform: translateY(-6px);
+.etiqueta-descuento {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: #000;
+  color: #ffd60a;
+  padding: 5px 12px;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 13px;
+  z-index: 5;
 }
 
 .producto-card img {
   width: 100%;
-  height: 230px;
+  height: 250px;
   object-fit: cover;
   border-radius: 10px;
   margin-bottom: 12px;
 }
 
-.producto-card h4 {
-  margin: 8px 0;
-  font-size: 16px;
+.precio-tachado {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 14px;
+  margin: 0;
 }
 
 .precio {
   font-weight: bold;
+  font-size: 20px;
+  color: #000;
+  margin: 5px 0 15px 0;
+}
+
+.seccion-reloj {
+  background: #fdfdfd;
+  border: 1px dashed #ddd;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.oferta-titulo {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.cronometro-contenedor {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.tiempo-bloque {
+  display: flex;
+  flex-direction: column;
+  background: #1c1c1c;
+  color: white;
+  min-width: 45px;
+  padding: 5px;
+  border-radius: 6px;
+}
+
+.tiempo-bloque span {
   font-size: 16px;
-  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.tiempo-bloque small {
+  font-size: 9px;
+  color: #ffd60a;
 }
 
 .colores {
@@ -54,31 +109,29 @@
 }
 
 .color-circle {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   cursor: pointer;
-  border: 1px solid #999;
-  transition: 0.2s ease;
-}
-
-.color-circle:hover {
-  transform: scale(1.2);
+  border: 1px solid #ccc;
+  transition: 0.2s;
 }
 
 .btn-producto {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   background: black;
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: 0.3s ease;
+  font-weight: bold;
+  transition: 0.3s;
 }
 
 .btn-producto:hover {
-  background: #333;
+  background: #ffd60a;
+  color: black;
 }
 
 @media (max-width: 768px) {

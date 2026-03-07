@@ -3,14 +3,23 @@ import Navbar from "../../components/Navbar/Navbar";
 import "./Denuncia.css";
 
 const Denuncia = () => {
+  const [formData, setFormData] = useState({
+    nombre: "",
+    tipo: "",
+    descripcion: "",
+  });
   const [imagen, setImagen] = useState(null);
   const [preview, setPreview] = useState(null);
-  const [enviado, setEnviado] = useState(false);
+  const [notificacion, setNotificacion] = useState({ visible: false, tipo: "" });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImagen(file);
-
     if (file) {
       setPreview(URL.createObjectURL(file));
     }
@@ -18,16 +27,46 @@ const Denuncia = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setEnviado(true);
 
-    setTimeout(() => {
-      setEnviado(false);
-    }, 3000);
+    if (!formData.nombre || !formData.tipo || !formData.descripcion) {
+      setNotificacion({ visible: true, tipo: "error" });
+      setTimeout(() => setNotificacion({ visible: false, tipo: "" }), 4000);
+      return;
+    }
+
+    setNotificacion({ visible: true, tipo: "exito" });
+    setTimeout(() => setNotificacion({ visible: false, tipo: "" }), 4000);
   };
 
   return (
     <>
       <Navbar />
+
+      {notificacion.visible && notificacion.tipo === "exito" && (
+        <div className="notificacion-push exito">
+          <div className="push-icon">D</div>
+          <div className="push-content">
+            <div className="push-header">
+              <strong>DBARY COMPANY</strong>
+              <span>ahora</span>
+            </div>
+            <p>Se envió la denuncia a nuestra empresa exitosamente.</p>
+          </div>
+        </div>
+      )}
+
+      {notificacion.visible && notificacion.tipo === "error" && (
+        <div className="notificacion-push error">
+          <div className="push-icon">!</div>
+          <div className="push-content">
+            <div className="push-header">
+              <strong>Error de Envío</strong>
+              <span>ahora</span>
+            </div>
+            <p>Por favor, completa los campos obligatorios antes de enviar.</p>
+          </div>
+        </div>
+      )}
 
       <div className="denuncia-container">
         <h1>Denuncia</h1>
@@ -36,17 +75,21 @@ const Denuncia = () => {
         </p>
 
         <div className="denuncia-box">
-
-          <form onSubmit={handleSubmit}>
-
+          <form onSubmit={handleSubmit} noValidate>
             <div className="form-group">
               <label>Nombre Completo *</label>
-              <input type="text" required placeholder="Tu nombre completo" />
+              <input 
+                type="text" 
+                name="nombre"
+                value={formData.nombre}
+                onChange={handleChange}
+                placeholder="Tu nombre completo" 
+              />
             </div>
 
             <div className="form-group">
               <label>Tipo de Incidente *</label>
-              <select required>
+              <select name="tipo" value={formData.tipo} onChange={handleChange}>
                 <option value="">Seleccionar</option>
                 <option value="Robo">Robo</option>
                 <option value="Acoso">Acoso</option>
@@ -58,7 +101,12 @@ const Denuncia = () => {
 
             <div className="form-group">
               <label>Descripción *</label>
-              <textarea required placeholder="Describe el incidente (lugar, fecha, detalles)"></textarea>
+              <textarea 
+                name="descripcion"
+                value={formData.descripcion}
+                onChange={handleChange}
+                placeholder="Describe el incidente (lugar, fecha, detalles)"
+              ></textarea>
             </div>
 
             <div className="form-group">
@@ -75,15 +123,7 @@ const Denuncia = () => {
             <button type="submit" className="btn-denunciar">
               Enviar Denuncia
             </button>
-
-            {enviado && (
-              <div className="mensaje-exito">
-                ✔ Denuncia enviada exitosamente
-              </div>
-            )}
-
           </form>
-
         </div>
       </div>
     </>
