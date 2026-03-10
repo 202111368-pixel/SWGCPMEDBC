@@ -7,17 +7,17 @@ import "./styles/Login.css";
 /* INICIO */ 
 import Inicio from "./pages/Inicio"; 
 
-/* Pagos */ 
-import Pagos from "./pages/Pagos/Pagos"; 
+/* Administrador */ 
+import Administrador from "./pages/Administrador/Administrador"; 
 
 /* Producto */ 
 import Producto from "./pages/Producto/Producto";
 
-/* Clientes  */
+/* Clientes */
 import Cliente from "./pages/Cliente/Cliente"; 
 
-/* Inventario  */
-import Inventario from "./pages/Inventario/Inventario"; 
+/* JefeAlmacen */
+import JefeAlmacen from "./pages/JefeAlmacen/JefeAlmacen"; 
 
 /* Reportes */
 import Reportes from "./pages/Reportes/Reportes";
@@ -25,8 +25,8 @@ import Reportes from "./pages/Reportes/Reportes";
 /* Login */
 import Login from "./pages/Login";
 
-/* Ventas */
-import RegistrarVenta from "./pages/Ventas/RegistrarVenta";
+/* Cajero */
+import Cajero from "./pages/Cajero/Cajero";
 
 /* Configuración */
 import Configuración from "./pages/Configuración/Configuración";
@@ -44,28 +44,31 @@ const App = () => {
               <Sidebar />
               <div className="content">
                 <Routes>
-                  {/* VENTAS */}
-                  <Route path="ventas/registrar" element={<RegistrarVenta />} />
+                  {/* INICIO */}
+                  <Route path="inicio" element={<Inicio />} />
 
-                  {/* Pagos */}
-                  <Route path="Pagos" element={<Pagos />} />
+                  {/* CAJERO */}
+                  <Route path="cajero" element={<Cajero />} />
+
+                  {/*ADMINISTRADOR */}
+                  <Route path="administrador" element={<Administrador />} />
+
+                  {/* PRODUCTO */}
                   <Route path="producto" element={<Producto />} />
 
                   {/* CLIENTES */}
                   <Route path="clientes" element={<Cliente />} />
 
-                  {/* Inventario */}
-                  <Route path="inventario" element={<Inventario />} />
+                  {/* JEFEALMACEN */}
+                  <Route path="jefeAlmacen" element={<JefeAlmacen />} />
 
-                  {/* Reportes  */}
+                  {/* REPORTES */}
                   <Route path="reportes" element={<Reportes />} />
 
-                  {/* Configuración  */}
+                  {/* CONFIGURACIÓN */}
                   <Route path="configuración" element={<Configuración />} />
                   
-                  {/* Inicio */}
-                  <Route path="inicio" element={<Inicio />} />
-
+                  {/* ERROR 404 */}
                   <Route path="*" element={<div>Página no encontrada en Admin</div>} />
                 </Routes>
               </div>

@@ -5,11 +5,11 @@ import {
   FaChartLine,
   FaBox,
   FaUsers,          
-  FaBoxes, 
   FaChartBar,         
   FaSignOutAlt,
   FaMoneyCheckAlt,
-  FaTools
+  FaTools,
+  FaWarehouse
 } from "react-icons/fa";
 import "../styles/Sidebar.css";
 
@@ -31,75 +31,69 @@ const Sidebar = () => {
       </div>
 
       <ul className="sidebar-menu">
-        {/*INICIO */}
+        {/* Inicio */}
         <li>
           <Link to="/admin/inicio" className="menu-link">
-            <FaChartLine /> <span>Dashboard </span>
+            <FaChartLine /> <span>Dashboard</span>
           </Link>
         </li>
 
-
-    {/*ventas */}
+        {/* Ventas */}
         <li>
-          <Link to="/admin/ventas/registrar" className="menu-link">
-            <FaCashRegister /> <span>Ventas</span>
+          <Link to="/admin/cajero" className="menu-link">
+            <FaCashRegister /> <span>Cajero</span>
           </Link>
         </li>
 
-
-    {/*Pagos */}
+        {/* Administrador */}
         <li>
-          <Link to="/admin/pagos" className="menu-link">
-            <FaMoneyCheckAlt /> <span>Pagos</span>
+          <Link to="/admin/administrador" className="menu-link">
+            <FaMoneyCheckAlt /> <span>Administrador</span>
           </Link>
         </li>
-  
 
-
-  {/*Producto */}
-         <li>
+        {/* Producto */}
+        <li>
           <Link to="/admin/producto" className="menu-link">
-            <FaBox /> <span>Producto</span>
+            <FaBox /> <span>Productos</span>
           </Link>
         </li>
 
         <hr className="sidebar-divider" />
 
-        {/* cliente */}
+        {/* Clientes */}
         <li>
           <Link to="/admin/clientes" className="menu-link">
             <FaUsers /> <span>Clientes</span>
           </Link>
         </li>
 
-        <hr className="sidebar-divider" />
-
-        {/* Inventario */}
+        {/* Jefe de Almacén */}
         <li>
-          <Link to="/admin/Inventario" className="menu-link">
-            <FaBoxes /> <span>Inventario </span>
+          <Link to="/admin/jefeAlmacen" className="menu-link">
+            <FaWarehouse /> <span>Jefe Almacén</span>
           </Link>
         </li>
 
+        <hr className="sidebar-divider" />
 
         {/* Reportes */}
-       <li>
+        <li>
           <Link to="/admin/reportes" className="menu-link">
             <FaChartBar /> <span>Reportes</span>
           </Link>
         </li>
 
-         {/* Configuración  */}
-       <li>
-          <Link to="/admin/configuración " className="menu-link">
-            <FaTools /> <span>Configuración </span>
+        {/* Configuración */}
+        <li>
+          <Link to="/admin/configuración" className="menu-link">
+            <FaTools /> <span>Configuración</span>
           </Link>
         </li>
 
-
         <hr className="sidebar-divider" />
 
-        {/* cerrar */}
+        {/* Cerrar Sesión */}
         <li className="cerrar-sesion">
           <button onClick={handleLogout} className="btn-logout">
             <FaSignOutAlt /> <span>Cerrar Sesión</span>

@@ -4,9 +4,9 @@ import "../styles/pages/Inicio.css";
 import { 
   FaCashRegister, 
   FaBox, 
-  FaBoxes, 
+  FaWarehouse, 
   FaUsers, 
-  FaCog, 
+  FaTools, 
   FaChartBar, 
   FaArrowCircleRight 
 } from "react-icons/fa";
@@ -18,8 +18,8 @@ const Inicio = () => {
     visitas: 13, 
     usuarios: 4, 
     productos: 7, 
-    inventario: 2, 
-    configuracion: 0
+    almacen: 2, 
+    configuracion: "Sistema"
   });
 
   useEffect(() => {
@@ -32,53 +32,54 @@ const Inicio = () => {
 
   const modulos = [
     { 
-      title: "Ventas", 
+      title: "Caja / Ventas", 
       val: counts.ventas, 
       icon: FaCashRegister, 
       col: "#4eb4e1", 
-      path: "/admin/ventas/registrar" 
+      path: "/admin/cajero" 
     },
     { 
-      title: "Visitas", 
+      title: "Reportes", 
       val: counts.visitas, 
       icon: FaChartBar, 
       col: "#5cb85c", 
-      path: "/admin/categoria" 
+      path: "/admin/reportes" 
     },
     { 
-      title: "Usuarios", 
+      title: "Clientes", 
       val: counts.usuarios, 
       icon: FaUsers, 
       col: "#f0ad4e", 
       path: "/admin/clientes" 
     },
     { 
-      title: "Productos", 
+      title: "Catálogo", 
       val: counts.productos, 
-      icon: FaBoxes, 
+      icon: FaBox, 
       col: "#d9534f", 
       path: "/admin/producto" 
     },
     { 
-      title: "Inventario", 
-      val: counts.inventario, 
-      icon: FaBox, 
+      title: "Jefe Almacén", 
+      val: counts.almacen, 
+      icon: FaWarehouse, 
       col: "#6052aa", 
-      path: "/admin/Inventario" 
+      path: "/admin/jefeAlmacen" 
     },
     { 
       title: "Configuración", 
       val: counts.configuracion, 
-      icon: FaCog, 
+      icon: FaTools, 
       col: "#475569", 
-      path: "/admin/Configuracion" 
+      path: "/admin/configuración" 
     }
   ];
 
   return (
-    <div className="page-container">
+    <div className="page-container fade-in">
       <div className="dashboard-header">
         <h2 className="page-title">Panel de Control D'Bary</h2>
+        <p className="page-subtitle">Bienvenido al sistema de gestión de melamina</p>
       </div>
 
       <div className="cards-grid-reference">
@@ -99,7 +100,7 @@ const Inicio = () => {
               </div>
             </div>
             <div className="more-info">
-              Más Info <FaArrowCircleRight />
+              Ir al módulo <FaArrowCircleRight />
             </div>
           </div>
         ))}
