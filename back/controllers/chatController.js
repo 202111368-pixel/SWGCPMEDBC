@@ -1,20 +1,24 @@
-let mensajes = [];
+const Chat = require("../models/Chat");
 
-exports.enviarMensaje = (req, res) => {
-  const { clienteId, mensaje, emisor } = req.body;
-
-  const nuevo = {
-    id: mensajes.length + 1,
-    clienteId,
-    mensaje,
-    emisor
-  };
-
-  mensajes.push(nuevo);
-
-  res.json({ msg: "Mensaje enviado", mensaje: nuevo });
+exports.enviarMensaje = async (req, res) => {
+  try {
+    const nuevoMensaje = new Chat({
+      emisor: req.user.id,
+      mensaje: req.body.mensaje,
+      sala: req.body.sala || "general"
+    });
+    await nuevoMensaje.save();
+    res.status(201).json(nuevoMensaje);
+  } catch (error) {
+    res.status(500).json({ error: "Error al enviar mensaje" });
+  }
 };
 
-exports.getMensajes = (req, res) => {
-  res.json(mensajes);
+exports.getMensajes = async (req, res) => {
+  try {
+    const mensajes = await Chat.find().populate("emisor", "nombres");
+    res.json(mensajes);
+  } catch (error) {
+    res.status(500).json({ error: "Error al obtener mensajes" });
+  }
 };

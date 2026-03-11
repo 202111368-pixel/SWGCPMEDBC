@@ -1,42 +1,75 @@
-let clientes = [];
+const Cliente = require("../models/Cliente");
 
-// Registrar cliente
-exports.registerCliente = (req, res) => {
-  const { nombre, email, telefono } = req.body;
+// Registrar cliente con validación de existencia
+exports.registerCliente = async (req, res) => {
+  try {
+    const { nombre, apellido, email, telefono } = req.body;
 
-  const existente = clientes.find(c => c.email === email);
-  if (existente) return res.status(400).json({ msg: "El cliente ya existe" });
+    const existente = await Cliente.findOne({ email });
+    if (existente) return res.status(400).json({ msg: "El cliente ya existe" });
 
-  const nuevo = { id: clientes.length + 1, nombre, email, telefono };
-  clientes.push(nuevo);
+    const nuevoCliente = new Cliente({ nombre, apellido, email, telefono });
+    await nuevoCliente.save();
 
-  res.json({ msg: "Cliente registrado correctamente", cliente: nuevo });
+    res.status(201).json({ msg: "Cliente registrado correctamente", nuevoCliente });
+  } catch (error) {
+    res.status(500).json({ error: "Error al registrar cliente" });
+  }
 };
 
-// Listar todos
-exports.getClientes = (req, res) => {
-  res.json(clientes);
+// Listar todos los clientes
+exports.getClientes = async (req, res) => {
+  try {
+    const clientes = await Cliente.find().sort({ createdAt: -1 });
+    res.json(clientes);
+  } catch (error) {
+    res.status(500).json({ error: "Error al obtener clientes" });
+  }
 };
 
-// Actualizar
-exports.updateCliente = (req, res) => {
-  const { id, nombre, email, telefono } = req.body;
-  const cliente = clientes.find(c => c.id == id);
-  if (!cliente) return res.status(404).json({ msg: "Cliente no encontrado" });
+// Registrar una Cotización para un cliente
+exports.addCotizacion = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { monto } = req.body;
+    
+    const cliente = await Cliente.findById(id);
+    if (!cliente) return res.status(404).json({ msg: "Cliente no encontrado" });
 
-  if (nombre) cliente.nombre = nombre;
-  if (email) cliente.email = email;
-  if (telefono) cliente.telefono = telefono;
+    cliente.cotizaciones.push({ monto });
+    await cliente.save();
+    
+    res.json({ msg: "Cotización registrada", cotizaciones: cliente.cotizaciones });
+  } catch (error) {
+    res.status(500).json({ error: "Error al procesar cotización" });
+  }
+};
 
-  res.json({ msg: "Cliente actualizado", cliente });
+// Registrar un Pago 
+exports.addPago = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { monto, metodo } = req.body;
+
+    const cliente = await Cliente.findByIdAndUpdate(
+      id,
+      { $push: { pagos: { monto, metodo } } },
+      { new: true }
+    );
+
+    res.json({ msg: "Pago registrado con éxito", historialPagos: cliente.pagos });
+  } catch (error) {
+    res.status(500).json({ error: "Error al registrar pago" });
+  }
 };
 
 // Eliminar
-exports.deleteCliente = (req, res) => {
-  const { id } = req.body;
-  const index = clientes.findIndex(c => c.id == id);
-  if (index === -1) return res.status(404).json({ msg: "Cliente no encontrado" });
-
-  clientes.splice(index, 1);
-  res.json({ msg: "Cliente eliminado correctamente" });
+exports.deleteCliente = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Cliente.findByIdAndDelete(id);
+    res.json({ msg: "Cliente eliminado correctamente" });
+  } catch (error) {
+    res.status(500).json({ error: "Error al eliminar" });
+  }
 };

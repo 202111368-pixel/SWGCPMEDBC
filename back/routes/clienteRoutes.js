@@ -1,8 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const { registerCliente, getClientes } = require("../controllers/clienteController");
+const clienteController = require("../controllers/clienteController");
 
-router.post("/crear", registerCliente);
-router.get("/", getClientes);
+// Rutas básicas
+router.post("/crear", clienteController.registerCliente);
+router.get("/", clienteController.getClientes);
+router.delete("/:id", clienteController.deleteCliente);
+
+// Rutas de Negocio 
+router.post("/cotizar/:id", clienteController.addCotizacion);
+router.post("/pagar/:id", clienteController.addPago);
 
 module.exports = router;

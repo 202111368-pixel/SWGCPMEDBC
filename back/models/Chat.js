@@ -1,12 +1,9 @@
-const express = require("express");
-const router = express.Router();
+const mongoose = require("mongoose");
 
-const {
-  enviarMensaje,
-  getMensajes
-} = require("../controllers/chatController");
+const chatSchema = new mongoose.Schema({
+  emisor: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  mensaje: { type: String, required: true },
+  sala: { type: String, default: "general" }, 
+}, { timestamps: true });
 
-router.post("/crear", enviarMensaje);
-router.get("/", getMensajes);
-
-module.exports = router;
+module.exports = mongoose.model("Chat", chatSchema);
