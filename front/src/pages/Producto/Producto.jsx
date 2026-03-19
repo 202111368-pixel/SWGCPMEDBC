@@ -9,56 +9,59 @@ import placards from "../../assets/Placards.jpg";
 
 const Producto = () => {
   return (
-    <>
+    <div className="producto-page-wrapper">
       <Navbar />
 
       <div className="producto-container">
-
-        <section className="producto-header">
-          <h1 className="producto-title">Nuestros Productos</h1>
+        <header className="producto-header">
+          <h1 className="producto-title">Nuestros <span>Productos</span></h1>
           <p className="producto-subtitle">
-            Calidad, precisión y confianza en cada uno de nuestros trabajos.
+            Calidad, precisión y confianza en cada uno de nuestros trabajos
           </p>
-        </section>
+        </header>
 
         <section className="producto-grid">
-
-          {/* COCINAS */}
           <div className="producto-card">
-            <img src={cocinas} alt="Cocinas" />
-            <h3>Cocinas Integrales</h3>
-            <p>Diseños modernos y funcionales para tu cocina</p>
-
-            <Link to="/detalles/cocina" className="btn-detalle">
-              Ver Detalles
-            </Link>
+            <div className="card-glass"></div>
+            <div className="image-wrapper">
+              <img src={cocinas} alt="Cocinas" />
+            </div>
+            <div className="card-content">
+              <p>Cocinas Integrales</p>
+              <Link to="/detalles/cocina" className="btn-detalle-ia">
+                Analizar Diseño <span>→</span>
+              </Link>
+            </div>
           </div>
 
-          {/* MUEBLES */}
           <div className="producto-card">
-            <img src={muebles} alt="Muebles" />
-            <h3>Muebles de Oficina</h3>
-            <p>Escritorios, bibliotecas y archivadores</p>
-
-            <Link to="/detalles/muebles" className="btn-detalle">
-              Ver Detalles
-            </Link>
+            <div className="card-glass"></div>
+            <div className="image-wrapper">
+              <img src={muebles} alt="Muebles" />
+            </div>
+            <div className="card-content">
+              <p>Muebles de Oficina</p>
+              <Link to="/detalles/muebles" className="btn-detalle-ia">
+                Analizar Diseño <span>→</span>
+              </Link>
+            </div>
           </div>
 
-          {/* PLACARDS */}
           <div className="producto-card">
-            <img src={placards} alt="Placards" />
-            <h3>Placards y Vestidores</h3>
-            <p>Soluciones de almacenamiento personalizadas</p>
-
-            <Link to="/detalles/placards" className="btn-detalle">
-              Ver Detalles
-            </Link>
+            <div className="card-glass"></div>
+            <div className="image-wrapper">
+              <img src={placards} alt="Placards" />
+            </div>
+            <div className="card-content">
+              <p>Placards y Vestidores</p>
+              <Link to="/detalles/placards" className="btn-detalle-ia">
+                Analizar Diseño <span>→</span>
+              </Link>
+            </div>
           </div>
         </section>
-
       </div>
-    </>
+    </div>
   );
 };
 

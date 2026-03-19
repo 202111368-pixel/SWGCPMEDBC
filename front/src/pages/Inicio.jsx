@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FaRobot, FaSearch, FaMicrophone } from 'react-icons/fa';
+import { useNavigate, Link } from 'react-router-dom';
+import { FaRobot, FaSearch, FaMicrophone, FaSignOutAlt, FaWaveSquare } from 'react-icons/fa';
 import './Inicio.css';
+import muebleImg from "../../assets/nicolas.jpg"; 
 
 function Inicio() {
   const navigate = useNavigate();
@@ -13,53 +14,78 @@ function Inicio() {
 
   return (
     <div className="inicio-container">
-      <header className="navbar">
+      <div className="ai-grid-overlay"></div>
+      
+      <header className="navbar-ia">
         <div className="navbar-left">
-          <h2 className="logo">DBARY <span>COMPANY</span></h2>
+          <h2 className="logo-ia">DBARY <span>AI</span></h2>
         </div>
 
-        <nav className="navbar-center">
-          <a href="#">Inicio</a>
-          <a href="#">Producto</a>
-          <a href="#">Nosotros</a>
-          <a href="#">Contacto</a>
-          <a href="#">Denuncia</a>
-          <a href="#">Blog</a>
-          <a href="#">Marcas</a>
+        <nav className="navbar-center-ia">
+          <Link to="/inicio" className="nav-link-ai">Inicio</Link>
+          <Link to="/productos" className="nav-link-ai">Productos</Link>
+          <Link to="/nosotros" className="nav-link-ai">Nosotros</Link>
+          <Link to="/contacto" className="nav-link-ai">Contacto</Link>
+          <Link to="/denuncia" className="nav-link-ai">Denuncia</Link>
+          <Link to="/blog" className="nav-link-ai">Blog</Link>
+          <Link to="/marcas" className="nav-link-ai">Marcas</Link>
         </nav>
 
         <div className="navbar-right">
-          <button className="logout-btn" onClick={handleLogout}>
-            Cerrar sesión
+          <button className="logout-btn-ia" onClick={handleLogout}>
+            <FaSignOutAlt /> <span>Salir</span>
           </button>
         </div>
       </header>
 
       <main className="hero-ia">
-        <div className="hero-content">
-          <span className="badge-ia">Powered by DBARY AI</span>
+        <div className="hero-bg-container">
+          <div 
+            className="hero-bg-3d" 
+            style={{ backgroundImage: `url(${muebleImg})` }}
+          ></div>
+          <div className="hero-overlay-ia"></div>
+        </div>
+
+        <div className="hero-content-ia">
+          <div className="ai-status">
+            <span className="dot"></span> SISTEMA ACTIVO v3.0
+          </div>
+          <span className="badge-ia-neon">DBARY INTELLIGENCE</span>
           <h1>Diseña el futuro de tu <span>Hogar</span></h1>
-          <p>Usa nuestro asistente con IA para encontrar el mueble perfecto o diseñar tu espacio ideal en segundos.</p>
+          <p className="hero-description">
+            Nuestra IA procesa tus ideas para transformarlas en muebles de melamina con precisión milimétrica.
+          </p>
           
-          <div className="ia-search-container">
-            <FaRobot className="ia-icon-inside" />
+          <div className="ia-search-box">
+            <div className="ia-scan-line"></div>
+            <FaRobot className="ia-icon-main" />
             <input 
               type="text" 
-              placeholder="Dime qué buscas... (Ej: Una cocina minimalista color gris)" 
+              placeholder="Ej: 'Diseña una cocina minimalista en gris humo'..." 
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
             />
-            <button className="ia-btn-search">
-              <FaSearch />
-            </button>
-            <FaMicrophone className="mic-icon" />
+            <div className="ia-actions">
+              <FaMicrophone className="mic-icon-ia" />
+              <button className="ia-btn-search-neon">
+                <FaSearch />
+              </button>
+            </div>
+          </div>
+          
+          <div className="ai-features-mini">
+            <span><FaWaveSquare /> Procesamiento en tiempo real</span>
+            <span>•</span>
+            <span>Renderizado 3D inmediato</span>
           </div>
         </div>
       </main>
 
-      <div className="ai-float-button">
-        <div className="ai-tooltip">¿En qué puedo ayudarte hoy?</div>
+      <div className="ai-float-master">
+        <div className="ai-ping"></div>
         <FaRobot />
+        <div className="ai-tooltip-ia">¿Iniciamos un nuevo diseño?</div>
       </div>
     </div>
   );

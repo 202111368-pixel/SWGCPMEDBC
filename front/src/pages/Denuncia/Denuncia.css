@@ -1,122 +1,214 @@
+.denuncia-page-wrapper {
+  background-color: #f8f9ff;
+  background-image: 
+    radial-gradient(circle at 10% 10%, rgba(155, 89, 182, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 90% 90%, rgba(52, 152, 219, 0.05) 0%, transparent 50%);
+  min-height: 100vh;
+  padding-bottom: 50px;
+}
+
 .denuncia-container {
   width: 100%;
-  max-width: 800px;
+  max-width: 700px;
   margin: 0 auto;
-  padding: 40px 20px;
-  font-family: "Poppins", sans-serif;
+  padding: 120px 20px 40px;
   text-align: center;
 }
 
-.subtitulo {
-  color: #666;
-  margin-bottom: 30px;
-}
-
-.denuncia-box {
-  background: #fff;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  text-align: left;
-}
-
-.form-group {
+.badge-security {
+  background: rgba(155, 89, 182, 0.1);
+  color: #8e44ad;
+  padding: 6px 15px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: inline-block;
   margin-bottom: 20px;
 }
 
-.form-group label {
+.denuncia-header h1 {
+  font-size: 40px;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.denuncia-header h1 span {
+  color: #8e44ad;
+}
+
+.subtitulo {
+  color: #7f8c8d;
+  font-size: 1rem;
+  margin-bottom: 40px;
+}
+
+.denuncia-box-ia {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.05);
+  border: 1px solid rgba(155, 89, 182, 0.1);
+  text-align: left;
+}
+
+.form-group-ia {
+  margin-bottom: 25px;
+}
+
+.form-group-ia label {
   display: block;
-  font-weight: 600;
-  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #34495e;
+  margin-bottom: 10px;
 }
 
-input, select, textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  outline: none;
-  background: #fafafa;
-}
-
-textarea {
-  height: 120px;
-  resize: none;
-}
-
-.preview-box {
-  margin-top: 15px;
-  text-align: center;
-}
-
-.preview-box img {
-  max-width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 10px;
-}
-
-.btn-denunciar {
+.form-group-ia input, 
+.form-group-ia select, 
+.form-group-ia textarea {
   width: 100%;
   padding: 14px;
-  background: #e63946; 
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  background: #fdfdfd;
+  font-size: 14px;
+  color: #2c3e50;
   transition: 0.3s;
 }
 
-.btn-denunciar:hover {
-  background: #c12a36;
+.form-group-ia input:focus, 
+.form-group-ia select:focus, 
+.form-group-ia textarea:focus {
+  border-color: #8e44ad;
+  background: #fff;
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(155, 89, 182, 0.05);
+}
+
+.upload-label {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #f8f9fa;
+  border: 2px dashed #dcdde1;
+  padding: 20px !important;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+  color: #7f8c8d !important;
+}
+
+.upload-label:hover {
+  background: #f1f2f6;
+  border-color: #8e44ad;
+  color: #8e44ad !important;
+}
+
+.preview-box-ia {
+  margin-top: 20px;
+  position: relative;
+  border-radius: 15px;
+  overflow: hidden;
+  height: 200px;
+  border: 1px solid #eee;
+}
+
+.preview-box-ia img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #8e44ad;
+  box-shadow: 0 0 15px #8e44ad;
+  animation: scan 2s linear infinite;
+}
+
+@keyframes scan {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+
+.btn-denunciar-ia {
+  width: 100%;
+  padding: 16px;
+  background: #2c3e50;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: 0.3s;
+  margin-top: 10px;
+}
+
+.btn-denunciar-ia:hover {
+  background: #8e44ad;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(142, 68, 173, 0.2);
 }
 
 .notificacion-push {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: 30px;
+  right: 30px;
   background: white;
-  width: 350px;
-  padding: 15px;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  width: 360px;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.1);
   display: flex;
   align-items: center;
-  gap: 12px;
-  z-index: 9999;
-  animation: slideIn 0.5s ease forwards;
+  gap: 15px;
+  z-index: 10000;
+  animation: slideIn 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
 }
 
-.notificacion-push.exito .push-icon { background-color: #2e8e38; }
-.notificacion-push.error { border-left: 5px solid #d32f2f; }
-.notificacion-push.error .push-icon { background-color: #d32f2f; }
+.notificacion-push.exito { border-left: 6px solid #2ecc71; }
+.notificacion-push.error { border-left: 6px solid #e74c3c; }
 
 .push-icon {
-  width: 45px;
-  height: 45px;
-  color: white;
+  width: 42px;
+  height: 42px;
+  background: #f1f2f6;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
   font-size: 20px;
-  flex-shrink: 0;
 }
+
+.notificacion-push.exito .push-icon { color: #2ecc71; }
+.notificacion-push.error .push-icon { color: #e74c3c; }
 
 .push-content { flex: 1; }
 .push-header { display: flex; justify-content: space-between; margin-bottom: 2px; }
-.push-header strong { font-size: 14px; color: #333; }
+.push-header strong { font-size: 13px; color: #1a1a1a; letter-spacing: 0.5px; }
 .push-header span { font-size: 11px; color: #999; }
-.push-content p { font-size: 13px; color: #555; margin: 0; }
+.push-content p { font-size: 13px; color: #666; margin: 0; line-height: 1.4; }
 
 @keyframes slideIn {
   from { transform: translateX(120%); }
   to { transform: translateX(0); }
 }
 
-@media (max-width: 500px) {
-  .notificacion-push { width: 90%; right: 5%; }
+@media (max-width: 768px) {
+  .denuncia-container { padding-top: 100px; }
+  .denuncia-box-ia { padding: 25px; }
+  .denuncia-header h1 { font-size: 30px; }
 }

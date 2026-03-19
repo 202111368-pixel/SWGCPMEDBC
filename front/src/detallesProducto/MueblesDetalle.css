@@ -1,89 +1,203 @@
-.producto-card {
-  position: relative; 
-  background: #fff;
-  padding: 20px;
+.muebles-ia-root {
+  background: #f0f2f5; /* Gris muy claro de fondo */
+  min-height: 100vh;
+  color: #2d3436;
+  padding-bottom: 50px;
+}
+
+.muebles-container-ia {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 20px 20px;
+}
+
+.muebles-ia-header {
+  margin-bottom: 40px;
+}
+
+.btn-back-ia {
+  background: white;
+  border: 1px solid #dfe6e9;
+  color: #0984e3;
+  padding: 10px 25px;
   border-radius: 12px;
-  text-align: center;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-  transition: 0.3s ease;
-}
-
-.badge-oferta {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  background: #e63946;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-weight: bold;
-  font-size: 14px;
-  z-index: 10;
-}
-
-.precio-antes {
-  text-decoration: line-through;
-  color: #888;
-  font-size: 14px;
-  margin-bottom: -5px;
-}
-
-.oferta-info {
-  background: #f9f9f9;
-  padding: 10px;
-  border-radius: 8px;
-  margin: 15px 0;
-  border: 1px solid #eee;
-}
-
-.oferta-info p {
-  font-size: 12px;
-  color: #555;
-  margin-bottom: 8px;
-}
-
-.timer-grid {
+  cursor: pointer;
+  font-weight: 700;
   display: flex;
-  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  transition: 0.3s;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.btn-back-ia:hover {
+  background: #0984e3;
+  color: white;
+  transform: translateX(-5px);
+}
+
+.ia-header-text h1 {
+  font-size: 42px;
+  margin-top: 25px;
+  color: #2d3436;
+}
+
+.ia-header-text h1 span {
+  color: #0984e3; /* Azul Eléctrico */
+}
+
+.ia-header-text p {
+  color: #636e72;
+  display: flex;
+  align-items: center;
   gap: 8px;
 }
 
-.timer-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.productos-grid-ia {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.card-ia-modern {
   background: white;
-  padding: 5px;
-  min-width: 45px;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border: 1px solid #eee;
+  border-radius: 24px;
+  overflow: hidden;
+  position: relative;
+  transition: 0.4s ease;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
 }
 
-.timer-item span {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
+.card-ia-modern:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 20px 40px rgba(9, 132, 227, 0.15);
 }
 
-.timer-item small {
-  font-size: 10px;
-  text-transform: uppercase;
-  color: #999;
+.ia-badge-off {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: #0984e3;
+  color: white;
+  padding: 6px 14px;
+  font-weight: 800;
+  font-size: 11px;
+  border-radius: 10px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
-.btn-producto {
+.ia-img-wrapper {
   width: 100%;
-  padding: 12px;
-  background: #1c1c1c;
+  height: 240px;
+  background: #fdfdfd;
+  padding: 30px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.ia-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.ia-card-content {
+  padding: 25px;
+  text-align: center;
+}
+
+.ia-pricing {
+  margin: 10px 0;
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: #b2bec3;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.new-price {
+  color: #2d3436;
+  font-size: 26px;
+  font-weight: 900;
+}
+
+.ia-timer-box {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 18px;
+  margin: 15px 0;
+}
+
+.ia-timer-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.timer-block span {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0984e3;
+  display: block;
+}
+
+.timer-block small {
+  font-size: 9px;
+  color: #636e72;
+  font-weight: 700;
+}
+
+.timer-sep {
+  color: #dfe6e9;
+  font-weight: bold;
+}
+
+.ia-color-selector {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.dot-ia {
+  width: 22px;
+  height: 22px;
+  border-radius: 8px; /* Cuadros redondeados */
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 0 0 1px #eee;
+  transition: 0.2s;
+}
+
+.dot-ia:hover {
+  transform: scale(1.2) rotate(10deg);
+  box-shadow: 0 0 0 2px #0984e3;
+}
+
+.btn-ia-action {
+  width: 100%;
+  padding: 16px;
+  background: #2d3436;
   color: white;
   border: none;
+  border-radius: 16px;
+  font-weight: 700;
   cursor: pointer;
-  border-radius: 6px;
-  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   transition: 0.3s;
 }
 
-.btn-producto:hover {
-  background: #ffd60a;
-  color: #1c1c1c;
+.btn-ia-action:hover {
+  background: #0984e3;
+  transform: scale(1.02);
+  box-shadow: 0 10px 20px rgba(9, 132, 227, 0.3);
 }

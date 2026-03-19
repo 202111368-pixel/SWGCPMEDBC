@@ -1,141 +1,218 @@
-.filtros-container {
-  width: 100%;
-  padding: 40px;
-  background: #f5f5f5;
-  display: flex;
-  justify-content: center;
+.placards-ia-page {
+  background: #f0f2f5;
+  min-height: 100vh;
+  padding-bottom: 60px;
 }
 
-.productos-grid {
-  width: 100%;
-  max-width: 1100px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 35px;
+.placards-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 20px 20px;
 }
 
-.producto-card {
-  position: relative;
-  background: #fff;
-  padding: 20px;
+.placards-header {
+  margin-bottom: 40px;
+}
+
+.btn-back-nav {
+  background: white;
+  border: 1px solid #dfe6e9;
+  color: #0984e3;
+  padding: 12px 25px;
   border-radius: 14px;
-  text-align: center;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-  transition: 0.3s ease;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: 0.3s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
-.etiqueta-descuento {
+.btn-back-nav:hover {
+  background: #0984e3;
+  color: white;
+  transform: translateX(-5px);
+}
+
+.placards-title-box h1 {
+  font-size: 38px;
+  margin-top: 25px;
+  color: #2d3436;
+}
+
+.placards-title-box h1 span {
+  color: #0984e3;
+}
+
+.placards-title-box p {
+  color: #636e72;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.placards-grid-modern {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+.placard-card-ia {
+  background: white;
+  border-radius: 24px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #eee;
+  transition: 0.4s ease;
+}
+
+.placard-card-ia:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(9, 132, 227, 0.1);
+}
+
+.badge-promo {
   position: absolute;
-  top: 15px;
-  left: 15px;
-  background: #000;
-  color: #ffd60a;
-  padding: 5px 12px;
-  border-radius: 5px;
-  font-weight: bold;
-  font-size: 13px;
+  top: 20px;
+  left: 20px;
+  background: #0984e3;
+  color: white;
+  padding: 6px 15px;
+  font-weight: 800;
+  font-size: 11px;
+  border-radius: 12px;
   z-index: 5;
+  letter-spacing: 0.5px;
 }
 
-.producto-card img {
+.placard-img-container {
   width: 100%;
-  height: 250px;
+  height: 280px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.placard-img-container img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 12px;
+  transition: 0.5s;
 }
 
-.precio-tachado {
-  text-decoration: line-through;
-  color: #999;
-  font-size: 14px;
-  margin: 0;
+.placard-card-ia:hover .placard-img-container img {
+  transform: scale(1.08);
 }
 
-.precio {
-  font-weight: bold;
+.placard-info-ia {
+  padding: 25px;
+  text-align: center;
+}
+
+.placard-info-ia h4 {
   font-size: 20px;
-  color: #000;
-  margin: 5px 0 15px 0;
+  color: #2d3436;
+  margin-bottom: 10px;
 }
 
-.seccion-reloj {
-  background: #fdfdfd;
-  border: 1px dashed #ddd;
-  padding: 10px;
-  border-radius: 10px;
-  margin-bottom: 15px;
+.placard-pricing {
+  margin-bottom: 20px;
 }
 
-.oferta-titulo {
-  font-size: 12px;
-  color: #666;
-  margin-bottom: 8px;
-  text-transform: uppercase;
+.placard-pricing .old {
+  text-decoration: line-through;
+  color: #b2bec3;
+  margin-right: 12px;
+}
+
+.placard-pricing .current {
+  font-size: 26px;
+  font-weight: 900;
+  color: #2d3436;
+}
+
+.ia-countdown-container {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.ia-countdown-container p {
+  font-size: 10px;
+  font-weight: 800;
+  color: #636e72;
+  margin-bottom: 10px;
   letter-spacing: 1px;
 }
 
-.cronometro-contenedor {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.tiempo-bloque {
-  display: flex;
-  flex-direction: column;
-  background: #1c1c1c;
-  color: white;
-  min-width: 45px;
-  padding: 5px;
-  border-radius: 6px;
-}
-
-.tiempo-bloque span {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.tiempo-bloque small {
-  font-size: 9px;
-  color: #ffd60a;
-}
-
-.colores {
+.ia-cronometro {
   display: flex;
   justify-content: center;
   gap: 12px;
-  margin-bottom: 15px;
 }
 
-.color-circle {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
+.ia-tiempo-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.ia-tiempo-item span {
+  font-size: 20px;
+  font-weight: 900;
+  color: #0984e3;
+}
+
+.ia-tiempo-item small {
+  font-size: 9px;
+  color: #b2bec3;
+  font-weight: bold;
+}
+
+.placard-colors {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
   cursor: pointer;
-  border: 1px solid #ccc;
+  border: 2px solid white;
+  box-shadow: 0 0 0 1px #eee;
   transition: 0.2s;
 }
 
-.btn-producto {
+.dot:hover {
+  transform: scale(1.2) rotate(5deg);
+  box-shadow: 0 0 0 2px #0984e3;
+}
+
+.btn-buy-ia {
   width: 100%;
-  padding: 12px;
-  background: black;
+  padding: 16px;
+  background: #2d3436;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 18px;
+  font-weight: 700;
   cursor: pointer;
-  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
   transition: 0.3s;
 }
 
-.btn-producto:hover {
-  background: #ffd60a;
-  color: black;
+.btn-buy-ia:hover {
+  background: #0984e3;
+  box-shadow: 0 10px 20px rgba(9, 132, 227, 0.2);
 }
 
 @media (max-width: 768px) {
-  .productos-grid {
-    grid-template-columns: 1fr;
-  }
+  .placards-wrapper { padding-top: 80px; }
+  .placards-title-box h1 { font-size: 30px; }
 }

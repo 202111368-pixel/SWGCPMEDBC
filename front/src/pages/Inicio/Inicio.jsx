@@ -1,51 +1,59 @@
 import React from "react";
 import Navbar from "../../components/Navbar/Navbar";
+import { FaArrowRight, FaChartLine } from "react-icons/fa";
 import "./Inicio.css";
 import muebleImg from "../../assets/nicolas.jpg"; 
 
 const Inicio = () => {
   return (
-    <>
+    <div className="inicio-page">
       <Navbar />
 
       <section className="hero-crea">
-        <div className="hero-left">
+        <div className="hero-visual">
+          <div 
+            className="hero-img-3d" 
+            style={{ backgroundImage: `url(${muebleImg})` }}
+          ></div>
+          <div className="hero-mask"></div>
+        </div>
+
+        <div className="hero-content-left">
+          <div className="hero-tag">
+            <FaChartLine /> <span>Líderes en Melamina</span>
+          </div>
           <h1>
-            "CONVIERTE TU ESPACIO EN EL LUGAR QUE SIEMPRE SOÑASTE"<br /> 
+            Convierte tu espacio en el <br />
+            <span>Lugar que siempre soñaste</span>
           </h1>
           <p className="hero-description">
-            Diseñamos espacios que inspiran y potencian tu ESTILO DE VIDA
+            Diseñamos mobiliario de alta ingeniería que inspira y potencia tu estilo de vida con acabados de lujo.
           </p>
-          <div className="hero-buttons">
-            <button className="btn-dark">Ver Catálogo →</button>
-            <button className="btn-light">Solicitar Presupuesto</button>
+          
+          <div className="hero-actions">
+            <button className="btn-primary">Ver Catálogo <FaArrowRight /></button>
+            <button className="btn-outline">Solicitar Presupuesto</button>
           </div>
-          <div className="hero-stats">
-            <div><h2>15+</h2><p>Años de experiencia</p></div>
-            <div><h2>500+</h2><p>Clientes satisfechos</p></div>
-            <div><h2>1000+</h2><p>Proyectos realizados</p></div>
-          </div>
-        </div>
 
-        <div className="hero-right">
-          <div className="image-container-3d">
-            <img src={muebleImg} alt="Mueble de melamina" className="image-3d" />
+          <div className="hero-stats-container">
+            <div className="stat-item">
+              <h3>15+</h3>
+              <p>Años de trayectoria</p>
+            </div>
+            <div className="stat-divider"></div>
+            <div className="stat-item">
+              <h3>500+</h3>
+              <p>Clientes satisfechos</p>
+            </div>
+            <div className="stat-divider"></div>
+            <div className="stat-item">
+              <h3>1000+</h3>
+              <p>Proyectos entregados</p>
+            </div>
           </div>
         </div>
       </section>
-
-      <section className="video-section">
-        <h2 className="video-title">Nuestros Proyectos en Video</h2>
-        <div className="video-grid">
-          <div className="video-card">
-            <iframe src="https://www.youtube.com/embed/rDWRARlVe-E" title="Video 1" allowFullScreen></iframe>
-          </div>
-          <div className="video-card">
-            <iframe src="https://www.youtube.com/embed/PaRfCWrlo4w" title="Video 2" allowFullScreen></iframe>
-          </div>
-        </div>
-      </section>
-    </>
+    </div>
   );
 };
 

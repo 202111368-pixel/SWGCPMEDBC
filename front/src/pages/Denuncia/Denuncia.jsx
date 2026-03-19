@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
+import { FaShieldAlt, FaUpload } from "react-icons/fa";
 import "./Denuncia.css";
 
 const Denuncia = () => {
@@ -8,7 +9,7 @@ const Denuncia = () => {
     tipo: "",
     descripcion: "",
   });
-  const [imagen, setImagen] = useState(null);
+  
   const [preview, setPreview] = useState(null);
   const [notificacion, setNotificacion] = useState({ visible: false, tipo: "" });
 
@@ -19,7 +20,6 @@ const Denuncia = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    setImagen(file);
     if (file) {
       setPreview(URL.createObjectURL(file));
     }
@@ -39,94 +39,91 @@ const Denuncia = () => {
   };
 
   return (
-    <>
+    <div className="denuncia-page-wrapper">
       <Navbar />
 
-      {notificacion.visible && notificacion.tipo === "exito" && (
-        <div className="notificacion-push exito">
-          <div className="push-icon">D</div>
-          <div className="push-content">
-            <div className="push-header">
-              <strong>DBARY COMPANY</strong>
-              <span>ahora</span>
-            </div>
-            <p>Se envió la denuncia a nuestra empresa exitosamente.</p>
+      {notificacion.visible && (
+        <div className={`notificacion-push ${notificacion.tipo}`}>
+          <div className="push-icon">
+            {notificacion.tipo === "exito" ? "✓" : "!"}
           </div>
-        </div>
-      )}
-
-      {notificacion.visible && notificacion.tipo === "error" && (
-        <div className="notificacion-push error">
-          <div className="push-icon">!</div>
           <div className="push-content">
             <div className="push-header">
-              <strong>Error de Envío</strong>
+              <strong>SISTEMA DE SEGURIDAD</strong>
               <span>ahora</span>
             </div>
-            <p>Por favor, completa los campos obligatorios antes de enviar.</p>
+            <p>
+              {notificacion.tipo === "exito" 
+                ? "Registro completado bajo protocolo de encriptación." 
+                : "Error: Faltan parámetros obligatorios en el reporte."}
+            </p>
           </div>
         </div>
       )}
 
       <div className="denuncia-container">
-        <h1>Denuncia</h1>
-        <p className="subtitulo">
-          Si deseas reportar algún incidente o irregularidad, completa el formulario.
-        </p>
+        <header className="denuncia-header">
+          <h1>Canal de <span>Denuncias</span></h1>
+          <p className="subtitulo">
+            Reporta incidentes de forma segura. Tu información será procesada con total confidencialidad.
+          </p>
+        </header>
 
-        <div className="denuncia-box">
+        <div className="denuncia-box-ia">
           <form onSubmit={handleSubmit} noValidate>
-            <div className="form-group">
-              <label>Nombre Completo *</label>
+            <div className="form-group-ia">
+              <label>Identificación del Reportante</label>
               <input 
                 type="text" 
                 name="nombre"
                 value={formData.nombre}
                 onChange={handleChange}
-                placeholder="Tu nombre completo" 
+                placeholder="Nombre completo o 'Anónimo'" 
               />
             </div>
 
-            <div className="form-group">
-              <label>Tipo de Incidente *</label>
+            <div className="form-group-ia">
+              <label>Categoría del Incidente</label>
               <select name="tipo" value={formData.tipo} onChange={handleChange}>
-                <option value="">Seleccionar</option>
-                <option value="Robo">Robo</option>
-                <option value="Acoso">Acoso</option>
-                <option value="Vandalismo">Vandalismo</option>
-                <option value="Accidente">Accidente</option>
-                <option value="Otros">Otros</option>
+                <option value="">Seleccionar categoría...</option>
+                <option value="Servicio">Falla en Servicio</option>
+                <option value="Producto">Defecto de Fabricación</option>
+                <option value="Conducta">Conducta Inapropiada</option>
+                <option value="Otros">Otros Incidentes</option>
               </select>
             </div>
 
-            <div className="form-group">
-              <label>Descripción *</label>
+            <div className="form-group-ia">
+              <label>Descripción Detallada</label>
               <textarea 
                 name="descripcion"
                 value={formData.descripcion}
                 onChange={handleChange}
-                placeholder="Describe el incidente (lugar, fecha, detalles)"
+                placeholder="Explique los hechos con precisión..."
               ></textarea>
             </div>
 
-            <div className="form-group">
-              <label>Evidencia (Imagen)</label>
-              <input type="file" accept="image/*" onChange={handleImageChange} />
+            <div className="form-group-ia">
+              <label className="upload-label">
+                <FaUpload /> Adjuntar Evidencia Digital
+                <input type="file" accept="image/*" onChange={handleImageChange} hidden />
+              </label>
 
               {preview && (
-                <div className="preview-box">
+                <div className="preview-box-ia">
                   <img src={preview} alt="Vista previa" />
+                  <div className="scan-line"></div>
                 </div>
               )}
             </div>
 
-            <button type="submit" className="btn-denunciar">
-              Enviar Denuncia
+            <button type="submit" className="btn-denunciar-ia">
+              <FaShieldAlt /> Procesar Reporte
             </button>
           </form>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

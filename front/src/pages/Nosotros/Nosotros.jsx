@@ -5,100 +5,91 @@ import Taller from "../../assets/nicolas.jpg";
 
 const Nosotros = () => {
   return (
-    <>
+    <div className="nosotros-page-wrapper">
       <Navbar />
 
       <div className="nosotros-container">
         <section className="nosotros-content">
           <div className="nosotros-text">
+            <span className="badge-ia">Trayectoria Tecnológica</span>
             <h1>Sobre <span>D’Bary Company</span></h1>
 
             <p>
-              Somos una empresa familiar con más de 15 años de experiencia en el diseño y 
-              fabricación de muebles de melamina. Nuestra pasión por crear espacios únicos 
-              nos ha llevado a convertirnos en líderes del sector.
+              Somos una empresa líder con más de 15 años de experiencia en la fusión de 
+              diseño arquitectónico y fabricación avanzada de muebles de melamina.
             </p>
 
             <p>
-              Desde nuestro inicio, nos hemos dedicado a brindar soluciones integrales 
-              que combinan funcionalidad, diseño y calidad. Trabajamos de cerca con cada 
-              cliente para entender sus necesidades y crear muebles que superen sus expectativas.
+              Nuestra infraestructura combina la precisión de la maquinaria moderna con 
+              el detalle artesanal, garantizando espacios que elevan tu estilo de vida.
             </p>
 
-            <h3>¿Por qué elegirnos?</h3>
+            <h3>¿Por qué elegir nuestra ingeniería?</h3>
 
             <div className="nosotros-list">
               <ul>
-                <li>✔ 15+ años de experiencia en el mercado</li>
-                <li>✔ Equipo de diseñadores profesionales</li>
-                <li>✔ Materiales de primera calidad</li>
+                <li>✔ 15+ Años de Innovación</li>
+                <li>✔ Diseño Paramétrico 3D</li>
+                <li>✔ Melaminas de Alta Densidad</li>
               </ul>
 
               <ul>
-                <li>✔ Más de 500 clientes satisfechos</li>
-                <li>✔ Taller equipado con maquinaria moderna</li>
-                <li>✔ Servicio integral de diseño a instalación</li>
+                <li>✔ +500 Proyectos Inteligentes</li>
+                <li>✔ Taller de Corte Automatizado</li>
+                <li>✔ Instalación de Precisión</li>
               </ul>
             </div>
 
-            <h3>Nuestros Valores</h3>
-
-            <div className="valores-list">
-              <div className="valor-card">
-                <div>
-                  <h4>Pasión por la Calidad</h4>
-                  <p>Cada mueble es creado con dedicación y atención a los detalles.</p>
-                </div>
+            <div className="valores-grid">
+              <div className="valor-card-ia">
+                <h4>Calidad Certificada</h4>
+                <p>Cada pieza pasa por un control de calidad riguroso antes del ensamblaje.</p>
               </div>
 
-              <div className="valor-card">
-                <div>
-                  <h4>Garantía y Confianza</h4>
-                  <p>Ofrecemos garantía en nuestros productos y servicio post-venta.</p>
-                </div>
+              <div className="valor-card-ia">
+                <h4>Garantía Real</h4>
+                <p>Protección extendida y soporte técnico post-instalación de por vida.</p>
               </div>
 
-              <div className="valor-card">
-                <div>
-                  <h4>Innovación Constante</h4>
-                  <p>Aplicamos las últimas tendencias en diseño y tecnología.</p>
-                </div>
+              <div className="valor-card-ia">
+                <h4>Tendencia 2026</h4>
+                <p>Modelos actualizados según las ferias de diseño internacionales.</p>
               </div>
             </div>
           </div>
 
-          <div className="nosotros-img">
-            <img src={Taller} alt="Taller de fabricación de D’Bary Company" loading="lazy" />
-            <div className="anos-box">
-              <strong>15+</strong>
-              <span>Años</span>
+          <div className="nosotros-img-container">
+            <div className="img-frame">
+              <img src={Taller} alt="Taller D’Bary" />
+              <div className="anos-experience">
+                <strong>15+</strong>
+                <span>Años</span>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="nosotros-metricas">
-          <div className="metric-card">
+        <section className="nosotros-stats-ia">
+          <div className="stat-box">
             <h2>500+</h2>
-            <p>Proyectos Completados</p>
+            <p>Estructuras Creadas</p>
           </div>
-
-          <div className="metric-card">
+          <div className="stat-box">
             <h2>100%</h2>
-            <p>Satisfacción Cliente</p>
+            <p>Efectividad IA</p>
           </div>
         </section>
 
-        <section className="nosotros-testimonio">
+        <section className="nosotros-quote">
+          <div className="quote-icon">"</div>
           <p>
-            <em>
-              "El equipo de D’Bary Company transformó completamente nuestra cocina. 
-              El diseño es hermoso y la calidad excepcional. ¡Recomendamos 100%!"
-            </em>
+            Transformamos tableros de melamina en experiencias de vida. 
+            La precisión es nuestra firma.
           </p>
-          <span>- María González, Cliente Satisfecha</span>
+          <span className="quote-author">- Dirección General, D’Bary Company</span>
         </section>
       </div>
-    </>
+    </div>
   );
 };
 
