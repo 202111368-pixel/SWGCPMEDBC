@@ -188,13 +188,13 @@ const Login = () => {
             </>
           )}
         </div>
-      </div>
+      </div>s
     </div>
   );
 };
 
 export default Login;
 
-
+//npm install axios
 //el scaner ejecutar con eso npm install tesseract.js
 //para escanear con tu carnet

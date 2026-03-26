@@ -4,31 +4,48 @@ const jwt = require("jsonwebtoken");
 
 exports.registerUser = async (req, res) => {
     try {
-        const { email, password, apellidos, dni, telefono, rol, nombres } = req.body;
+        const { nombres, apellidos, email, password, dni, telefono, rol } = req.body;
 
         let user = await User.findOne({ $or: [{ email }, { dni }] });
-        if (user) return res.status(400).json({ msg: "El usuario (Email o DNI) ya existe" });
-
-        user = new User({
-            nombres: nombres || "Usuario",
-            apellidos,
-            email,
-            password,
-            dni,
-            telefono,
-            rol
-        });
-
+        if (user) {
+            return res.status(400).json({ msg: "Usuario ya registrado" });
+        }
+        user = new User({ 
+            nombres, 
+            apellidos, 
+            email, 
+            password, 
+            dni, 
+            telefono, 
+            rol });
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
 
         await user.save();
 
         const payload = { user: { id: user.id, rol: user.rol } };
-        jwt.sign(payload, process.env.JWT_SECRET || "palabra_secreta", { expiresIn: "24h" }, (err, token) => {
-            if (err) throw err;
-            res.status(201).json({ token, msg: "Usuario registrado con éxito" });
-        });
+        
+        jwt.sign(
+            payload, 
+            process.env.JWT_SECRET || "palabra_secreta", 
+            { expiresIn: "24h" }, 
+            (err, token) => {
+                if (err) throw err;
+
+                res.status(201).json({
+                    token,
+                    usuario_registrado: {
+                        nombres,
+                        apellidos,
+                        email,
+                        password: "**********", 
+                        dni,
+                        telefono,
+                        rol
+                    }
+                });
+            }
+        );
 
     } catch (error) {
         console.error(error.message);
