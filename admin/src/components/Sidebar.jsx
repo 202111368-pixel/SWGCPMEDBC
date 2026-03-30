@@ -38,14 +38,14 @@ const Sidebar = () => {
           </Link>
         </li>
 
-        {/* Ventas */}
+
+        {/* Clientes */}
         <li>
-          <Link to="/admin/cajero" className="menu-link">
-            <FaCashRegister /> <span>Cajero</span>
+          <Link to="/admin/clientes" className="menu-link">
+            <FaUsers /> <span>Clientes</span>
           </Link>
         </li>
-
-        {/* Administrador */}
+{/* Administrador */}
         <li>
           <Link to="/admin/administrador" className="menu-link">
             <FaMoneyCheckAlt /> <span>Administrador</span>
@@ -60,13 +60,21 @@ const Sidebar = () => {
         </li>
 
         <hr className="sidebar-divider" />
-
-        {/* Clientes */}
+        {/* Reportes */}
         <li>
-          <Link to="/admin/clientes" className="menu-link">
-            <FaUsers /> <span>Clientes</span>
+          <Link to="/admin/reportes" className="menu-link">
+            <FaChartBar /> <span>Reportes</span>
           </Link>
         </li>
+
+        {/* Cajero */}
+        <li>
+          <Link to="/admin/cajero" className="menu-link">
+            <FaCashRegister /> <span>Cajero</span>
+          </Link>
+        </li>
+
+        
 
         {/* Jefe de Almacén */}
         <li>
@@ -77,12 +85,6 @@ const Sidebar = () => {
 
         <hr className="sidebar-divider" />
 
-        {/* Reportes */}
-        <li>
-          <Link to="/admin/reportes" className="menu-link">
-            <FaChartBar /> <span>Reportes</span>
-          </Link>
-        </li>
 
         {/* Configuración */}
         <li>

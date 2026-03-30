@@ -46,24 +46,22 @@ const App = () => {
                 <Routes>
                   {/* INICIO */}
                   <Route path="inicio" element={<Inicio />} />
-
-                  {/* CAJERO */}
-                  <Route path="cajero" element={<Cajero />} />
-
-                  {/*ADMINISTRADOR */}
-                  <Route path="administrador" element={<Administrador />} />
-
-                  {/* PRODUCTO */}
-                  <Route path="producto" element={<Producto />} />
-
                   {/* CLIENTES */}
                   <Route path="clientes" element={<Cliente />} />
+                  {/*ADMINISTRADOR */}
+                  <Route path="administrador" element={<Administrador />} />
+                  {/* PRODUCTO */}
+                  <Route path="producto" element={<Producto />} />
+                  {/* REPORTES */}
+                  <Route path="reportes" element={<Reportes />} />
+                  {/* CAJERO */}
+                  <Route path="cajero" element={<Cajero />} />
+               
 
                   {/* JEFEALMACEN */}
                   <Route path="jefeAlmacen" element={<JefeAlmacen />} />
 
-                  {/* REPORTES */}
-                  <Route path="reportes" element={<Reportes />} />
+
 
                   {/* CONFIGURACIÓN */}
                   <Route path="configuración" element={<Configuración />} />

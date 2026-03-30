@@ -54,8 +54,6 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`\n🚀 ==========================================`);
     console.log(`🚀 SERVIDOR D'BARY COMPANY CORRIENDO EN: ${PORT}`);
-    console.log(`🔗 Front Usuario: http://localhost:3000`);
-    console.log(`🔗 Front Admin:   http://localhost:3001`);
     console.log(`📡 Endpoint Registro: http://localhost:5000/api/users/register`);
     console.log(`============================================\n`);
 });
