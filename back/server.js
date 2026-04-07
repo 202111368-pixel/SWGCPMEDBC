@@ -21,7 +21,7 @@ app.use(cors({
     credentials: true
 }));
 
-app.use(express.json()); 
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // --- CONEXIÓN A MONGODB ---
@@ -42,6 +42,8 @@ app.use("/api/reportes", require("./routes/reporteRoutes"));
 app.use("/api/chat", require("./routes/chatRoutes"));
 app.use("/api/configuracion", require("./routes/configRoutes"));
 app.use("/api/productos", require("./routes/productoRoutes"));
+app.use("/api/pagos", require("./routes/pagoRoutes"));
+
 
 // --- MANEJO DE ERRORES GLOBAL ---
 app.use((err, req, res, next) => {
