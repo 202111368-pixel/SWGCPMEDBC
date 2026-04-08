@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaUserShield, FaEnvelope, FaLock, FaArrowLeft, FaIdCard } from "react-icons/fa";
+import { FaUserShield, FaEnvelope, FaLock, FaArrowLeft, FaIdCard, FaGoogle } from "react-icons/fa";
 import Tesseract from "tesseract.js";
 import "../styles/Login.css";
 import bgImage from "../assets/logo.jpg";
@@ -18,7 +18,29 @@ const Login = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    if (name === "password") {
+      const onlyDigits = value.replace(/\D/g, "");
+
+      if (onlyDigits.length > 6) {
+        setStatus({
+          loading: false,
+          error: "Error la contraseña solo puede tener 6 digitos",
+          type: "error",
+        });
+      } else if (status.error === "Error la contraseña solo puede tener 6 digitos") {
+        setStatus({ loading: false, error: null, type: "idle" });
+      }
+
+      setCredentials((prev) => ({ ...prev, [name]: onlyDigits.slice(0, 6) }));
+      return;
+    }
+
     setCredentials((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const parseHashParams = (hashString) => {
+    const rawHash = hashString.startsWith("#") ? hashString.slice(1) : hashString;
+    return new URLSearchParams(rawHash);
   };
 
   const executeAuth = useCallback(async (e) => {
@@ -109,6 +131,91 @@ const Login = () => {
     }
   };
 
+  const handleGoogleAccess = () => {
+    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    const redirectUri = process.env.REACT_APP_GOOGLE_REDIRECT_URI || window.location.origin;
+    const hostedDomain = process.env.REACT_APP_UNIVERSITY_DOMAIN || "urp.edu.pe";
+
+    if (!clientId) {
+      setStatus({
+        loading: false,
+        type: "error",
+        error: "Falta configurar REACT_APP_GOOGLE_CLIENT_ID para acceso con Google institucional.",
+      });
+      return;
+    }
+
+    const googleOauthUrl =
+      "https://accounts.google.com/o/oauth2/v2/auth" +
+      `?client_id=${encodeURIComponent(clientId)}` +
+      `&redirect_uri=${encodeURIComponent(redirectUri)}` +
+      "&response_type=token" +
+      "&scope=openid%20email%20profile" +
+      `&hd=${encodeURIComponent(hostedDomain)}` +
+      "&prompt=select_account";
+
+    window.location.href = googleOauthUrl;
+  };
+
+  useEffect(() => {
+    const processGoogleCallback = async () => {
+      if (!window.location.hash.includes("access_token")) return;
+
+      const hostedDomain = (process.env.REACT_APP_UNIVERSITY_DOMAIN || "urp.edu.pe").toLowerCase();
+      const params = parseHashParams(window.location.hash);
+      const accessToken = params.get("access_token");
+
+      if (!accessToken) {
+        setStatus({ loading: false, type: "error", error: "No se pudo recuperar el token de Google." });
+        return;
+      }
+
+      setStatus({ loading: true, type: "processing", error: "Validando cuenta institucional..." });
+
+      try {
+        const response = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+
+        if (!response.ok) {
+          throw new Error("Google no devolvió información del usuario.");
+        }
+
+        const profile = await response.json();
+        const email = (profile.email || "").toLowerCase();
+
+        if (!profile.email_verified) {
+          throw new Error("Tu cuenta de Google no tiene correo verificado.");
+        }
+
+        if (!email.endsWith(`@${hostedDomain}`)) {
+          throw new Error(`Solo se permiten correos institucionales @${hostedDomain}.`);
+        }
+
+        const googleSession = {
+          token: accessToken,
+          provider: "google",
+          user: {
+            nombres: profile.given_name || "Usuario",
+            apellidos: profile.family_name || "",
+            email: profile.email,
+            rol: "admin",
+            picture: profile.picture || "",
+          },
+        };
+
+        localStorage.setItem("user_session", JSON.stringify(googleSession));
+        window.history.replaceState({}, document.title, window.location.pathname);
+        navigate("/admin/inicio");
+      } catch (error) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+        setStatus({ loading: false, type: "error", error: error.message || "Error en autenticación con Google." });
+      }
+    };
+
+    processGoogleCallback();
+  }, [navigate]);
+
   return (
     <div className="auth-container">
       <div className="auth-aside" style={{ backgroundImage: `url(${bgImage})` }}>
@@ -145,7 +252,16 @@ const Login = () => {
                   <label>Contraseña</label>
                   <div className="input-3d-wrapper">
                     <FaLock className="input-icon" />
-                    <input name="password" type="password" placeholder="••••••••" onChange={handleInputChange} required />
+                    <input
+                      name="password"
+                      type="password"
+                      placeholder="Hasta 6 dígitos"
+                      inputMode="numeric"
+                      pattern="[0-9]{1,6}"
+                      onChange={handleInputChange}
+                      value={credentials.password}
+                      required
+                    />
                   </div>
                 </div>
 
@@ -159,6 +275,11 @@ const Login = () => {
                   <span className="btn-content">
                     {status.loading ? "Verificando..." : attempts >= 3 ? "Bloqueado: Use Carnet" : "Acceder"}
                   </span>
+                </button>
+
+                <button type="button" className="google-access-btn" onClick={handleGoogleAccess} disabled={status.loading}>
+                  <FaGoogle />
+                  <span>{status.loading ? "Procesando acceso..." : "Acceder con Google"}</span>
                 </button>
               </form>
             </>
@@ -188,7 +309,7 @@ const Login = () => {
             </>
           )}
         </div>
-      </div>s
+      </div>
     </div>
   );
 };

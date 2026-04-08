@@ -272,6 +272,39 @@ input:checked + .slider-ui:before {
   cursor: not-allowed;
 }
 
+.google-access-btn {
+  width: 100%;
+  margin-top: 14px;
+  padding: 14px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #1f2937;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+}
+
+.google-access-btn svg {
+  color: #db4437;
+  font-size: 18px;
+}
+
+.google-access-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.14);
+}
+
+.google-access-btn:active {
+  transform: translateY(0);
+}
+
 .auth-error-msg {
   background: #fee2e2;
   color: #b91c1c;
