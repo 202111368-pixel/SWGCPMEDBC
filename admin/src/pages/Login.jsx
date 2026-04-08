@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaUserShield, FaEnvelope, FaLock, FaArrowLeft, FaIdCard } from "react-icons/fa";
+import { FaUserShield, FaEnvelope, FaLock, FaArrowLeft, FaIdCard, FaGoogle } from "react-icons/fa";
 import Tesseract from "tesseract.js";
 import "../styles/Login.css";
 import bgImage from "../assets/logo.jpg";
@@ -19,6 +19,37 @@ const Login = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCredentials((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleGoogleAccess = () => {
+    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    const redirectUri = process.env.REACT_APP_GOOGLE_REDIRECT_URI || window.location.origin;
+    const hostedDomain = process.env.REACT_APP_UNIVERSITY_DOMAIN || "urp.edu.pe";
+
+    if (!clientId) {
+      setStatus({
+        loading: false,
+        error: "Falta configurar REACT_APP_GOOGLE_CLIENT_ID para acceso con Google institucional.",
+        type: "error",
+      });
+      return;
+    }
+
+    const googleOauthUrl =
+      "https://accounts.google.com/o/oauth2/v2/auth" +
+      `?client_id=${encodeURIComponent(clientId)}` +
+      `&redirect_uri=${encodeURIComponent(redirectUri)}` +
+      "&response_type=token" +
+      "&scope=openid%20email%20profile" +
+      `&hd=${encodeURIComponent(hostedDomain)}` +
+      "&prompt=select_account";
+
+    window.location.href = googleOauthUrl;
+  };
+
+  const parseHashParams = (hashString) => {
+    const rawHash = hashString.startsWith("#") ? hashString.slice(1) : hashString;
+    return new URLSearchParams(rawHash);
   };
 
   const executeAuth = useCallback(async (e) => {
@@ -76,6 +107,65 @@ const Login = () => {
       }
     };
   }, [isRecoveryMode]);
+
+  useEffect(() => {
+    const processGoogleCallback = async () => {
+      if (!window.location.hash.includes("access_token")) return;
+
+      const hostedDomain = (process.env.REACT_APP_UNIVERSITY_DOMAIN || "urp.edu.pe").toLowerCase();
+      const params = parseHashParams(window.location.hash);
+      const accessToken = params.get("access_token");
+
+      if (!accessToken) {
+        setStatus({ loading: false, error: "No se pudo recuperar el token de Google.", type: "error" });
+        return;
+      }
+
+      setStatus({ loading: true, error: "Validando cuenta institucional...", type: "processing" });
+
+      try {
+        const response = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+
+        if (!response.ok) {
+          throw new Error("Google no devolvió información del usuario.");
+        }
+
+        const profile = await response.json();
+        const email = (profile.email || "").toLowerCase();
+
+        if (!profile.email_verified) {
+          throw new Error("Tu cuenta de Google no tiene correo verificado.");
+        }
+
+        if (!email.endsWith(`@${hostedDomain}`)) {
+          throw new Error(`Solo se permiten correos institucionales @${hostedDomain}.`);
+        }
+
+        const googleSession = {
+          token: accessToken,
+          provider: "google",
+          user: {
+            nombres: profile.given_name || "Usuario",
+            apellidos: profile.family_name || "",
+            email: profile.email,
+            rol: "admin",
+            picture: profile.picture || "",
+          },
+        };
+
+        localStorage.setItem("user_session", JSON.stringify(googleSession));
+        window.history.replaceState({}, document.title, window.location.pathname);
+        navigate("/admin/inicio");
+      } catch (error) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+        setStatus({ loading: false, error: error.message || "Error en autenticación con Google.", type: "error" });
+      }
+    };
+
+    processGoogleCallback();
+  }, [navigate]);
 
   const handleScan = async () => {
     if (!videoRef.current) return;
@@ -160,6 +250,11 @@ const Login = () => {
                     {status.loading ? "Verificando..." : attempts >= 3 ? "Bloqueado: Use Carnet" : "Acceder"}
                   </span>
                 </button>
+
+                <button type="button" className="google-access-btn" onClick={handleGoogleAccess} disabled={status.loading}>
+                  <FaGoogle />
+                  <span>{status.loading ? "Procesando acceso..." : "Acceder con Google"}</span>
+                </button>
               </form>
             </>
           ) : (
@@ -188,7 +283,7 @@ const Login = () => {
             </>
           )}
         </div>
-      </div>s
+      </div>
     </div>
   );
 };
