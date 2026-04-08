@@ -6,9 +6,6 @@ import {
 } from "react-icons/fa";
 import "../../styles/pages/Administrador/Administrador.css";
 
-/* ─────────────────────────────────────────────────────────────────
-   GSAP — carga dinámica desde CDN.
-───────────────────────────────────────────────────────────────── */
 const loadGSAP = () =>
   new Promise((resolve) => {
     if (window.gsap) { resolve(window.gsap); return; }
@@ -18,9 +15,6 @@ const loadGSAP = () =>
     document.head.appendChild(script);
   });
 
-/* ─────────────────────────────────────────────────────────────────
-   UTILIDADES
-───────────────────────────────────────────────────────────────── */
 const fileToBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -36,18 +30,13 @@ const triggerDownload = (base64, filename) => {
   a.click();
 };
 
-// Función para quitar tildes y hacer las búsquedas más exactas
 const normalizarTexto = (texto) => {
   if (!texto) return "";
   return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 };
 
-/* ─────────────────────────────────────────────────────────────────
-   COMPONENTE PRINCIPAL
-───────────────────────────────────────────────────────────────── */
 const Administrador = () => {
 
-  /* ── Estado principal ─────────────────────────────────────────── */
   const [admins, setAdmins] = useState(() => {
     const guardado = localStorage.getItem("db_admins_v2");
     return guardado ? JSON.parse(guardado) : [
@@ -66,7 +55,6 @@ const Administrador = () => {
     ];
   });
 
-  /* ── Estado de UI ─────────────────────────────────────────────── */
   const [expandedId, setExpandedId]     = useState(null);
   const [showModal, setShowModal]       = useState(false);
   const [editingAdmin, setEditingAdmin] = useState(null);
@@ -75,23 +63,28 @@ const Administrador = () => {
   const [formData, setFormData]         = useState(emptyForm());
   const [isDragging, setIsDragging]     = useState(false);
 
-  /* ── Estado Modal Contraseña ──────────────────────────────────── */
+  const [formErrors, setFormErrors] = useState({
+    nombres: false,
+    apellidos: false,
+    dni: false,
+    telefono: false,
+    email: false,
+    monto: false
+  });
+
   const [showPwdModal, setShowPwdModal]   = useState(false);
   const [pwdInput, setPwdInput]           = useState("");
   const [pwdError, setPwdError]           = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
 
-  /* ── Refs para GSAP ───────────────────────────────────────────── */
   const gsap         = useRef(null);
   const modalRef     = useRef(null);
   const expandedRefs = useRef({});
 
-  /* ── Persistencia ─────────────────────────────────────────────── */
   useEffect(() => {
     localStorage.setItem("db_admins_v2", JSON.stringify(admins));
   }, [admins]);
 
-  /* ── Carga GSAP ───────────────────────────────────────────────── */
   useEffect(() => {
     loadGSAP().then((g) => { gsap.current = g; });
   }, []);
@@ -100,13 +93,15 @@ const Administrador = () => {
     return { nombres: "", apellidos: "", email: "", dni: "", telefono: "", monto: "", imagenes: [] };
   }
 
-  /* ── Toast ────────────────────────────────────────────────────── */
+  function clearErrors() {
+    setFormErrors({ nombres: false, apellidos: false, dni: false, telefono: false, email: false, monto: false });
+  }
+
   const showToast = (title, msg, type = "success") => {
     setAlert({ show: true, title, msg, type });
     setTimeout(() => setAlert({ show: false, title: "", msg: "", type: "" }), 4500);
   };
 
-  /* ── SISTEMA DE SEGURIDAD (CONTRASEÑA) ────────────────────────── */
   const requirePassword = (actionType, adminData) => {
     setPendingAction({ type: actionType, payload: adminData });
     setPwdInput("");
@@ -133,10 +128,10 @@ const Administrador = () => {
     }
   };
 
-  /* ── Acciones protegidas (se llaman tras validación exitosa) ──── */
   const abrirAgregar = () => {
     setEditingAdmin(null);
     setFormData(emptyForm());
+    clearErrors();
     setShowModal(true);
   };
 
@@ -151,6 +146,7 @@ const Administrador = () => {
       monto:     admin.monto     !== undefined ? admin.monto : "",
       imagenes:  admin.imagenes  || [],
     });
+    clearErrors();
     setShowModal(true);
   };
 
@@ -160,7 +156,6 @@ const Administrador = () => {
     showToast("ELIMINADO", "Registro eliminado del sistema.", "error");
   };
 
-  /* ── Animar modal al abrirse ──────────────────────────────────── */
   useEffect(() => {
     if (showModal && modalRef.current && gsap.current) {
       gsap.current.fromTo(
@@ -171,7 +166,6 @@ const Administrador = () => {
     }
   }, [showModal]);
 
-  /* ── Toggle expansión de imágenes ────────────────────────────── */
   const toggleExpand = useCallback((id) => {
     const g = gsap.current;
     if (expandedId === id) {
@@ -189,7 +183,6 @@ const Administrador = () => {
     }
   }, [expandedId]);
 
-  /* ── Animar apertura de fila expandida ───────────────────────── */
   useEffect(() => {
     if (expandedId !== null) {
       const el = expandedRefs.current[expandedId];
@@ -203,14 +196,26 @@ const Administrador = () => {
     }
   }, [expandedId]);
 
-  /* ── Guardar (Nuevo o Editado) ────────────────────────────────── */
   const guardarEdicion = () => {
-    if (!formData.nombres.trim()) {
-      showToast("VALIDACIÓN", "El nombre es obligatorio.", "error");
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const errors = {
+      nombres: !formData.nombres.trim(),
+      apellidos: !formData.apellidos.trim(),
+      dni: !formData.dni || formData.dni.length < 8,
+      telefono: !formData.telefono || formData.telefono.length < 9,
+      email: !emailRegex.test(formData.email),
+      monto: !formData.monto || isNaN(parseFloat(formData.monto))
+    };
+
+    setFormErrors(errors);
+
+    if (Object.values(errors).includes(true)) {
+      showToast("VALIDACIÓN", "Por favor, corrige los campos resaltados en rojo.", "error");
       return;
     }
 
-    const montoNumerico = parseFloat(formData.monto) || 0;
+    const montoNumerico = parseFloat(formData.monto);
 
     if (editingAdmin) {
       setAdmins(prev =>
@@ -240,7 +245,6 @@ const Administrador = () => {
     cerrarModal();
   };
 
-  /* ── Subir imágenes en Modal ──────────────────────────────────── */
   const handleSubirImagenesModal = async (files) => {
     const totalActual = formData.imagenes?.length || 0;
 
@@ -267,7 +271,6 @@ const Administrador = () => {
     showToast("IMÁGENES", `${nuevas.length} imagen(es) subida(s).`, "success");
   };
 
-  /* ── Eliminar imagen en Modal ─────────────────────────────────── */
   const eliminarImagenModal = (imgIndex) => {
     setFormData(prev => ({
       ...prev,
@@ -275,7 +278,6 @@ const Administrador = () => {
     }));
   };
 
-  /* ── Eliminar imagen desde la Tabla directamente ──────────────── */
   const eliminarImagenTabla = (adminId, imgIndex) => {
     setAdmins(prev =>
       prev.map(a =>
@@ -286,7 +288,6 @@ const Administrador = () => {
     );
   };
 
-  /* ── Imprimir PDF ─────────────────────────────────────────────── */
   const imprimirPDF = (admin) => {
     const imagenesHTML = (admin.imagenes || [])
       .map((img) => `
@@ -323,7 +324,7 @@ const Administrador = () => {
       </head>
       <body>
         <div class="header">
-          <div class="logo-ph">[ Logo empresa — se añade en fase 2 ]</div>
+          <div class="logo-ph"></div>
           <h1>${admin.cliente}</h1>
           <span class="badge">#ID-${admin.id}</span>
           <span class="badge red">${admin.estado}</span>
@@ -350,27 +351,22 @@ const Administrador = () => {
     ventana.document.close();
   };
 
-  /* ── Cerrar modal ─────────────────────────────────────────────── */
   const cerrarModal = () => {
     setShowModal(false);
     setEditingAdmin(null);
     setFormData(emptyForm());
+    clearErrors();
   };
 
-  /* ── Filtrado Inteligente (Ignora tildes y mayúsculas) ────────── */
   const filtrados = useMemo(() => {
     if (!searchTerm) return admins;
     const busqueda = normalizarTexto(searchTerm);
     return admins.filter(a => normalizarTexto(a.cliente).includes(busqueda));
   }, [admins, searchTerm]);
 
-  /* ─────────────────────────────────────────────────────────────────
-     RENDER
-  ───────────────────────────────────────────────────────────────── */
   return (
     <div className="admin-main-wrapper">
 
-      {/* Toast */}
       {alert.show && (
         <div className={`toast-notification ${alert.type}`}>
           <div className="toast-icon-circle">
@@ -386,7 +382,6 @@ const Administrador = () => {
         </div>
       )}
 
-      {/* MODAL DE CONTRASEÑA */}
       {showPwdModal && (
         <div 
           className="modal-overlay pwd-overlay"
@@ -418,13 +413,11 @@ const Administrador = () => {
         </div>
       )}
 
-      {/* Header */}
       <header className="brand-section">
         <div className="brand-logo-bg"><FaUserShield /></div>
         <h1 className="brand-title">Gestión de Administrador</h1>
       </header>
 
-      {/* Buscador y Botón Agregar */}
       <div className="action-row">
         <div className="search-box">
           <FaSearch />
@@ -438,7 +431,6 @@ const Administrador = () => {
         </button>
       </div>
 
-      {/* Tabla */}
       <div className="data-card">
         <table className="modern-table">
           <thead>
@@ -455,7 +447,6 @@ const Administrador = () => {
             {filtrados.map((admin) => (
               <React.Fragment key={admin.id}>
 
-                {/* Fila principal */}
                 <tr className={expandedId === admin.id ? "row-expanded-active" : ""}>
                   <td className="td-code">#ID-{admin.id}</td>
                   <td><strong className="td-nombre">{admin.cliente}</strong></td>
@@ -479,22 +470,18 @@ const Administrador = () => {
                     </button>
                   </td>
                   <td className="td-acciones">
-                    {/* Botón Imprimir protegido */}
                     <button className="act-btn-print" onClick={() => requirePassword('PRINT', admin)} title="Imprimir">
                       <FaPrint />
                     </button>
-                    {/* Botón Editar protegido */}
                     <button className="act-btn-edit" onClick={() => requirePassword('EDIT', admin)} title="Editar">
                       <FaEdit />
                     </button>
-                    {/* Botón Eliminar protegido */}
                     <button className="act-btn-delete" onClick={() => requirePassword('DELETE', admin)} title="Eliminar">
                       <FaTrash />
                     </button>
                   </td>
                 </tr>
 
-                {/* Fila expandida con imágenes */}
                 {expandedId === admin.id && (
                   <tr className="tr-expand-row">
                     <td colSpan={6} style={{ padding: 0 }}>
@@ -547,9 +534,6 @@ const Administrador = () => {
         </table>
       </div>
 
-      {/* ══════════════════════════════════════════════════════════
-          MODAL DE EDICIÓN Y CREACIÓN
-      ══════════════════════════════════════════════════════════ */}
       {showModal && (
         <div
           className="modal-overlay"
@@ -557,7 +541,6 @@ const Administrador = () => {
         >
           <div className="modal-admin-card" ref={modalRef}>
 
-            {/* Cabecera del modal */}
             <div className="modal-admin-head">
               <h3 className="modal-admin-title">
                 {editingAdmin ? "Editar Perfil" : "Agregar Nuevo"}
@@ -565,33 +548,32 @@ const Administrador = () => {
               <button className="close-x-btn" onClick={cerrarModal}><FaTimes /></button>
             </div>
 
-            {/* Cuerpo */}
             <div className="modal-admin-body">
 
               <div className="modal-grid-2">
                 <div className="modal-field">
-                  <label>Nombres <span className="req">*</span></label>
+                  <label>Nombres</label>
                   <input
-                    className="input-modern"
+                    className={`input-modern ${formErrors.nombres ? "input-err" : ""}`}
                     value={formData.nombres}
                     placeholder="EJ. JUAN CARLOS"
-                    /* RESTRICCIÓN: Solo letras, acentos y espacios */
                     onChange={(e) => {
                       const valor = e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, "");
                       setFormData({ ...formData, nombres: valor.toUpperCase() });
+                      if (formErrors.nombres) setFormErrors({ ...formErrors, nombres: false });
                     }}
                   />
                 </div>
                 <div className="modal-field">
                   <label>Apellidos</label>
                   <input
-                    className="input-modern"
+                    className={`input-modern ${formErrors.apellidos ? "input-err" : ""}`}
                     value={formData.apellidos}
                     placeholder="EJ. RIVERA LÓPEZ"
-                    /* RESTRICCIÓN: Solo letras, acentos y espacios */
                     onChange={(e) => {
                       const valor = e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, "");
                       setFormData({ ...formData, apellidos: valor.toUpperCase() });
+                      if (formErrors.apellidos) setFormErrors({ ...formErrors, apellidos: false });
                     }}
                   />
                 </div>
@@ -601,28 +583,28 @@ const Administrador = () => {
                 <div className="modal-field">
                   <label>DNI</label>
                   <input
-                    className="input-modern"
+                    className={`input-modern ${formErrors.dni ? "input-err" : ""}`}
                     value={formData.dni}
                     placeholder="EJ. 46591170"
                     maxLength={8}
-                    /* RESTRICCIÓN: Solo números */
                     onChange={(e) => {
                       const valor = e.target.value.replace(/\D/g, "");
                       setFormData({ ...formData, dni: valor });
+                      if (formErrors.dni) setFormErrors({ ...formErrors, dni: false });
                     }}
                   />
                 </div>
                 <div className="modal-field">
                   <label>Teléfono</label>
                   <input
-                    className="input-modern"
+                    className={`input-modern ${formErrors.telefono ? "input-err" : ""}`}
                     value={formData.telefono}
                     placeholder="EJ. 987654321"
                     maxLength={9}
-                    /* RESTRICCIÓN: Solo números */
                     onChange={(e) => {
                       const valor = e.target.value.replace(/\D/g, "");
                       setFormData({ ...formData, telefono: valor });
+                      if (formErrors.telefono) setFormErrors({ ...formErrors, telefono: false });
                     }}
                   />
                 </div>
@@ -632,32 +614,35 @@ const Administrador = () => {
                 <div className="modal-field">
                   <label>Email</label>
                   <input
-                    className="input-modern"
+                    className={`input-modern ${formErrors.email ? "input-err" : ""}`}
                     type="email"
                     value={formData.email}
                     placeholder="EJ. admin@empresa.com"
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, email: e.target.value });
+                      if (formErrors.email) setFormErrors({ ...formErrors, email: false });
+                    }}
                   />
                 </div>
                 <div className="modal-field">
                   <label>Monto</label>
                   <input
-                    className="input-modern"
+                    className={`input-modern ${formErrors.monto ? "input-err" : ""}`}
                     type="number"
                     step="0.01"
                     min="0"
                     value={formData.monto}
                     placeholder="EJ. 150.00"
-                    /* RESTRICCIÓN: Input tipo number evita letras (salvo la 'e' matemática) */
-                    onChange={(e) => setFormData({ ...formData, monto: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, monto: e.target.value });
+                      if (formErrors.monto) setFormErrors({ ...formErrors, monto: false });
+                    }}
                   />
                 </div>
               </div>
 
-              {/* Divisor */}
               <div className="modal-divider"><span>Documentos adjuntos</span></div>
 
-              {/* Zona drag & drop para subir imágenes */}
               <div
                 className={`upload-zone ${isDragging ? "dragging" : ""}`}
                 onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
@@ -684,7 +669,6 @@ const Administrador = () => {
                 />
               </div>
 
-              {/* Lista de imágenes subidas en el modal */}
               {formData.imagenes?.length > 0 && (
                 <div className="modal-imgs-list">
                   {formData.imagenes.map((img, i) => (
@@ -715,7 +699,6 @@ const Administrador = () => {
                 </div>
               )}
 
-              {/* Guardar */}
               <button className="btn-confirmar-blue" onClick={guardarEdicion}>
                 {editingAdmin ? "Guardar Cambios" : "Agregar Registro"}
               </button>
