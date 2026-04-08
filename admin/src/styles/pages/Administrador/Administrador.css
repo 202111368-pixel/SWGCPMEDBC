@@ -1,7 +1,3 @@
-/* ════════════════════════════════════════════════════════════════
-   Administrador.css — D'Bary Company
-════════════════════════════════════════════════════════════════ */
-
 :root {
   --primary-blue: #2563eb;
   --bg-main: #f8fafc;
@@ -15,7 +11,6 @@
   --surface-alt: #f1f5f9;
 }
 
-/* ── Layout ──────────────────────────────────────────────────── */
 .admin-main-wrapper {
   padding: 30px;
   background: var(--bg-main);
@@ -23,7 +18,6 @@
   font-family: 'Inter', 'Segoe UI', sans-serif;
 }
 
-/* ── Toast ───────────────────────────────────────────────────── */
 .toast-notification {
   position: fixed; top: 20px; right: 20px; width: 380px;
   background: rgba(255,255,255,0.98); backdrop-filter: blur(10px);
@@ -51,7 +45,6 @@
 .toast-time   { font-size: 11px; color: var(--text-light); }
 .toast-message { font-size: 13px; color: var(--text-muted); margin: 0; }
 
-/* ── Header ──────────────────────────────────────────────────── */
 .brand-section { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
 .brand-logo-bg {
   background: var(--primary-blue); color: white;
@@ -60,7 +53,6 @@
 }
 .brand-title { font-size: 22px; font-weight: 800; color: var(--text-main); }
 
-/* ── Barra acciones ──────────────────────────────────────────── */
 .action-row { display: flex; gap: 15px; margin-bottom: 20px; align-items: center; }
 
 .search-box { position: relative; flex: 1; }
@@ -82,7 +74,6 @@
 }
 .btn-primary-blue:hover { background: #1d4ed8; }
 
-/* ── Tabla ───────────────────────────────────────────────────── */
 .data-card {
   background: var(--surface); border-radius: 18px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.04); overflow: hidden;
@@ -110,7 +101,6 @@
 .status-pill.completado { background: #d1fae5; color: #065f46; }
 .status-pill.cancelado  { background: #fee2e2; color: #991b1b; }
 
-/* ── Botones de acción en tabla ──────────────────────────────── */
 .td-acciones { display: flex; gap: 7px; align-items: center; }
 
 .act-btn-edit, .act-btn-delete, .act-btn-print {
@@ -122,14 +112,12 @@
 .act-btn-edit  { background: #eff6ff; color: var(--primary-blue); }
 .act-btn-edit:hover  { background: var(--primary-blue); color: white; }
 
-/* Botón imprimir — naranja suave para diferenciarlo */
 .act-btn-print { background: #fff7ed; color: #c2410c; }
 .act-btn-print:hover { background: #c2410c; color: white; }
 
 .act-btn-delete { background: #fee2e2; color: var(--danger); }
 .act-btn-delete:hover { background: var(--danger); color: white; }
 
-/* ── Botón expandir imágenes ─────────────────────────────────── */
 .btn-expand-imgs {
   display: flex; align-items: center; gap: 6px;
   background: var(--surface-alt); border: 1.5px solid var(--border);
@@ -147,7 +135,6 @@
   display: flex; align-items: center; justify-content: center;
 }
 
-/* ── Fila expandida de imágenes ──────────────────────────────── */
 .tr-expand-row td { border-bottom: none; padding: 0 !important; }
 .expand-imgs-panel { overflow: hidden; }
 .expand-imgs-inner {
@@ -196,10 +183,6 @@
   border-top: 1px solid var(--border);
 }
 
-/* ══════════════════════════════════════════════════════════════
-   MODAL DE CONTRASEÑA
-══════════════════════════════════════════════════════════════ */
-/* z-index mayor que el modal de edición para que aparezca encima */
 .pwd-overlay { z-index: 1100; }
 
 .modal-pwd-card {
@@ -227,6 +210,7 @@
 
 .modal-pwd-body { padding: 20px 24px 24px; }
 
+/* ESTA ES LA CLASE PARA LOS ERRORES (BORDE ROJO Y FONDO ROJIZO) */
 .input-err { border-color: var(--danger) !important; background: #fff5f5 !important; }
 
 .pwd-error-msg {
@@ -250,9 +234,6 @@
 }
 .btn-pwd-confirm:hover { background: #1d4ed8; }
 
-/* ══════════════════════════════════════════════════════════════
-   MODAL DE EDICIÓN
-══════════════════════════════════════════════════════════════ */
 .modal-overlay {
   position: fixed; inset: 0;
   background: rgba(15,23,42,0.72); backdrop-filter: blur(5px);
@@ -290,7 +271,6 @@
   color: var(--text-muted); text-transform: uppercase;
   letter-spacing: 0.5px; margin-bottom: 6px;
 }
-.req { color: var(--danger); }
 
 .input-modern {
   width: 100%; padding: 11px 13px;
@@ -301,17 +281,14 @@
 }
 .input-modern:focus { border-color: var(--primary-blue); background: white; }
 
-/* Mensaje de error bajo el campo */
 .field-error { font-size: 11px; color: var(--danger); margin-top: 4px; display: block; font-weight: 600; }
 
-/* Divisor */
 .modal-divider {
   display: flex; align-items: center; gap: 10px; margin: 20px 0 16px;
 }
 .modal-divider::before, .modal-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 .modal-divider span { font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase; white-space: nowrap; }
 
-/* ── Zona drag & drop ────────────────────────────────────────── */
 .upload-zone {
   border: 2px dashed var(--border); border-radius: 14px; padding: 24px;
   text-align: center; cursor: pointer; transition: all 0.25s;
@@ -329,7 +306,6 @@
 .upload-text span { color: var(--primary-blue); font-weight: 600; text-decoration: underline; }
 .upload-subtext { font-size: 12px; color: var(--text-light); }
 
-/* ── Lista imágenes en modal ─────────────────────────────────── */
 .modal-imgs-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
 
 .modal-img-row {
@@ -355,7 +331,6 @@
 .img-action-btn.delete { background: #fee2e2; color: var(--danger); }
 .img-action-btn.delete:hover { background: var(--danger); color: white; }
 
-/* ── Botón guardar ───────────────────────────────────────────── */
 .btn-confirmar-blue {
   width: 100%; background: var(--primary-blue); color: white;
   padding: 14px; border-radius: 12px; font-weight: 700;
@@ -364,7 +339,6 @@
 }
 .btn-confirmar-blue:hover { background: #1d4ed8; }
 
-/* ── Animaciones ─────────────────────────────────────────────── */
 @keyframes slideInRight {
   from { transform: translateX(110%); opacity: 0; }
   to   { transform: translateX(0);    opacity: 1; }
@@ -379,7 +353,6 @@
   75%       { transform: translateX(5px); }
 }
 
-/* ── Responsive ──────────────────────────────────────────────── */
 @media (max-width: 600px) {
   .admin-main-wrapper { padding: 16px; }
   .modal-grid-2 { grid-template-columns: 1fr; }
