@@ -309,15 +309,6 @@ body { font-family: 'Poppins', sans-serif; background: var(--bg-right); }
   75%      { transform: translateX(5px); }
 }
 
-.pwd-strength-dots { display: flex; gap: 8px; margin-top: 12px; }
-.pwd-dot {
-  width: 11px; height: 11px;
-  border-radius: 50%;
-  background: #dde3ee;
-  transition: background 0.25s, transform 0.25s;
-}
-.pwd-dot.active { background: var(--blue-500); transform: scale(1.35); }
-
 .auth-options {
   display: flex; justify-content: flex-end;
   margin-bottom: 30px; font-size: 14.5px;

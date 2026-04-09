@@ -245,12 +245,6 @@ const Login = () => {
                   </div>
 
                   {passwordError && <div className="password-error-msg">⚠ {passwordError}</div>}
-
-                  <div className="pwd-strength-dots">
-                    {[...Array(6)].map((_, i) => (
-                      <span key={i} className={`pwd-dot ${credentials.password.length > i ? "active" : ""}`} />
-                    ))}
-                  </div>
                 </div>
 
                 <div className="auth-options">
