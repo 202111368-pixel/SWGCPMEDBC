@@ -195,7 +195,7 @@ const Login = () => {
             </div>
           </div>
 
-          <div className="brand-bottom">© 2025 D'Barí Company · Todos los derechos reservados</div>
+          <div className="brand-bottom">© 2025 D'Bary Company · Todos los derechos reservados</div>
         </div>
       </div>
 
