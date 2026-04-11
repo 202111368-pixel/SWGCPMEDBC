@@ -161,15 +161,15 @@ const Login = () => {
 
           <div className="brand-identity">
             <span className="brand-dot" />
-            <h2>D'BARÍ COMPANY</h2>
-          </div>
+            <h2>D'BARI COMPANY</h2>
+          </div>  
 
           <div className="brand-center">
             <div className="brand-logo-card">
               <div className="logo-icon-wrap">
                 <FaShieldAlt />
               </div>
-              <h1>D'BARÍ</h1>
+              <h1>D'BARI</h1>
               <span className="brand-tag">Company</span>
             </div>
 
@@ -195,7 +195,7 @@ const Login = () => {
             </div>
           </div>
 
-          <div className="brand-bottom">© 2025 D'Bary Company · Todos los derechos reservados</div>
+          <div className="brand-bottom">© 2025 D'Barí Company · Todos los derechos reservados</div>
         </div>
       </div>
 
