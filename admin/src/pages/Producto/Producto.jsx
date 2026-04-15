@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { FaTrash, FaFilePdf, FaSearch, FaBoxOpen } from "react-icons/fa";
-import jsPDF from "jspdf";
 import "jspdf-autotable";
 import "../../styles/pages/Producto/Producto.css"; 
 

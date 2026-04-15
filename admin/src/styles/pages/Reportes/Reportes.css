@@ -1,5 +1,5 @@
 .reportes-main-container {
-  margin-left: 260px;
+  margin-left: 260px; /* Ajusta esto según el ancho de tu Sidebar */
   padding: 30px;
   background-color: #f8f9fa;
   min-height: 100vh;
@@ -16,160 +16,162 @@
 .reportes-header-box {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 10px;
-  margin-bottom: 20px;
+  align-items: center;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 15px;
+  margin-bottom: 25px;
   width: 100%;
+}
+
+.reportes-header-box h2 {
+  font-size: 1.4rem;
+  color: #2c3e50;
 }
 
 .btn-refresh {
   background: none;
-  border: none;
+  border: 1px solid #ff7300;
   color: #ff7300;
+  padding: 8px 15px;
+  border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 8px;
+  transition: 0.3s;
 }
 
+.btn-refresh:hover {
+  background: #ff7300;
+  color: white;
+}
+
+/* Filtros */
 .filter-section-reporte {
   background: white;
   padding: 20px;
-  border: 1px solid #eee;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   display: flex;
   gap: 20px;
   align-items: flex-end;
-  margin-bottom: 20px;
-  border-radius: 8px;
-}
-
-.filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+  margin-bottom: 25px;
 }
 
 .filter-group label {
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 700;
   color: #64748b;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  display: block;
 }
 
 .filter-group select {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 150px;
-  outline: none;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  width: 160px;
+  background-color: #f9f9f9;
 }
 
-.btn-consultar {
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
+/* Botones */
+.btn-consultar, .btn-generar-pdf {
+  padding: 11px 20px;
+  border-radius: 6px;
   font-weight: bold;
-  transition: background 0.2s;
-}
-
-.btn-consultar:hover {
-  background-color: #e64545;
-}
-
-.btn-generar-pdf {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   cursor: pointer;
-  font-weight: bold;
-  transition: background 0.2s;
+  border: none;
 }
 
-.btn-generar-pdf:hover {
-  background-color: #218838;
-}
+.btn-consultar { background-color: #e74c3c; color: white; }
+.btn-generar-pdf { background-color: #27ae60; color: white; }
 
+/* Grid y Tabla */
 .reporte-content-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 30px;
-  background: white;
-  padding: 20px;
-  border: 1px solid #eee;
-  border-radius: 8px;
+  gap: 25px;
   width: 100%;
-  box-sizing: border-box;
+}
+
+.table-side, .chart-side {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
 .tabla-reporte-ventas {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 15px;
 }
 
 .tabla-reporte-ventas th {
-  background-color: #d9edf7;
-  color: #31708f;
+  background-color: #f1f5f9;
+  color: #475569;
   padding: 12px;
   text-align: left;
-  border: 1px solid #ddd;
   font-size: 13px;
+  border-bottom: 2px solid #e2e8f0;
 }
 
 .tabla-reporte-ventas td {
-  padding: 10px;
-  border: 1px solid #ddd;
+  padding: 12px;
+  border-bottom: 1px solid #f1f5f9;
   font-size: 14px;
 }
 
 .product-name-cell {
-  color: #d9534f;
-  font-weight: bold;
+  color: #334155;
+  font-weight: 600;
 }
 
-.pie-container {
-  width: 100%;
-  max-width: 300px;
-  margin: 0 auto;
+/* BOTÓN PAGAR AMARILLO */
+.btn-pagar-amarillo {
+  background-color: #f1c40f;
+  color: #000;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  gap: 6px;
+  transition: 0.3s;
+  font-size: 12px;
+}
+
+.btn-pagar-amarillo:hover {
+  background-color: #d4ac0d;
+  transform: scale(1.05);
 }
 
 .monto-total-reporte {
   margin-top: 20px;
   padding: 15px;
-  background: #f1f1f1;
+  background: #2c3e50;
+  color: white;
   text-align: right;
-  font-size: 1.1rem;
-  font-weight: bold;
-  border-radius: 4px;
-  width: 100%;
-  box-sizing: border-box;
+  border-radius: 8px;
+}
+
+/* Input de búsqueda */
+.input-search-wrapper input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  width: 250px;
+  margin-left: 10px;
 }
 
 @media (max-width: 1024px) {
-  .reportes-main-container {
-    margin-left: 0;
-    padding: 20px;
-  }
-  
-  .reporte-content-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 600px) {
-  .filter-section-reporte {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .filter-group select {
-    width: 100%;
-  }
+  .reportes-main-container { margin-left: 0; }
+  .reporte-content-grid { grid-template-columns: 1fr; }
 }

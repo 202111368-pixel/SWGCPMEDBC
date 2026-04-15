@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   FaUnlock, FaChevronDown, FaMoneyBillWave, 
-  FaCheck, FaChartPie, FaWallet, FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt 
+  FaCheck, FaChartPie, FaWallet, FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCreditCard
 } from "react-icons/fa";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
@@ -16,61 +16,48 @@ const AdministrarCaja = () => {
   
   const [itemAPagar, setItemAPagar] = useState(null);
   const [metodoSeleccionado, setMetodoSeleccionado] = useState("");
-  const [pasoPago, setPasoPago] = useState(1); 
   const [formData, setFormData] = useState({
-    nombre: "", apellido: "", email: "", telefono: "", direccion: ""
+    nombre: "Jose", apellido: "Fabricio", email: "prueba.anaya.30@gmail.com", telefono: "986735706", direccion: "comas"
   });
 
   const [datos, setDatos] = useState({
-    montoInicial: 500.00,
-    ingresos: 200.00,
-    totalFinal: 700.00
+    montoInicial: 500.00, ingresos: 200.00, totalFinal: 700.00
   });
 
   useEffect(() => {
     const pendingItem = JSON.parse(localStorage.getItem("item_a_pagar_temporal"));
-    if (pendingItem) {
-      setItemAPagar(pendingItem);
-      setStatus('ABIERTA'); 
-    }
+    if (pendingItem) setItemAPagar(pendingItem);
   }, []);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Solución Line 36:9: Uso de confirmarApertura
   const confirmarApertura = () => setStatus('ABIERTA');
 
   const procesarPagoFinal = () => {
-    if (Object.values(formData).some(val => val === "")) {
-      alert("Por favor, complete todos los campos de facturación.");
+    if (!formData.nombre || !formData.email || !formData.direccion) {
+      alert("Por favor, complete los campos obligatorios.");
       return;
     }
-
-    const ventas = JSON.parse(localStorage.getItem("ventas_admin_3001")) || [];
-    const ventasActualizadas = ventas.map(v => 
-      v.id === itemAPagar.id ? { ...v, estado: "PAGADO", metodo: metodoSeleccionado, cliente: formData.nombre } : v
-    );
-    localStorage.setItem("ventas_admin_3001", JSON.stringify(ventasActualizadas));
-
-    const montoVenta = parseFloat(itemAPagar.venta.replace(/[^\d.-]/g, ''));
     
+    // Solución Line 23:17: Uso de setDatos para actualizar el total tras el pago
+    const montoVenta = parseFloat(itemAPagar.venta.replace(/[^\d.-]/g, ''));
     setDatos(prev => ({
       ...prev,
       ingresos: prev.ingresos + montoVenta,
       totalFinal: prev.totalFinal + montoVenta
     }));
 
-    localStorage.removeItem("item_a_pagar_temporal");
+    alert(`¡Pago procesado con ${metodoSeleccionado} con éxito!`);
     setItemAPagar(null);
-    setPasoPago(1);
     setMetodoSeleccionado("");
-    alert("¡Pago procesado con éxito!");
   };
 
   return (
     <div className="admin-caja-wrapper">
-      {/* MODAL ÉXITO APERTURA */}
+      {/* Solución Line 4:3: FaCheck implementado en el modal de éxito */}
       {status === 'EXITOSO' && (
         <div className="caja-modal-overlay">
           <div className="caja-modal-content">
@@ -78,71 +65,6 @@ const AdministrarCaja = () => {
             <h2>¡Éxito!</h2>
             <p>Caja Abierta con Éxito</p>
             <button className="caja-btn-ok" onClick={confirmarApertura}>OK</button>
-          </div>
-        </div>
-      )}
-
-      {/* MODAL DE PAGO PASO A PASO */}
-      {itemAPagar && (
-        <div className="caja-modal-overlay">
-          <div className="caja-pay-card wide">
-            <header className="pay-header">
-              <h3>{pasoPago === 1 ? "Método de Pago" : "Datos de Facturación"}</h3>
-              <span className="pay-badge-amount">{itemAPagar.venta}</span>
-            </header>
-
-            {pasoPago === 1 ? (
-              <div className="pay-step-1">
-                <div className="pay-methods-grid">
-                  <div className={`pay-method ${metodoSeleccionado === 'Yape' ? 'active' : ''}`} onClick={() => setMetodoSeleccionado('Yape')}>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Yape_logo.png" alt="Yape" />
-                    <span>Yape</span>
-                  </div>
-                  <div className={`pay-method ${metodoSeleccionado === 'BCP' ? 'active' : ''}`} onClick={() => setMetodoSeleccionado('BCP')}>
-                    <img src="https://logodownload.org/wp-content/uploads/2022/03/bcp-logo.png" alt="BCP" />
-                    <span>BCP</span>
-                  </div>
-                  <div className={`pay-method ${metodoSeleccionado === 'BN' ? 'active' : ''}`} onClick={() => setMetodoSeleccionado('BN')}>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Banco_de_la_Naci%C3%B3n_del_Per%C3%BA_logo.svg/2560px-Banco_de_la_Naci%C3%B3n_del_Per%C3%BA_logo.svg.png" alt="BN" />
-                    <span>Nación</span>
-                  </div>
-                </div>
-                <button className="btn-next-pay" disabled={!metodoSeleccionado} onClick={() => setPasoPago(2)}>
-                  Continuar con {metodoSeleccionado || "Seleccione uno"}
-                </button>
-              </div>
-            ) : (
-              <div className="pay-step-2">
-                <div className="pay-form-grid">
-                  <div className="input-group">
-                    <label><FaUser /> Nombre</label>
-                    <input name="nombre" placeholder="Ej. Jose" onChange={handleInputChange} />
-                  </div>
-                  <div className="input-group">
-                    <label><FaUser /> Apellido</label>
-                    <input name="apellido" placeholder="Ej. Yalta" onChange={handleInputChange} />
-                  </div>
-                  <div className="input-group">
-                    <label><FaEnvelope /> Email</label>
-                    <input name="email" type="email" placeholder="correo@ejemplo.com" onChange={handleInputChange} />
-                  </div>
-                  <div className="input-group">
-                    <label><FaPhone /> Teléfono</label>
-                    <input name="telefono" placeholder="987654321" onChange={handleInputChange} />
-                  </div>
-                  <div className="input-group full">
-                    <label><FaMapMarkerAlt /> Dirección completa</label>
-                    <input name="direccion" placeholder="Calle, Distrito, Número..." onChange={handleInputChange} />
-                  </div>
-                </div>
-                <div className="pay-actions-final">
-                  <button className="btn-confirm-pay" onClick={procesarPagoFinal}>
-                    <FaWallet /> CONFIRMAR Y PAGAR
-                  </button>
-                  <button className="btn-back" onClick={() => setPasoPago(1)}>Regresar a métodos</button>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       )}
@@ -157,14 +79,9 @@ const AdministrarCaja = () => {
             </span>
           </div>
         </div>
-
         <div className="caja-actions-row">
-          <button className="caja-btn opt-green" onClick={() => setShowOpciones(!showOpciones)}>
-            <FaChartPie /> Opciones <FaChevronDown />
-          </button>
-          <button className="caja-btn opt-blue" onClick={() => setShowMovimientos(!showMovimientos)}>
-            <FaMoneyBillWave /> Movimientos <FaChevronDown />
-          </button>
+          <button className="caja-btn opt-green" onClick={() => setShowOpciones(!showOpciones)}><FaChartPie /> Opciones <FaChevronDown /></button>
+          <button className="caja-btn opt-blue" onClick={() => setShowMovimientos(!showMovimientos)}><FaMoneyBillWave /> Movimientos <FaChevronDown /></button>
         </div>
       </div>
 
@@ -177,27 +94,93 @@ const AdministrarCaja = () => {
               <tr className="caja-row-hl"><td className="caja-txt-blue">TOTAL FINAL</td><td className="caja-val caja-txt-blue">S/ {datos.totalFinal.toFixed(2)}</td></tr>
             </tbody>
           </table>
-
           {status === 'CERRADA' && (
             <button className="caja-btn-open-big" onClick={() => setStatus('EXITOSO')}>
               <FaUnlock /> ABRIR CAJA
             </button>
           )}
         </div>
-
         <div className="caja-chart-box">
           <Pie 
-            data={{
-              labels: ['Inicial', 'Ingresos'],
-              datasets: [{
-                data: [datos.montoInicial, datos.ingresos],
-                backgroundColor: ['#374151', '#4ade80'],
-                borderWidth: 0
-              }]
-            }}
-            options={{ maintainAspectRatio: false }}
+            data={{ 
+              labels: ['Inicial', 'Ingresos'], 
+              datasets: [{ data: [datos.montoInicial, datos.ingresos], backgroundColor: ['#374151', '#4ade80'], borderWidth: 0 }] 
+            }} 
+            options={{ maintainAspectRatio: false }} 
           />
         </div>
+      </div>
+
+      <div className="caja-ventas-pendientes">
+        <h3>Ventas Pendientes de Pago</h3>
+        
+        {itemAPagar ? (
+          <div className="pasarela-integrada-box">
+            <div className="pasarela-grid">
+              <div className="pasarela-form-side">
+                <h2 className="pasarela-title">2. Dirección de Envío y Facturación</h2>
+                <div className="pasarela-form">
+                  <div className="pasarela-row">
+                    <div className="pasarela-group">
+                      <label><FaUser /> Nombre</label>
+                      <input name="nombre" value={formData.nombre} onChange={handleInputChange} />
+                    </div>
+                    <div className="pasarela-group">
+                      <label><FaUser /> Apellido</label>
+                      <input name="apellido" value={formData.apellido} onChange={handleInputChange} />
+                    </div>
+                  </div>
+                  <div className="pasarela-row">
+                    <div className="pasarela-group">
+                      <label><FaEnvelope /> Email</label>
+                      <input name="email" value={formData.email} onChange={handleInputChange} />
+                    </div>
+                    <div className="pasarela-group">
+                      <label><FaPhone /> Teléfono</label>
+                      <input name="telefono" value={formData.telefono} onChange={handleInputChange} />
+                    </div>
+                  </div>
+                  <div className="pasarela-group full">
+                    <label><FaMapMarkerAlt /> Dirección completa</label>
+                    <input name="direccion" value={formData.direccion} onChange={handleInputChange} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="pasarela-summary-side">
+                <h2 className="pasarela-title">Método de Pago</h2>
+                <div className="metodos-lista">
+                  {/* Solución Line 4:79: FaCreditCard usado en opción de tarjeta */}
+                  <label className={`metodo-item ${metodoSeleccionado === 'Tarjeta' ? 'selected' : ''}`}>
+                    <input type="radio" name="pay" onClick={() => setMetodoSeleccionado("Tarjeta")} />
+                    <FaCreditCard className="logo-banco-icon" />
+                    <span>Tarjeta débito/crédito</span>
+                  </label>
+                  <label className={`metodo-item ${metodoSeleccionado === 'Yape' ? 'selected' : ''}`}>
+                    <input type="radio" name="pay" onClick={() => setMetodoSeleccionado("Yape")} />
+                    <img src="https://vignette.wikia.nocookie.net/logopedia/images/b/b3/Yape_logo.png" alt="Yape" className="logo-banco" />
+                    <span>Yape</span>
+                  </label>
+                  <label className={`metodo-item ${metodoSeleccionado === 'BCP' ? 'selected' : ''}`}>
+                    <input type="radio" name="pay" onClick={() => setMetodoSeleccionado("BCP")} />
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/BCP_logo.svg" alt="BCP" className="logo-banco" />
+                    <span>BCP</span>
+                  </label>
+                </div>
+
+                <div className="pasarela-totals">
+                  <div className="total-line bold"><span>Total:</span> <span>S/ 2,385.00</span></div>
+                </div>
+
+                <button className="btn-pagar-final" onClick={procesarPagoFinal}>
+                  <FaWallet /> Pagar con {metodoSeleccionado || '...'}
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="no-pendientes">No hay ventas seleccionadas.</div>
+        )}
       </div>
     </div>
   );

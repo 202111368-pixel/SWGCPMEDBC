@@ -1,85 +1,80 @@
 .admin-caja-wrapper {
-  background: #fff; padding: 25px; border-radius: 8px;
+  background: #f4f7f6; padding: 25px; border-radius: 8px;
   max-width: 1300px; margin: 20px auto; font-family: 'Segoe UI', sans-serif;
 }
 
 .caja-modal-overlay {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5); z-index: 10000; display: flex; justify-content: center; align-items: center;
-}
-.caja-modal-content {
-  background: white; padding: 40px; border-radius: 12px; text-align: center; width: 320px;
-}
-.caja-check-icon {
-  width: 80px; height: 80px; border: 4px solid #f0fdf4; border-radius: 50%;
-  color: #22c55e; font-size: 40px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;
-}
-.caja-btn-ok {
-  background: #62c462; color: white; border: none; padding: 10px 40px;
-  border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 15px;
+  background: rgba(0,0,0,0.7); z-index: 10000; display: flex; justify-content: center; align-items: center;
 }
 
-/* Header & Timer - image_2b07bd.png */
-.caja-top-nav {
-  display: flex; justify-content: space-between; align-items: flex-start;
-  border-bottom: 1px solid #eee; padding-bottom: 20px; position: relative;
+.pasarela-container {
+  background: #fff; width: 90%; max-width: 1000px; border-radius: 12px; overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.3);
 }
-.caja-title-section h2 { font-size: 18px; color: #444; margin-bottom: 5px; }
-.caja-sub-info { font-size: 12px; color: #777; font-weight: 500; }
-.caja-badge { padding: 2px 10px; border-radius: 12px; font-size: 10px; color: white; font-weight: 900; }
-.caja-badge.open { background: #5cb85c; }
-.caja-badge.closed { background: #d9534f; }
 
-.caja-timer-center {
-  position: absolute; left: 50%; transform: translateX(-50%); top: -15px;
-}
-.caja-notif-card {
-  background: white; border-radius: 15px; padding: 15px 30px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.15); border: 1px solid #e2e8f0;
-  border-left: 6px solid #3b82f6; min-width: 480px;
-}
-.caja-notif-body { display: flex; align-items: center; gap: 25px; }
-.caja-timer-circle {
-  width: 100px; height: 100px; border: 4px solid #f1f5f9; border-top-color: #3b82f6;
-  border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center;
-}
-.caja-24h-text { font-size: 24px; font-weight: 900; color: #1e293b; }
-.caja-clock-live { font-size: 10px; color: #22c55e; font-weight: bold; font-family: monospace; }
-.caja-notif-text p { font-size: 15px; color: #64748b; font-weight: 600; margin-bottom: 10px; }
-.caja-notif-btns { display: flex; gap: 8px; }
-.caja-btn-timer { padding: 8px 15px; border: none; border-radius: 6px; color: white; cursor: pointer; font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 6px; }
-.accept { background: #22c55e; }
-.cancel { background: #ef4444; }
+.pasarela-grid { display: grid; grid-template-columns: 1.5fr 1fr; }
 
-/* Grid & Table - image_2b70dd.png */
-.caja-grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; padding: 40px 0; }
-.caja-data-table { width: 100%; border-collapse: collapse; border: 1px solid #f1f5f9; }
-.caja-data-table td { padding: 14px 20px; border-bottom: 1px solid #f1f5f9; font-size: 13px; color: #334155; }
-.caja-sq { width: 12px; height: 12px; display: inline-block; margin-right: 12px; border-radius: 2px; }
-.caja-sq.dark { background: #374151; } .caja-sq.green { background: #22c55e; } 
-.caja-sq.orange { background: #f97316; } .caja-sq.yellow { background: #facc15; } 
-.caja-sq.cyan { background: #22d3ee; }
-.caja-val { text-align: right; font-weight: 500; color: #1e293b; }
-.caja-row-hl { font-weight: bold; }
-.caja-row-hl td { border-top: 1px solid #e2e8f0; padding: 16px 20px; }
-.caja-txt-green { color: #16a34a; }
-.caja-txt-red { color: #dc2626; }
-.caja-txt-blue { color: #0ea5e9; font-size: 16px; }
+.pasarela-form-side { padding: 40px; background: #fff; }
+.pasarela-summary-side { padding: 40px; background: #f8fafc; border-left: 1px solid #e2e8f0; }
+
+.pasarela-title { font-size: 18px; color: #1e293b; margin-bottom: 25px; font-weight: 700; }
+
+.pasarela-row { display: flex; gap: 20px; margin-bottom: 15px; }
+.pasarela-group { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+.pasarela-group label { font-size: 13px; color: #64748b; font-weight: 600; }
+.pasarela-group input { padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; }
+.pasarela-group input:disabled { background: #f1f5f9; color: #94a3b8; }
+
+.metodos-lista { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+.metodo-item { 
+  display: flex; align-items: center; gap: 12px; padding: 15px; 
+  border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #fff;
+}
+
+.pasarela-totals { margin-bottom: 30px; border-top: 1px solid #e2e8f0; padding-top: 20px; }
+.total-line { display: flex; justify-content: space-between; margin-bottom: 8px; color: #64748b; }
+.total-line.bold { font-size: 20px; color: #1e293b; font-weight: 800; margin-top: 10px; }
+
+.btn-pagar-final {
+  width: 100%; padding: 15px; background: #059669; color: #fff; border: none;
+  border-radius: 8px; font-weight: 700; cursor: pointer; margin-bottom: 10px;
+}
+
+.btn-cancelar-pasarela {
+  width: 100%; padding: 10px; background: transparent; color: #ef4444; border: none; cursor: pointer;
+}
+
+.caja-ventas-pendientes { margin-top: 40px; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+.caja-ventas-pendientes h3 { margin-bottom: 20px; color: #1e293b; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
+
+.item-pendiente-card {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20px; background: #f8fafc; border-radius: 10px; border-left: 5px solid #facc15;
+}
+
+.item-actions { display: flex; gap: 10px; }
+.btn-pagar-yape { background: #7c3aed; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+.btn-pagar-tarjeta { background: #1e293b; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+
+.caja-top-nav { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+.caja-badge { padding: 4px 12px; border-radius: 20px; font-size: 11px; color: white; font-weight: 800; }
+.caja-badge.open { background: #10b981; }
+.caja-badge.closed { background: #ef4444; }
+
+.caja-grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 30px 0; }
+.caja-data-table { width: 100%; background: #fff; border-radius: 8px; }
+.caja-data-table td { padding: 15px 20px; border-bottom: 1px solid #f1f5f9; }
+.caja-val { text-align: right; font-weight: 700; }
+.caja-row-hl { background: #f0f9ff; }
+.caja-txt-blue { color: #0284c7; font-size: 18px; }
 
 .caja-btn-open-big {
-  width: 100%; padding: 16px; background: #3b82f6; color: white; border: none;
-  border-radius: 8px; font-weight: bold; font-size: 15px; margin-top: 25px; cursor: pointer;
+  width: 100%; padding: 18px; background: #2563eb; color: white; border: none;
+  border-radius: 8px; font-weight: bold; font-size: 16px; margin-top: 20px; cursor: pointer;
 }
 
-.caja-actions-row { display: flex; gap: 10px; }
-.caja-btn { padding: 10px 16px; border: none; border-radius: 6px; color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; }
-.opt-green { background: #71a41d; }
-.opt-dark { background: #334155; }
-.opt-blue { background: #00aced; }
-.caja-dropdown { position: relative; }
-.caja-menu { position: absolute; top: 110%; right: 0; background: white; border: 1px solid #ddd; width: 180px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); z-index: 100; border-radius: 4px; }
-.caja-menu-item { padding: 12px 15px; font-size: 13px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-.caja-menu-item:hover { background: #f8fafc; }
-.caja-menu-item.red { color: #ef4444; font-weight: bold; border-top: 1px solid #f1f5f9; }
-
-.caja-chart-box { height: 380px; display: flex; align-items: center; justify-content: center; }
+.caja-actions-row { display: flex; gap: 12px; }
+.caja-btn { padding: 10px 20px; border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+.opt-green { background: #65a30d; }
+.opt-blue { background: #0ea5e9; }
