@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
-import { FaArrowLeft, FaShoppingCart, FaClock, FaTag, FaCheckCircle, FaExclamationTriangle } from "react-icons/fa";
+import { FaArrowLeft, FaShoppingCart, FaTag, FaCheckCircle, FaExclamationTriangle } from "react-icons/fa";
 import "./Detalles.css";
 
 import cocina1a from "../img/cocina1a.jpg";

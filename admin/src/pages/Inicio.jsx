@@ -77,33 +77,35 @@ const Inicio = () => {
 
   return (
     <div className="page-container fade-in">
-      <div className="dashboard-header">
-        <h2 className="page-title">Panel de Control D'Bary</h2>
-        <p className="page-subtitle">Bienvenido al sistema de gestión de melamina</p>
-      </div>
+      <div className="dashboard-content-limit">
+        <div className="dashboard-header">
+          <h2 className="page-title">Panel de Control D'Bary</h2>
+          <p className="page-subtitle">Bienvenido al sistema de gestión de melamina</p>
+        </div>
 
-      <div className="cards-grid-reference">
-        {modulos.map((m) => (
-          <div 
-            key={m.title} 
-            className="card-stat" 
-            style={{ backgroundColor: m.col }}
-            onClick={() => navigate(m.path)}
-          >
-            <div className="inner-content">
-              <div className="stat-info">
-                <h3>{m.val}</h3>
-                <p>{m.title}</p>
+        <div className="cards-grid-reference">
+          {modulos.map((m) => (
+            <div 
+              key={m.title} 
+              className="card-stat" 
+              style={{ backgroundColor: m.col }}
+              onClick={() => navigate(m.path)}
+            >
+              <div className="inner-content">
+                <div className="stat-info">
+                  <h3>{m.val}</h3>
+                  <p>{m.title}</p>
+                </div>
+                <div className="stat-icon">
+                  <m.icon />
+                </div>
               </div>
-              <div className="stat-icon">
-                <m.icon />
+              <div className="more-info">
+                Ir al módulo <FaArrowCircleRight />
               </div>
             </div>
-            <div className="more-info">
-              Ir al módulo <FaArrowCircleRight />
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

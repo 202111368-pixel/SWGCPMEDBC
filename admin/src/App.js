@@ -12,6 +12,10 @@ import Administrador from "./pages/Administrador/Administrador";
 
 /* Producto */ 
 import Producto from "./pages/Producto/Producto";
+import Catalogo from "./pages/Producto/Catalogo"; 
+import Insumos from "./pages/Producto/Insumos";
+import Precios from "./pages/Producto/Precios";
+
 
 /* Clientes */
 import Cliente from "./pages/Cliente/Cliente"; 
@@ -53,7 +57,11 @@ const App = () => {
                   {/*ADMINISTRADOR */}
                   <Route path="administrador" element={<Administrador />} />
                   {/* PRODUCTO */}
-                  <Route path="producto" element={<Producto />} />
+                  <Route path="producto/gestionar" element={<Producto />} />
+                  <Route path="producto/catalogo" element={<Catalogo />} />
+                  <Route path="producto/insumos" element={<Insumos />} />
+                  <Route path="producto/precios" element={<Precios />} />
+
                   {/* REPORTES */}
                   <Route path="reportes" element={<Reportes />} />
                   {/* CAJERO */}
