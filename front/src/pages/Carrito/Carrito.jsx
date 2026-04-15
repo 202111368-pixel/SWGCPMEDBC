@@ -18,18 +18,24 @@ const Carrito = () => {
   };
 
   const finalizarCompra = () => {
-  if (carrito.length === 0) {
-    alert("El carrito está vacío");
-    return;
-  }
+    if (carrito.length === 0) {
+      alert("El carrito está vacío");
+      return;
+    }
 
-  const datosCodificados = btoa(JSON.stringify(carrito));
+    const datosParaAdmin = carrito.map(item => ({
+      ...item,
+      imagen: item.imagen.startsWith('http') 
+        ? item.imagen 
+        : `http://localhost:3000${item.imagen}`
+    }));
 
-  localStorage.removeItem("carrito");
-  window.dispatchEvent(new Event("carritoActualizado"));
+    const datosCodificados = btoa(JSON.stringify(datosParaAdmin));
 
-  window.location.href = `http://localhost:3001/admin/producto?data=${datosCodificados}`;
-};
+    localStorage.removeItem("carrito");
+    window.dispatchEvent(new Event("carritoActualizado"));
+    window.location.href = `http://localhost:3001/admin/producto?data=${datosCodificados}`;
+  };
 
   const total = carrito.reduce((acc, item) => acc + item.precio, 0);
 

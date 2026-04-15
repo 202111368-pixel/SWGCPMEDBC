@@ -1,6 +1,7 @@
 .detalle-page-root {
   background: #fcfcfc;
   min-height: 100vh;
+  position: relative;
 }
 
 .catalogo-wrapper {
@@ -68,11 +69,6 @@
   border: 1px solid #f0f0f0;
 }
 
-.producto-card-ia:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-}
-
 .card-badge {
   position: absolute;
   top: 15px;
@@ -104,21 +100,6 @@
   object-fit: contain;
 }
 
-.img-hover-overlay {
-  position: absolute;
-  bottom: 10px;
-  left: 0; right: 0;
-  text-align: center;
-  font-size: 11px;
-  color: #aaa;
-  opacity: 0;
-  transition: 0.3s;
-}
-
-.img-container-ia:hover .img-hover-overlay {
-  opacity: 1;
-}
-
 .timer-ia-box {
   background: #1a1a1a;
   color: white;
@@ -126,16 +107,8 @@
   text-align: center;
 }
 
-.timer-label {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  opacity: 0.7;
-  margin-bottom: 4px;
-}
-
 .timer-numbers {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: monospace;
   font-weight: 700;
   color: #27ae60;
 }
@@ -143,12 +116,6 @@
 .card-info-ia {
   padding: 25px;
   text-align: center;
-}
-
-.card-info-ia h4 {
-  font-size: 18px;
-  margin-bottom: 10px;
-  color: #1a1a1a;
 }
 
 .ia-price {
@@ -172,12 +139,6 @@
   cursor: pointer;
   border: 2px solid white;
   box-shadow: 0 0 0 1px #ddd;
-  transition: 0.2s;
-}
-
-.color-dot:hover {
-  transform: scale(1.2);
-  box-shadow: 0 0 0 2px #27ae60;
 }
 
 .btn-ia-cart {
@@ -196,11 +157,36 @@
   transition: 0.3s;
 }
 
-.btn-ia-cart:hover {
-  background: #27ae60;
+.btn-ia-cart.btn-added {
+  background: #95a5a6 !important;
+  cursor: default;
 }
 
-/* Modal */
+/* --- NOTIFICACIONES --- */
+.notificacion-toast {
+  position: fixed;
+  top: 100px;
+  right: 20px;
+  padding: 15px 25px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  z-index: 5000;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  animation: slideIn 0.4s ease-out;
+}
+
+.notificacion-toast.success { background: #27ae60; }
+.notificacion-toast.error { background: #e74c3c; }
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
 .modal-ia-overlay {
   position: fixed;
   inset: 0;
@@ -209,26 +195,10 @@
   justify-content: center;
   align-items: center;
   z-index: 3000;
-  backdrop-filter: blur(5px);
-}
-
-.modal-ia-box {
-  position: relative;
-  max-width: 80%;
 }
 
 .modal-ia-box img {
-  width: 100%;
+  max-width: 90%;
+  max-height: 80vh;
   border-radius: 15px;
-}
-
-.modal-ia-close {
-  position: absolute;
-  top: -50px;
-  right: -20px;
-  background: none;
-  border: none;
-  color: white;
-  font-size: 40px;
-  cursor: pointer;
 }
