@@ -6,6 +6,7 @@ const Carrito = () => {
   const [carrito, setCarrito] = useState([]);
 
   useEffect(() => {
+    // Obtenemos el carrito actual de este puerto
     const data = JSON.parse(localStorage.getItem("carrito")) || [];
     setCarrito(data);
   }, []);
@@ -13,20 +14,21 @@ const Carrito = () => {
   const finalizarCompra = () => {
     if (carrito.length === 0) return;
 
-    const nuevasVentas = carrito.map(item => ({
-      id: Date.now() + Math.random(), 
+    const datosVenta = carrito.map(item => ({
+      id: Date.now() + Math.random(), // ID único para cada venta
       producto: item.nombre,
-      imagen: item.imagen,
+      imagen: item.imagen, 
       venta: `S/ ${item.precio.toFixed(2)}`,
       estado: "PENDIENTE"
     }));
 
-    const historial = JSON.parse(localStorage.getItem("ventas_admin_3001")) || [];
-    localStorage.setItem("ventas_admin_3001", JSON.stringify([...historial, ...nuevasVentas]));
+    const datosVentaString = encodeURIComponent(JSON.stringify(datosVenta));
+
+    const urlDestino = `http://localhost:3000/admin/producto/gestionar?data=${datosVentaString}`;
 
     localStorage.removeItem("carrito");
-    
-    window.location.href = "http://localhost:3000/admin/producto/gestionar";
+
+    window.location.href = urlDestino;
   };
 
   const eliminarProducto = (index) => {
@@ -46,6 +48,7 @@ const Carrito = () => {
         <div className="carrito-lista">
           {carrito.map((item, index) => (
             <div className="carrito-item" key={index}>
+              {/* Mostramos la imagen en el carrito */}
               <img src={item.imagen} alt={item.nombre} className="img-cart" />
               <div className="carrito-info">
                 <h4>{item.nombre}</h4>
@@ -57,6 +60,7 @@ const Carrito = () => {
         </div>
         <div className="carrito-resumen">
           <h3>Total: S/ {total.toFixed(2)}</h3>
+          {/* Botón que activa la función finalizarCompra */}
           <button className="btn-finalizar" onClick={finalizarCompra}>Finalizar Compra</button>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaTrash, FaFilePdf, FaSearch, FaBoxOpen } from "react-icons/fa";
-import "jspdf-autotable";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import "../../styles/pages/Producto/Producto.css"; 
 
 const Producto = () => {
@@ -8,12 +9,48 @@ const Producto = () => {
   const [busqueda, setBusqueda] = useState("");
 
   useEffect(() => {
-    const datos = JSON.parse(localStorage.getItem("ventas_admin_3001")) || [];
-    setVentas(datos); 
+    const params = new URLSearchParams(window.location.search);
+    const datosDesdeUrl = params.get("data");
+    
+    let historialActual = JSON.parse(localStorage.getItem("ventas_admin_3001")) || [];
+
+    if (datosDesdeUrl) {
+      try {
+        const ventasRecibidas = JSON.parse(decodeURIComponent(datosDesdeUrl));
+        historialActual = [...historialActual, ...ventasRecibidas];
+        localStorage.setItem("ventas_admin_3001", JSON.stringify(historialActual));
+        window.history.replaceState({}, document.title, window.location.pathname);
+      } catch (error) {
+        console.error("Error al procesar datos:", error);
+      }
+    }
+    setVentas(historialActual); 
   }, []);
 
-  const eliminarVenta = (id) => {
-    const nuevaLista = ventas.filter(v => v.id !== id);
+  const exportarPDF = () => {
+    const doc = new jsPDF();
+    doc.text("Reporte de Gestión de Productos", 14, 15);
+    
+    const tablaData = ventas.map((v, i) => [
+      i + 1, 
+      v.producto || "Sin nombre", 
+      v.venta || "S/ 0.00", 
+      v.estado || "PENDIENTE"
+    ]);
+
+    autoTable(doc, {
+      head: [['#', 'Producto', 'Precio Venta', 'Estado']],
+      body: tablaData,
+      startY: 20,
+      theme: 'grid',
+      headStyles: { fillColor: [39, 174, 96] }
+    });
+
+    doc.save("reporte-ventas.pdf");
+  };
+
+  const eliminarVenta = (index) => {
+    const nuevaLista = ventas.filter((_, i) => i !== index);
     setVentas(nuevaLista);
     localStorage.setItem("ventas_admin_3001", JSON.stringify(nuevaLista));
   };
@@ -25,15 +62,18 @@ const Producto = () => {
           <h1><FaBoxOpen /> Gestión de Productos</h1>
           <p>Listado de compras y estados de pago</p>
         </div>
-        <button className="btn-export-pdf"><FaFilePdf /> Exportar PDF</button>
+        <button className="btn-export-pdf" onClick={exportarPDF}>
+          <FaFilePdf /> Exportar PDF
+        </button>
       </header>
 
       <div className="search-section-center">
         <div className="search-bar-modern">
-          <FaSearch />
+          <FaSearch color="#999" />
           <input 
             type="text" 
             placeholder="Buscar producto..." 
+            value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)} 
           />
         </div>
@@ -54,24 +94,33 @@ const Producto = () => {
           <tbody>
             {ventas.length > 0 ? (
               ventas
-                .filter(v => v.producto.toLowerCase().includes(busqueda.toLowerCase()))
+                .filter(v => (v.producto || "").toLowerCase().includes(busqueda.toLowerCase()))
                 .map((v, i) => (
-                <tr key={v.id || i}>
+                <tr key={i}>
                   <td>{i + 1}</td>
                   <td className="prod-name">{v.producto}</td>
                   <td>
-                    <img src={v.imagen} alt="prod" className="img-tabla" />
+                    <div className="container-img-tabla">
+                      <img 
+                        src={v.imagen} 
+                        alt="producto" 
+                        className="img-tabla" 
+                        onError={(e) => { e.target.src = "https://via.placeholder.com/80x60?text=Cocina"; }}
+                      />
+                    </div>
                   </td>
                   <td className="prod-price">{v.venta}</td>
                   <td><span className="badge-status">{v.estado}</span></td>
                   <td>
-                    <button onClick={() => eliminarVenta(v.id)} className="btn-delete"><FaTrash /></button>
+                    <button onClick={() => eliminarVenta(i)} className="btn-delete">
+                      <FaTrash />
+                    </button>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="6" className="no-data">No hay compras para mostrar.</td>
+                <td colSpan="6" className="no-data">No hay compras registradas en el sistema.</td>
               </tr>
             )}
           </tbody>
