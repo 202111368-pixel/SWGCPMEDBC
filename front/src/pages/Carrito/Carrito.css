@@ -1,16 +1,15 @@
 .carrito-container {
-  padding: 40px;
-  max-width: 900px;
+  padding: 20px;
+  max-width: 500px;
   margin: auto;
+  background-color: #f9f9f9;
+  min-height: 100vh;
 }
 
 .carrito-container h1 {
+  text-align: left;
+  font-size: 1.5rem;
   margin-bottom: 20px;
-}
-
-.carrito-vacio {
-  text-align: center;
-  font-size: 18px;
 }
 
 .carrito-lista {
@@ -23,47 +22,77 @@
   display: flex;
   align-items: center;
   background: #fff;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 10px;
+  border-bottom: 1px solid #eee;
 }
 
-.carrito-item img {
-  width: 100px;
-  height: 80px;
+.img-cart {
+  width: 80px;
+  height: 60px;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
 .carrito-info {
   flex: 1;
-  margin-left: 20px;
+  margin-left: 15px;
+}
+
+.carrito-info h4 {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.item-precio {
+  margin: 5px 0 0 0;
+  font-weight: bold;
+  color: #333;
 }
 
 .btn-eliminar {
-  background-color: #e63946;
+  background-color: #ff4d4d;
   color: white;
   border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
+  padding: 5px 10px;
+  border-radius: 4px;
   cursor: pointer;
+  font-size: 0.8rem;
 }
 
-.btn-eliminar:hover {
-  background-color: #c1121f;
-}
-
-.carrito-total {
+.carrito-footer {
   margin-top: 30px;
-  text-align: right;
+  padding-top: 20px;
+  border-top: 1px solid #ccc;
 }
 
-.btn-comprar {
-  margin-top: 10px;
-  background-color: #1c1c1c;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 6px;
+.subtotal-container {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+.acciones-carrito {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-azul {
+  width: 100%;
+  padding: 12px;
   border: none;
+  border-radius: 2px;
+  font-weight: bold;
   cursor: pointer;
+  color: white;
+  background-color: #003366;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.btn-azul:hover {
+  background-color: #002244;
 }

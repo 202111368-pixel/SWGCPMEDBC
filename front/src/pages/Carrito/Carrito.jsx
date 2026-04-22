@@ -6,16 +6,15 @@ const Carrito = () => {
   const [carrito, setCarrito] = useState([]);
 
   useEffect(() => {
-    // Obtenemos el carrito actual de este puerto
     const data = JSON.parse(localStorage.getItem("carrito")) || [];
     setCarrito(data);
   }, []);
 
-  const finalizarCompra = () => {
+  const irAPagar = () => {
     if (carrito.length === 0) return;
 
     const datosVenta = carrito.map(item => ({
-      id: Date.now() + Math.random(), // ID único para cada venta
+      id: Date.now() + Math.random(),
       producto: item.nombre,
       imagen: item.imagen, 
       venta: `S/ ${item.precio.toFixed(2)}`,
@@ -23,12 +22,13 @@ const Carrito = () => {
     }));
 
     const datosVentaString = encodeURIComponent(JSON.stringify(datosVenta));
-
-    const urlDestino = `http://localhost:3000/admin/producto/gestionar?data=${datosVentaString}`;
-
+    
     localStorage.removeItem("carrito");
+    window.location.href = `http://localhost:3000/admin/caja/administrar?data=${datosVentaString}`;
+  };
 
-    window.location.href = urlDestino;
+  const irAProductos = () => {
+    window.location.href = `http://localhost:3000/admin/producto/gestionar`;
   };
 
   const eliminarProducto = (index) => {
@@ -44,24 +44,40 @@ const Carrito = () => {
     <>
       <Navbar />
       <div className="carrito-container">
-        <h1>Carrito de Compras</h1>
+        <h1>Tu Carrito</h1>
         <div className="carrito-lista">
-          {carrito.map((item, index) => (
-            <div className="carrito-item" key={index}>
-              {/* Mostramos la imagen en el carrito */}
-              <img src={item.imagen} alt={item.nombre} className="img-cart" />
-              <div className="carrito-info">
-                <h4>{item.nombre}</h4>
-                <p>S/ {item.precio.toFixed(2)}</p>
+          {carrito.length === 0 ? (
+            <p className="carrito-vacio">El carrito está vacío</p>
+          ) : (
+            carrito.map((item, index) => (
+              <div className="carrito-item" key={index}>
+                <img src={item.imagen} alt={item.nombre} className="img-cart" />
+                <div className="carrito-info">
+                  <h4>{item.nombre}</h4>
+                  <p className="item-precio">S/ {item.precio.toFixed(2)}</p>
+                </div>
+                <button className="btn-eliminar" onClick={() => eliminarProducto(index)}>
+                  Eliminar
+                </button>
               </div>
-              <button className="btn-eliminar" onClick={() => eliminarProducto(index)}>Eliminar</button>
-            </div>
-          ))}
+            ))
+          )}
         </div>
-        <div className="carrito-resumen">
-          <h3>Total: S/ {total.toFixed(2)}</h3>
-          {/* Botón que activa la función finalizarCompra */}
-          <button className="btn-finalizar" onClick={finalizarCompra}>Finalizar Compra</button>
+
+        <div className="carrito-footer">
+          <div className="subtotal-container">
+            <span>Subtotal</span>
+            <span className="subtotal-monto">S/. {total.toFixed(2)}</span>
+          </div>
+          
+          <div className="acciones-carrito">
+            <button className="btn-azul" onClick={irAPagar}>
+              VER DETALLE Y PAGAR
+            </button>
+            <button className="btn-azul" onClick={irAProductos}>
+              BUSCAR MÁS PRODUCTOS
+            </button>
+          </div>
         </div>
       </div>
     </>

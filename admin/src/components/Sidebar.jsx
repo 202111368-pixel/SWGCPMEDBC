@@ -3,14 +3,15 @@ import { NavLink, useNavigate } from "react-router-dom";
 import {
   FaCashRegister, FaChartLine, FaBox, FaUsers, FaChartBar, 
   FaSignOutAlt, FaMoneyCheckAlt, FaTools, FaWarehouse,
-  FaChevronDown, FaChevronUp, FaThLarge, FaClipboardList, FaTags
+  FaChevronDown, FaChevronUp, FaThLarge, FaClipboardList,
+  FaBoxes 
 } from "react-icons/fa";
 import "../styles/Sidebar.css";
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const [openCaja, setOpenCaja] = useState(false); 
-  const [openProductos, setOpenProductos] = useState(false); // Nuevo estado
+  const [openProductos, setOpenProductos] = useState(false); 
 
   const handleLogout = () => {
     if (window.confirm("¿Deseas cerrar sesión?")) {
@@ -28,9 +29,21 @@ const Sidebar = () => {
       
       <ul className="sidebar-menu">
         <li className="menu-section-title">GENERAL</li>
-        <li><NavLink to="/admin/inicio" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}><FaChartLine /> <span>Dashboard</span></NavLink></li>
-        <li><NavLink to="/admin/clientes" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}><FaUsers /> <span>Clientes</span></NavLink></li>
-        <li><NavLink to="/admin/administrador" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}><FaMoneyCheckAlt /> <span>Administrador</span></NavLink></li>
+        <li>
+          <NavLink to="/admin/inicio" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
+            <FaChartLine /> <span>Dashboard</span>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/admin/clientes" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
+            <FaUsers /> <span>Clientes</span>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/admin/administrador" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
+            <FaMoneyCheckAlt /> <span>Administrador</span>
+          </NavLink>
+        </li>
         
         {/* PRODUCTO DESPLEGABLE */}
         <li className={`menu-item-desplegable ${openProductos ? "open" : ""}`}>
@@ -45,14 +58,16 @@ const Sidebar = () => {
             <ul className="submenu">
               <li><NavLink to="/admin/producto/gestionar" className="submenu-link"><FaThLarge size={14}/> Gestionar Productos</NavLink></li>
               <li><NavLink to="/admin/producto/catalogo" className="submenu-link"><FaClipboardList size={14}/> Gestionar Catálogo</NavLink></li>
-              <li><NavLink to="/admin/producto/insumos" className="submenu-link"><FaTags size={14}/> Gestionar Insumos</NavLink></li>
-              <li><NavLink to="/admin/producto/precios" className="submenu-link"><FaMoneyCheckAlt size={14}/> Gestionar Precios</NavLink></li>
             </ul>
           )}
         </li>
         
         <li className="menu-section-title">OPERACIONES</li>
-        <li><NavLink to="/admin/reportes" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}><FaChartBar /> <span>Reportes</span></NavLink></li>
+        <li>
+          <NavLink to="/admin/reportes" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
+            <FaChartBar /> <span>Reportes</span>
+          </NavLink>
+        </li>
         
         <li className={`menu-item-desplegable ${openCaja ? "open" : ""}`}>
           <div className="menu-link" onClick={() => setOpenCaja(!openCaja)} style={{ cursor: 'pointer' }}>
@@ -70,13 +85,29 @@ const Sidebar = () => {
           )}
         </li>
 
-        <li><NavLink to="/admin/jefeAlmacen" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}><FaWarehouse /> <span>Jefe Almacén</span></NavLink></li>
-        
+        {/* SECCIÓN ALMACÉN / INVENTARIO */}
+        <li>
+          <NavLink to="/admin/jefeAlmacen" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
+            <FaWarehouse /> <span>Jefe Almacén</span>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/admin/inventario" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
+            <FaBoxes /> <span>Inventario</span>
+          </NavLink>
+        </li>        
+
         <li className="menu-section-title">SISTEMA</li>
-        <li><NavLink to="/admin/configuración" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}><FaTools /> <span>Configuración</span></NavLink></li>
+        <li>
+          <NavLink to="/admin/configuración" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
+            <FaTools /> <span>Configuración</span>
+          </NavLink>
+        </li>
         
         <li className="cerrar-sesion">
-          <button onClick={handleLogout} className="btn-logout"><FaSignOutAlt /> <span>Cerrar Sesión</span></button>
+          <button onClick={handleLogout} className="btn-logout">
+            <FaSignOutAlt /> <span>Cerrar Sesión</span>
+          </button>
         </li>
       </ul>
     </div>

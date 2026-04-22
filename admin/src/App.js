@@ -13,8 +13,7 @@ import Administrador from "./pages/Administrador/Administrador";
 /* Producto */ 
 import Producto from "./pages/Producto/Producto";
 import Catalogo from "./pages/Producto/Catalogo"; 
-import Insumos from "./pages/Producto/Insumos";
-import Precios from "./pages/Producto/Precios";
+
 
 
 /* Clientes */
@@ -22,6 +21,8 @@ import Cliente from "./pages/Cliente/Cliente";
 
 /* JefeAlmacen */
 import JefeAlmacen from "./pages/JefeAlmacen/JefeAlmacen"; 
+import Inventario from "./pages/JefeAlmacen/Inventario";
+
 
 /* Reportes */
 import Reportes from "./pages/Reportes/Reportes";
@@ -36,6 +37,7 @@ import HistorialCaja from "./pages/Cajero/HistorialCaja";
 
 /* Configuración */
 import Configuración from "./pages/Configuración/Configuración";
+
 
 const App = () => {
   return (
@@ -59,9 +61,7 @@ const App = () => {
                   {/* PRODUCTO */}
                   <Route path="producto/gestionar" element={<Producto />} />
                   <Route path="producto/catalogo" element={<Catalogo />} />
-                  <Route path="producto/insumos" element={<Insumos />} />
-                  <Route path="producto/precios" element={<Precios />} />
-
+                
                   {/* REPORTES */}
                   <Route path="reportes" element={<Reportes />} />
                   {/* CAJERO */}
@@ -71,6 +71,7 @@ const App = () => {
 
                   {/* JEFEALMACEN */}
                   <Route path="jefeAlmacen" element={<JefeAlmacen />} />
+                  <Route path="inventario" element={<Inventario />} /> 
 
 
 

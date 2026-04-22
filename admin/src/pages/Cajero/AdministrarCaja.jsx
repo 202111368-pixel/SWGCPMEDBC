@@ -1,187 +1,143 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  FaUnlock, FaChevronDown, FaMoneyBillWave, 
-  FaCheck, FaChartPie, FaWallet, FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCreditCard
+  FaUnlock, FaLock, FaCheck, FaShoppingCart, FaTruck, FaFileAlt, FaTag, FaCreditCard 
 } from "react-icons/fa";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Pie } from 'react-chartjs-2';
 import "../../styles/pages/Cajero/AdmintrarCaja.css";
-
-ChartJS.register(ArcElement, Tooltip, Legend);
 
 const AdministrarCaja = () => {
   const [status, setStatus] = useState('CERRADA'); 
-  const [showOpciones, setShowOpciones] = useState(false);
-  const [showMovimientos, setShowMovimientos] = useState(false);
-  
+  const [showModalDir, setShowModalDir] = useState(false);
+  const [notificacion, setNotificacion] = useState("");
   const [itemAPagar, setItemAPagar] = useState(null);
-  const [metodoSeleccionado, setMetodoSeleccionado] = useState("");
-  const [formData, setFormData] = useState({
-    nombre: "Jose", apellido: "Fabricio", email: "prueba.anaya.30@gmail.com", telefono: "986735706", direccion: "comas"
-  });
 
-  const [datos, setDatos] = useState({
-    montoInicial: 500.00, ingresos: 200.00, totalFinal: 700.00
-  });
+  const distritosPeru = ["Lima", "Miraflores", "San Isidro", "Comas", "Los Olivos", "Surco", "Ate", "Callao", "La Molina", "San Miguel"];
 
   useEffect(() => {
-    const pendingItem = JSON.parse(localStorage.getItem("item_a_pagar_temporal"));
-    if (pendingItem) setItemAPagar(pendingItem);
+    const params = new URLSearchParams(window.location.search);
+    const dataString = params.get("data");
+    if (dataString) {
+      try {
+        const decodedData = JSON.parse(decodeURIComponent(dataString));
+        setItemAPagar(decodedData[0]);
+      } catch (e) {
+        console.error("Error al decodificar datos", e);
+      }
+    }
   }, []);
 
-  const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const toggleCaja = () => {
+    setStatus(prev => prev === 'ABIERTA' ? 'CERRADA' : 'ABIERTA');
   };
 
-  // Solución Line 36:9: Uso de confirmarApertura
-  const confirmarApertura = () => setStatus('ABIERTA');
-
-  const procesarPagoFinal = () => {
-    if (!formData.nombre || !formData.email || !formData.direccion) {
-      alert("Por favor, complete los campos obligatorios.");
-      return;
-    }
-    
-    // Solución Line 23:17: Uso de setDatos para actualizar el total tras el pago
-    const montoVenta = parseFloat(itemAPagar.venta.replace(/[^\d.-]/g, ''));
-    setDatos(prev => ({
-      ...prev,
-      ingresos: prev.ingresos + montoVenta,
-      totalFinal: prev.totalFinal + montoVenta
-    }));
-
-    alert(`¡Pago procesado con ${metodoSeleccionado} con éxito!`);
-    setItemAPagar(null);
-    setMetodoSeleccionado("");
+  const guardarDireccion = (e) => {
+    e.preventDefault();
+    setNotificacion("¡Dirección guardada con éxito!");
+    setTimeout(() => {
+      setNotificacion("");
+      setShowModalDir(false);
+    }, 2000);
   };
+
+  const totalCalculado = itemAPagar ? parseFloat(itemAPagar.venta.replace(/[^\d.-]/g, '')) : 0;
+  const subtotal = totalCalculado / 1.18;
+  const igv = totalCalculado - subtotal;
+
+  const estaCerrada = status === 'CERRADA';
 
   return (
     <div className="admin-caja-wrapper">
-      {/* Solución Line 4:3: FaCheck implementado en el modal de éxito */}
-      {status === 'EXITOSO' && (
-        <div className="caja-modal-overlay">
-          <div className="caja-modal-content">
-            <div className="caja-check-icon"><FaCheck /></div>
-            <h2>¡Éxito!</h2>
-            <p>Caja Abierta con Éxito</p>
-            <button className="caja-btn-ok" onClick={confirmarApertura}>OK</button>
-          </div>
-        </div>
-      )}
+      {notificacion && <div className="notificacion-exito">{notificacion}</div>}
 
-      <div className="caja-top-nav">
-        <div className="caja-title-section">
-          <h2>Administrar Caja - Movimientos</h2>
-          <div className="caja-sub-info">
-            <span>Fecha: 13/04/2026 - </span>
-            <span className={`caja-badge ${status === 'ABIERTA' ? 'open' : 'closed'}`}>
-              {status === 'ABIERTA' ? 'VIGENTE / ABIERTA' : 'CERRADA'}
-            </span>
-          </div>
-        </div>
-        <div className="caja-actions-row">
-          <button className="caja-btn opt-green" onClick={() => setShowOpciones(!showOpciones)}><FaChartPie /> Opciones <FaChevronDown /></button>
-          <button className="caja-btn opt-blue" onClick={() => setShowMovimientos(!showMovimientos)}><FaMoneyBillWave /> Movimientos <FaChevronDown /></button>
-        </div>
+      <div className="checkout-stepper">
+        <div className="step completed"><FaShoppingCart /><span>Carrito</span></div>
+        <div className="step active"><FaTruck /><span>Detalles de Envío</span></div>
+        <div className="step"><FaFileAlt /><span>Facturación</span></div>
+        <div className="step"><FaTag /><span>Cupón</span></div>
+        <div className="step"><FaCreditCard /><span>Pago</span></div>
       </div>
 
-      <div className="caja-grid-container">
-        <div className="caja-table-box">
-          <table className="caja-data-table">
-            <tbody>
-              <tr><td><span className="caja-sq dark"></span> MONTO INICIAL</td><td className="caja-val">S/ {datos.montoInicial.toFixed(2)}</td></tr>
-              <tr><td><span className="caja-sq green"></span> INGRESOS</td><td className="caja-val">S/ {datos.ingresos.toFixed(2)}</td></tr>
-              <tr className="caja-row-hl"><td className="caja-txt-blue">TOTAL FINAL</td><td className="caja-val caja-txt-blue">S/ {datos.totalFinal.toFixed(2)}</td></tr>
-            </tbody>
-          </table>
-          {status === 'CERRADA' && (
-            <button className="caja-btn-open-big" onClick={() => setStatus('EXITOSO')}>
-              <FaUnlock /> ABRIR CAJA
+      <div className="caja-main-layout">
+        <div className="caja-left-panel">
+          <div className="caja-top-nav">
+            <div className="caja-title-section">
+              <h2>Administrar Caja</h2>
+              <span className={`caja-badge ${status === 'ABIERTA' ? 'open' : 'closed'}`}>
+                {status === 'ABIERTA' ? '● ABIERTA' : '● CERRADA'}
+              </span>
+            </div>
+            <button className={`caja-btn-toggle ${status === 'ABIERTA' ? 'btn-cerrar' : 'btn-abrir'}`} onClick={toggleCaja}>
+              {estaCerrada ? <><FaUnlock /> ABRIR CAJA</> : <><FaLock /> CERRAR CAJA</>}
             </button>
-          )}
-        </div>
-        <div className="caja-chart-box">
-          <Pie 
-            data={{ 
-              labels: ['Inicial', 'Ingresos'], 
-              datasets: [{ data: [datos.montoInicial, datos.ingresos], backgroundColor: ['#374151', '#4ade80'], borderWidth: 0 }] 
-            }} 
-            options={{ maintainAspectRatio: false }} 
-          />
-        </div>
-      </div>
+          </div>
 
-      <div className="caja-ventas-pendientes">
-        <h3>Ventas Pendientes de Pago</h3>
-        
-        {itemAPagar ? (
-          <div className="pasarela-integrada-box">
-            <div className="pasarela-grid">
-              <div className="pasarela-form-side">
-                <h2 className="pasarela-title">2. Dirección de Envío y Facturación</h2>
-                <div className="pasarela-form">
-                  <div className="pasarela-row">
-                    <div className="pasarela-group">
-                      <label><FaUser /> Nombre</label>
-                      <input name="nombre" value={formData.nombre} onChange={handleInputChange} />
-                    </div>
-                    <div className="pasarela-group">
-                      <label><FaUser /> Apellido</label>
-                      <input name="apellido" value={formData.apellido} onChange={handleInputChange} />
-                    </div>
-                  </div>
-                  <div className="pasarela-row">
-                    <div className="pasarela-group">
-                      <label><FaEnvelope /> Email</label>
-                      <input name="email" value={formData.email} onChange={handleInputChange} />
-                    </div>
-                    <div className="pasarela-group">
-                      <label><FaPhone /> Teléfono</label>
-                      <input name="telefono" value={formData.telefono} onChange={handleInputChange} />
-                    </div>
-                  </div>
-                  <div className="pasarela-group full">
-                    <label><FaMapMarkerAlt /> Dirección completa</label>
-                    <input name="direccion" value={formData.direccion} onChange={handleInputChange} />
-                  </div>
-                </div>
-              </div>
+          <div className={`envio-section-box ${estaCerrada ? 'disabled-section' : ''}`}>
+            <h3>Detalles de Envío</h3>
+            <div className="direccion-selector">
+              <button 
+                className="btn-agregar-dir" 
+                onClick={() => setShowModalDir(true)}
+                disabled={estaCerrada}
+              >
+                + AGREGAR DIRECCIÓN DE ENVÍO
+              </button>
+              {estaCerrada && <p className="aviso-bloqueo">Debe abrir la caja para gestionar envíos.</p>}
+            </div>
 
-              <div className="pasarela-summary-side">
-                <h2 className="pasarela-title">Método de Pago</h2>
-                <div className="metodos-lista">
-                  {/* Solución Line 4:79: FaCreditCard usado en opción de tarjeta */}
-                  <label className={`metodo-item ${metodoSeleccionado === 'Tarjeta' ? 'selected' : ''}`}>
-                    <input type="radio" name="pay" onClick={() => setMetodoSeleccionado("Tarjeta")} />
-                    <FaCreditCard className="logo-banco-icon" />
-                    <span>Tarjeta débito/crédito</span>
-                  </label>
-                  <label className={`metodo-item ${metodoSeleccionado === 'Yape' ? 'selected' : ''}`}>
-                    <input type="radio" name="pay" onClick={() => setMetodoSeleccionado("Yape")} />
-                    <img src="https://vignette.wikia.nocookie.net/logopedia/images/b/b3/Yape_logo.png" alt="Yape" className="logo-banco" />
-                    <span>Yape</span>
-                  </label>
-                  <label className={`metodo-item ${metodoSeleccionado === 'BCP' ? 'selected' : ''}`}>
-                    <input type="radio" name="pay" onClick={() => setMetodoSeleccionado("BCP")} />
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/BCP_logo.svg" alt="BCP" className="logo-banco" />
-                    <span>BCP</span>
-                  </label>
-                </div>
+            <div className="alerta-disponibilidad">
+              Productos listos para entrega en 7 días hábiles.
+            </div>
 
-                <div className="pasarela-totals">
-                  <div className="total-line bold"><span>Total:</span> <span>S/ 2,385.00</span></div>
-                </div>
-
-                <button className="btn-pagar-final" onClick={procesarPagoFinal}>
-                  <FaWallet /> Pagar con {metodoSeleccionado || '...'}
-                </button>
+            <div className="horario-entrega">
+              <h4>Fecha de envío: 2026-12-11</h4>
+              <div className="radio-group">
+                <label className={estaCerrada ? 'disabled-label' : ''}>
+                  <input type="radio" name="horario" defaultChecked disabled={estaCerrada} /> Mañana (09:00 - 13:00)
+                </label>
+                <label className={estaCerrada ? 'disabled-label' : ''}>
+                  <input type="radio" name="horario" disabled={estaCerrada} /> Tarde (14:00 - 18:00)
+                </label>
               </div>
             </div>
           </div>
-        ) : (
-          <div className="no-pendientes">No hay ventas seleccionadas.</div>
-        )}
+        </div>
+
+        <div className="caja-right-panel">
+          <div className="resumen-checkout-card">
+            <h3>Resumen</h3>
+            <div className="resumen-line"><span>Cargos de Envío</span><span>S/ 0.00</span></div>
+            <div className="resumen-line"><span>Subtotal</span><span>S/ {subtotal.toFixed(2)}</span></div>
+            <div className="resumen-line"><span>IGV 18%</span><span>S/ {igv.toFixed(2)}</span></div>
+            <div className="resumen-line total"><span>Total</span><span>S/ {totalCalculado.toFixed(2)}</span></div>
+            
+            <div className="resumen-actions">
+              <button className="btn-atras">ATRÁS</button>
+              <button className="btn-siguiente" disabled={estaCerrada}>
+                {estaCerrada ? "CAJA CERRADA" : "SIGUIENTE"}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
+
+      {showModalDir && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Agregar dirección</h3>
+            <form onSubmit={guardarDireccion}>
+              <select required className="modal-input">
+                <option value="">Distrito</option>
+                {distritosPeru.map(d => <option key={d} value={d}>{d}</option>)}
+              </select>
+              <input type="text" placeholder="Dirección" required className="modal-input" />
+              <input type="text" placeholder="Referencia (opcional)" className="modal-input" />
+              <div className="modal-buttons">
+                <button type="button" onClick={() => setShowModalDir(false)} className="btn-cancelar">CANCELAR</button>
+                <button type="submit" className="btn-guardar">GUARDAR</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
