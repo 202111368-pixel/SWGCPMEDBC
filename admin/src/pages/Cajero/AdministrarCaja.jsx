@@ -46,9 +46,11 @@ const AdministrarCaja = () => {
   const igv = totalCalculado - subtotal;
   const estaCerrada = status === 'CERRADA';
 
-  // Funciones de navegación
   const irSiguiente = () => { if (pasoActual < 5) setPasoActual(pasoActual + 1); };
   const irAtras = () => { if (pasoActual > 2) setPasoActual(pasoActual - 1); };
+
+  // Mostrar el botón en el paso 1 y 2
+const esPasoCarrito = pasoActual === 1 || pasoActual === 2;
 
   return (
     <div className="admin-caja-wrapper">
@@ -64,6 +66,8 @@ const AdministrarCaja = () => {
 
       <div className="caja-main-layout">
         <div className="caja-left-panel">
+
+          {/* ✅ Header: badge siempre visible, botón solo en paso Carrito */}
           <div className="caja-top-nav">
             <div className="caja-title-section">
               <h2>Administrar Caja</h2>
@@ -71,14 +75,19 @@ const AdministrarCaja = () => {
                 {status === 'ABIERTA' ? '● ABIERTA' : '● CERRADA'}
               </span>
             </div>
-            <button className={`caja-btn-toggle ${status === 'ABIERTA' ? 'btn-cerrar' : 'btn-abrir'}`} onClick={toggleCaja}>
-              {estaCerrada ? <><FaUnlock /> ABRIR CAJA</> : <><FaLock /> CERRAR CAJA</>}
-            </button>
+
+            {esPasoCarrito && (
+              <button
+                className={`caja-btn-toggle ${status === 'ABIERTA' ? 'btn-cerrar' : 'btn-abrir'}`}
+                onClick={toggleCaja}
+              >
+                {estaCerrada ? <><FaUnlock /> ABRIR CAJA</> : <><FaLock /> CERRAR CAJA</>}
+              </button>
+            )}
           </div>
 
           <div className={`envio-section-box ${estaCerrada ? 'disabled-section' : ''}`}>
             
-            {/* SECCIÓN 2: ENVÍO (Tu código original) */}
             {pasoActual === 2 && (
               <div className="fade-in">
                 <h3>Detalles de Envío</h3>
@@ -97,7 +106,6 @@ const AdministrarCaja = () => {
               </div>
             )}
 
-            {/* SECCIONES DINÁMICAS (Aquí se usan los componentes para quitar los warnings) */}
             {pasoActual === 3 && <Facturacion />}
             {pasoActual === 4 && <Cupon />}
             {pasoActual === 5 && <Pago />}
