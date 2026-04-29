@@ -24,7 +24,6 @@ const Sidebar = () => {
     <div className="sidebar">
       <div className="sidebar-header">
         <h3>D’Bary Company</h3>
-        <p>Sistema de Melamina</p>
       </div>
       
       <ul className="sidebar-menu">
