@@ -1,8 +1,10 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
+import Header from "./components/Header";
 import "./styles/Sidebar.css";
 import "./styles/Login.css";
+import "./styles/Header.css";
 
 /* INICIO */ 
 import Inicio from "./pages/Inicio"; 
@@ -51,6 +53,7 @@ const App = () => {
             <div className="app-container">
               <Sidebar />
               <div className="content">
+                <Header />
                 <Routes>
                   {/* INICIO */}
                   <Route path="inicio" element={<Inicio />} />

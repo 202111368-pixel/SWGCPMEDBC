@@ -15,7 +15,7 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     if (window.confirm("¿Deseas cerrar sesión?")) {
-      localStorage.removeItem("userEmail");
+      localStorage.removeItem("user_session");
       navigate("/");
     }
   };
