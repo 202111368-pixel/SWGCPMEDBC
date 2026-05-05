@@ -1,3 +1,4 @@
+
 .pago-titulo {
   font-size: 15px;
   font-weight: 600;
@@ -194,6 +195,22 @@
   accent-color: #1a3c6e;
   width: 15px;
   height: 15px;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  font-size: 14px;
+  color: #2d3748;
+  transition: border-color 0.2s;
+}
+
+.modal-input:focus {
+  outline: none;
+  border-color: #1a3c6e;
 }
 
 /* Botón pagar */
