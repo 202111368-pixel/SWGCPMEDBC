@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import "../../styles/pages/Cajero/Pago.css";
 import qrYape from '../../assets/yape.png';
 
