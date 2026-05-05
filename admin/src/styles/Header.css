@@ -48,7 +48,7 @@
   .header-email { display: none; }
 }
 
-.header-menu { position: absolute; right: 16px; top: 60px; background: #fff; border-radius: 10px; box-shadow: 0 8px 24px rgba(2,6,23,0.12); padding: 12px; min-width: 260px; }
+.header-menu { position: absolute; right: -8px; top: 100%; background: #fff; border-radius: 10px; box-shadow: 0 8px 24px rgba(2,6,23,0.12); padding: 12px; min-width: 280px; margin-top: 8px; z-index: 1300; }
 .header-menu-row { display:flex; gap:12px; align-items:center; }
 .header-menu-avatar { flex:0 0 auto; }
 .header-menu-info { flex:1 1 auto; }
