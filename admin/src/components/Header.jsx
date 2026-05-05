@@ -75,52 +75,46 @@ const Header = () => {
 
   return (
     <div className="header-top-right" ref={menuRef}>
-      <div className="header-user" title={email}>
-        <div className="header-avatar" onClick={() => setMenuOpen(!menuOpen)} style={{ cursor: "pointer" }}>
+      <div className="header-user" title={email} style={{ position: "relative" }}>
+        <div className="header-avatar" onClick={(e) => { e.stopPropagation(); setMenuOpen(!menuOpen); }} style={{ cursor: "pointer" }}>
           <Avatar />
         </div>
         <div className="header-email">{email}</div>
+
+        {menuOpen && (
+          <div className="header-menu">
+            <div className="header-menu-row">
+              <div className="header-menu-avatar">
+                {getAvatarSource() ? (
+                  <img src={getAvatarSource()} alt="avatar-large" style={{ width: 56, height: 56, borderRadius: 8, objectFit: "cover" }} />
+                ) : (
+                  <div style={{ width: 56, height: 56, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 8, background: "#6b7280", color: "#fff", fontWeight: 700 }}>?</div>
+                )}
+              </div>
+              <div className="header-menu-info">
+                <div className="header-menu-name">{(session.user.nombres || session.user.name || "Usuario")}</div>
+                <div className="header-menu-email">{email}</div>
+              </div>
+            </div>
+
+            <div className="header-menu-divider" />
+
+            <div className="header-menu-gender">
+              <label>
+                <input type="radio" name="gender" value="male" checked={selectedGender === "male"} onChange={() => setSelectedGender("male")} /> Masculino
+              </label>
+              <label>
+                <input type="radio" name="gender" value="female" checked={selectedGender === "female"} onChange={() => setSelectedGender("female")} /> Femenino
+              </label>
+            </div>
+
+            <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+              <button className="btn-primary" onClick={() => saveGender(selectedGender)}>Guardar</button>
+              <button className="btn-secondary" onClick={() => setMenuOpen(false)}>Cancelar</button>
+            </div>
+          </div>
+        )}
       </div>
-
-      {menuOpen && (
-        <div className="header-menu">
-          <div className="header-menu-row">
-            <div className="header-menu-avatar">
-              {getAvatarSource() ? (
-                <img src={getAvatarSource()} alt="avatar-large" style={{ width: 56, height: 56, borderRadius: 8, objectFit: "cover" }} />
-              ) : (
-                <div style={{ width: 56, height: 56, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 8, background: "#6b7280", color: "#fff", fontWeight: 700 }}>?</div>
-              )}
-            </div>
-            <div className="header-menu-info">
-              <div className="header-menu-name">{(session.user.nombres || session.user.name || "Usuario")}</div>
-              <div className="header-menu-email">{email}</div>
-            </div>
-          </div>
-
-          <div className="header-menu-divider" />
-
-          <div className="header-menu-gender">
-            <label>
-              <input type="radio" name="gender" value="male" checked={selectedGender === "male"} onChange={() => setSelectedGender("male")} /> Masculino
-            </label>
-            <label>
-              <input type="radio" name="gender" value="female" checked={selectedGender === "female"} onChange={() => setSelectedGender("female")} /> Femenino
-            </label>
-            <label>
-              <input type="radio" name="gender" value="other" checked={selectedGender === "other"} onChange={() => setSelectedGender("other")} /> Otro
-            </label>
-            <label>
-              <input type="radio" name="gender" value="none" checked={selectedGender === "none"} onChange={() => setSelectedGender("none")} /> Prefiero no decir
-            </label>
-          </div>
-
-          <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-            <button className="btn-primary" onClick={() => saveGender(selectedGender)}>Guardar</button>
-            <button className="btn-secondary" onClick={() => setMenuOpen(false)}>Cancelar</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
