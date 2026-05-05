@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react";
 import { FaTrash, FaFilePdf, FaSearch, FaBoxOpen } from "react-icons/fa";
 import jsPDF from "jspdf";
