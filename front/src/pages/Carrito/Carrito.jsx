@@ -38,7 +38,7 @@ const Carrito = () => {
   };
 
   const irAProductos = () => {
-    window.location.href = `http://localhost:3000/admin/producto/gestionar`;
+    window.location.href = `http://localhost:3000/admin/producto/catalogo`;
   };
 
   const eliminarProducto = (index) => {

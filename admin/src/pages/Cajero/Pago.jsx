@@ -182,9 +182,11 @@ const Pago = ({ itemAPagar, totalCalculado }) => {
                       name="cvv"
                       value={tarjeta.cvv}
                       onChange={handleTarjeta}
-                      placeholder="S/ 0.0"
+                      placeholder="123"
                       className="modal-input"
                       maxLength={4}
+                      type="text"
+                      inputMode="numeric"
                     />
                     <span className="cvv-icono">🛡️</span>
                   </div>
@@ -244,7 +246,7 @@ const Pago = ({ itemAPagar, totalCalculado }) => {
               <button
                 className="btn-pagar"
                 onClick={confirmarPago}
-                disabled={!tarjeta.terminos}
+                disabled={!tarjeta.terminos || !tarjeta.numero || !tarjeta.vencimiento || !tarjeta.cvv}
               >
                 Pagar
               </button>

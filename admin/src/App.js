@@ -16,15 +16,12 @@ import Administrador from "./pages/Administrador/Administrador";
 import Producto from "./pages/Producto/Producto";
 import Catalogo from "./pages/Producto/Catalogo"; 
 
-
-
 /* Clientes */
 import Cliente from "./pages/Cliente/Cliente"; 
 
 /* JefeAlmacen */
 import JefeAlmacen from "./pages/JefeAlmacen/JefeAlmacen"; 
 import Inventario from "./pages/JefeAlmacen/Inventario";
-
 
 /* Reportes */
 import Reportes from "./pages/Reportes/Reportes";
@@ -40,54 +37,53 @@ import HistorialCaja from "./pages/Cajero/HistorialCaja";
 /* Configuración */
 import Configuración from "./pages/Configuración/Configuración";
 
+// Componente envolvente para rutas protegidas
+const AdminLayout = ({ children }) => (
+  <div className="app-container">
+    <Sidebar />
+    <div className="content">
+      <Header />
+      {children}
+    </div>
+  </div>
+);
 
 const App = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-
-        <Route
-          path="/admin/*"
-          element={
-            <div className="app-container">
-              <Sidebar />
-              <div className="content">
-                <Header />
-                <Routes>
-                  {/* INICIO */}
-                  <Route path="inicio" element={<Inicio />} />
-                  {/* CLIENTES */}
-                  <Route path="clientes" element={<Cliente />} />
-                  {/*ADMINISTRADOR */}
-                  <Route path="administrador" element={<Administrador />} />
-                  {/* PRODUCTO */}
-                  <Route path="producto/gestionar" element={<Producto />} />
-                  <Route path="producto/catalogo" element={<Catalogo />} />
-                
-                  {/* REPORTES */}
-                  <Route path="reportes" element={<Reportes />} />
-                  {/* CAJERO */}
-                  <Route path="cajero" element={<Cajero />} />
-                  <Route path="caja/administrar" element={<AdministrarCaja />} /> 
-                  <Route path="caja/historial" element={<HistorialCaja />} />
-
-                  {/* JEFEALMACEN */}
-                  <Route path="jefeAlmacen" element={<JefeAlmacen />} />
-                  <Route path="inventario" element={<Inventario />} /> 
-
-
-
-                  {/* CONFIGURACIÓN */}
-                  <Route path="configuración" element={<Configuración />} />
-                  
-                  {/* ERROR 404 */}
-                  <Route path="*" element={<div>Página no encontrada en Admin</div>} />
-                </Routes>
-              </div>
-            </div>
-          }
-        />
+        
+        {/* ADMIN - Inicio */}
+        <Route path="/admin/inicio" element={<AdminLayout><Inicio /></AdminLayout>} />
+        
+        {/* ADMIN - Clientes */}
+        <Route path="/admin/clientes" element={<AdminLayout><Cliente /></AdminLayout>} />
+        
+        {/* ADMIN - Administrador */}
+        <Route path="/admin/administrador" element={<AdminLayout><Administrador /></AdminLayout>} />
+        
+        {/* ADMIN - Productos */}
+        <Route path="/admin/producto/gestionar" element={<AdminLayout><Producto /></AdminLayout>} />
+        <Route path="/admin/producto/catalogo" element={<AdminLayout><Catalogo /></AdminLayout>} />
+        
+        {/* ADMIN - Reportes */}
+        <Route path="/admin/reportes" element={<AdminLayout><Reportes /></AdminLayout>} />
+        
+        {/* ADMIN - Cajero */}
+        <Route path="/admin/cajero" element={<AdminLayout><Cajero /></AdminLayout>} />
+        <Route path="/admin/caja/administrar" element={<AdminLayout><AdministrarCaja /></AdminLayout>} />
+        <Route path="/admin/caja/historial" element={<AdminLayout><HistorialCaja /></AdminLayout>} />
+        
+        {/* ADMIN - JefeAlmacen */}
+        <Route path="/admin/jefeAlmacen" element={<AdminLayout><JefeAlmacen /></AdminLayout>} />
+        <Route path="/admin/inventario" element={<AdminLayout><Inventario /></AdminLayout>} />
+        
+        {/* ADMIN - Configuración */}
+        <Route path="/admin/configuración" element={<AdminLayout><Configuración /></AdminLayout>} />
+        
+        {/* Error 404 */}
+        <Route path="*" element={<div style={{ padding: '20px' }}>Página no encontrada</div>} />
       </Routes>
     </Router>
   );

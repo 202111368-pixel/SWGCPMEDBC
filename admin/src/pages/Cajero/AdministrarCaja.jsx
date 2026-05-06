@@ -22,7 +22,17 @@ const AdministrarCaja = () => {
     if (dataString) {
       try {
         const decodedData = JSON.parse(decodeURIComponent(dataString));
-        setItemAPagar(decodedData[0]);
+        // Calcular el total de todos los productos
+        const totalVenta = decodedData.reduce((acc, item) => {
+          const monto = parseFloat(item.venta.replace(/[^\d.-]/g, ''));
+          return acc + monto;
+        }, 0);
+        setItemAPagar({
+          producto: `${decodedData.length} producto(s)`,
+          venta: `S/ ${totalVenta.toFixed(2)}`,
+          imagen: decodedData[0]?.imagen || "https://via.placeholder.com/80x60?text=Productos",
+          items: decodedData
+        });
       } catch (e) {
         console.error("Error al decodificar datos", e);
       }
