@@ -24,12 +24,9 @@ const Carrito = () => {
     const datosVentaString = encodeURIComponent(JSON.stringify(datosVenta));
     
     localStorage.removeItem("carrito");
-<<<<<<< Updated upstream
     window.location.href = `http://localhost:3000/admin/caja/administrar?data=${datosVentaString}`;
     
-=======
     window.location.href = `http://localhost:3001/admin/caja/administrar?data=${datosVentaString}`;
->>>>>>> Stashed changes
   };
 
   const irAProductos = () => {
