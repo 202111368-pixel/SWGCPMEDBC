@@ -9,23 +9,34 @@ const Producto = () => {
   const [busqueda, setBusqueda] = useState("");
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const datosDesdeUrl = params.get("data");
+    cargarVentas();
     
-    let historialActual = JSON.parse(localStorage.getItem("ventas_admin_3001")) || [];
-
-    if (datosDesdeUrl) {
-      try {
-        const ventasRecibidas = JSON.parse(decodeURIComponent(datosDesdeUrl));
-        historialActual = [...historialActual, ...ventasRecibidas];
-        localStorage.setItem("ventas_admin_3001", JSON.stringify(historialActual));
-        window.history.replaceState({}, document.title, window.location.pathname);
-      } catch (error) {
-        console.error("Error al procesar datos:", error);
+    window.addEventListener("storage", (e) => {
+      if (e.key === "ventas_registradas") {
+        cargarVentas();
       }
-    }
-    setVentas(historialActual); 
+    });
+
+    window.addEventListener("ventaRegistrada", cargarVentas);
+
+    return () => {
+      window.removeEventListener("storage", cargarVentas);
+      window.removeEventListener("ventaRegistrada", cargarVentas);
+    };
   }, []);
+
+  const cargarVentas = () => {
+    const ventasGuardadas = JSON.parse(localStorage.getItem("ventas_registradas")) || [];
+    setVentas(ventasGuardadas);
+  };
+
+  const eliminarVenta = (index) => {
+    const nuevaLista = [...ventas];
+    nuevaLista.splice(index, 1);
+    localStorage.setItem("ventas_registradas", JSON.stringify(nuevaLista));
+    setVentas(nuevaLista);
+    window.dispatchEvent(new Event("ventaRegistrada"));
+  };
 
   const exportarPDF = () => {
     const doc = new jsPDF();
@@ -35,24 +46,20 @@ const Producto = () => {
       i + 1, 
       v.producto || "Sin nombre", 
       v.venta || "S/ 0.00", 
-      v.estado || "PENDIENTE"
+      v.metodoPago || "Yape",
+      v.estado || "VALIDADO",
+      v.fecha || ""
     ]);
 
     autoTable(doc, {
-      head: [['#', 'Producto', 'Precio Venta', 'Estado']],
+      head: [['#', 'Producto', 'Total', 'Método', 'Estado', 'Fecha']],
       body: tablaData,
       startY: 20,
       theme: 'grid',
       headStyles: { fillColor: [39, 174, 96] }
     });
 
-    doc.save("reporte-ventas.pdf");
-  };
-
-  const eliminarVenta = (index) => {
-    const nuevaLista = ventas.filter((_, i) => i !== index);
-    setVentas(nuevaLista);
-    localStorage.setItem("ventas_admin_3001", JSON.stringify(nuevaLista));
+    doc.save("reporte-productos-dbary.pdf");
   };
 
   return (
@@ -60,7 +67,7 @@ const Producto = () => {
       <header className="table-header-container">
         <div className="header-text">
           <h1><FaBoxOpen /> Gestión de Productos</h1>
-          <p>Listado de compras y estados de pago</p>
+          <p>Datos sincronizados desde el Carrito (Localhost:3000)</p>
         </div>
         <button className="btn-export-pdf" onClick={exportarPDF}>
           <FaFilePdf /> Exportar PDF
@@ -72,7 +79,7 @@ const Producto = () => {
           <FaSearch color="#999" />
           <input 
             type="text" 
-            placeholder="Buscar producto..." 
+            placeholder="Buscar por nombre de producto..." 
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)} 
           />
@@ -86,8 +93,10 @@ const Producto = () => {
               <th>#</th>
               <th>PRODUCTO</th>
               <th>IMAGEN</th>
-              <th>PRECIO VENTA</th>
+              <th>TOTAL</th>
+              <th>MÉTODO PAGO</th>
               <th>ESTADO</th>
+              <th>FECHA</th>
               <th>ACCIONES</th>
             </tr>
           </thead>
@@ -98,21 +107,29 @@ const Producto = () => {
                 .map((v, i) => (
                 <tr key={i}>
                   <td>{i + 1}</td>
-                  <td className="prod-name">{v.producto}</td>
+                  <td className="prod-name-bold">{v.producto}</td>
                   <td>
                     <div className="container-img-tabla">
                       <img 
                         src={v.imagen} 
-                        alt="producto" 
-                        className="img-tabla" 
-                        onError={(e) => { e.target.src = "https://via.placeholder.com/80x60?text=Cocina"; }}
+                        alt={v.producto} 
+                        className="img-tabla-fixed" 
+                        onError={(e) => { 
+                          e.target.src = "https://via.placeholder.com/80x60?text=Error+Img"; 
+                        }}
                       />
                     </div>
                   </td>
-                  <td className="prod-price">{v.venta}</td>
-                  <td><span className="badge-status">{v.estado}</span></td>
+                  <td className="prod-price-green">{v.venta || v.total}</td>
+                  <td className="method-text">{v.metodoPago || "Yape"}</td>
                   <td>
-                    <button onClick={() => eliminarVenta(i)} className="btn-delete">
+                    <span className="badge-status-validated">
+                      {v.estado || "VALIDADO"}
+                    </span>
+                  </td>
+                  <td className="date-text">{v.fecha || new Date().toLocaleDateString()}</td>
+                  <td>
+                    <button onClick={() => eliminarVenta(i)} className="btn-delete-red">
                       <FaTrash />
                     </button>
                   </td>
@@ -120,7 +137,9 @@ const Producto = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="6" className="no-data">No hay compras registradas en el sistema.</td>
+                <td colSpan="8" className="no-data">
+                  No hay ventas del carrito. Esperando datos de http://localhost:3000/carrito
+                </td>
               </tr>
             )}
           </tbody>
@@ -131,4 +150,3 @@ const Producto = () => {
 };
 
 export default Producto;
-//para el pdf npm install jspdf jspdf-autotable

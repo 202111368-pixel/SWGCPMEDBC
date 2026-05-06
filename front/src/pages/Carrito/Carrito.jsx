@@ -24,13 +24,13 @@ const Carrito = () => {
     const datosVentaString = encodeURIComponent(JSON.stringify(datosVenta));
     
     localStorage.removeItem("carrito");
-    window.location.href = `http://localhost:3000/admin/caja/administrar?data=${datosVentaString}`;
+    window.location.href = `http://localhost:3001/admin/caja/administrar?data=${datosVentaString}`;
     
-    window.location.href = `http://localhost:3000/admin/caja/administrar?data=${datosVentaString}`;
+    window.location.href = `http://localhost:3001/admin/caja/administrar?data=${datosVentaString}`;
   };
 
   const irAProductos = () => {
-    window.location.href = `http://localhost:3000/admin/producto/gestionar`;
+    window.location.href = `http://localhost:3001/admin/producto/gestionar`;
   };
 
   const eliminarProducto = (index) => {
@@ -75,9 +75,6 @@ const Carrito = () => {
           <div className="acciones-carrito">
             <button className="btn-azul" onClick={irAPagar}>
               VER DETALLE Y PAGAR
-            </button>
-            <button className="btn-azul" onClick={irAProductos}>
-              BUSCAR MÁS PRODUCTOS
             </button>
           </div>
         </div>

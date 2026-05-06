@@ -1,81 +1,69 @@
 .admin-producto-page {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: 40px 40px 40px 280px;
+  background-color: #f4f7f9;
+  min-height: 100vh;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .table-header-container {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 20px;
 }
 
 .header-text h1 {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 0;
   font-size: 24px;
-  color: #1a1a1a;
+  color: #1a3353;
+  margin: 0;
+  font-weight: 700;
 }
 
 .header-text p {
-  color: #666;
-  margin: 5px 0 0 0;
+  color: #7a828a;
+  font-size: 14px;
+  margin: 5px 0;
 }
 
 .btn-export-pdf {
-  background-color: #27ae60;
+  background-color: #e74c3c;
   color: white;
-  padding: 10px 20px;
   border: none;
+  padding: 8px 16px;
   border-radius: 6px;
-  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
   display: flex;
   align-items: center;
   gap: 8px;
-  font-weight: 600;
-  transition: background 0.3s ease;
-}
-
-.btn-export-pdf:hover {
-  background-color: #219150;
-}
-
-.search-section-center {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 30px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .search-bar-modern {
+  background: white;
   display: flex;
   align-items: center;
-  background: white;
-  padding: 12px 18px;
-  border-radius: 10px;
-  border: 1px solid #e0e0e0;
-  width: 100%;
-  max-width: 500px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  padding: 0 15px;
+  border-radius: 8px;
+  border: 1px solid #e0e6ed;
+  width: 300px;
+  margin-bottom: 30px;
 }
 
 .search-bar-modern input {
   border: none;
-  outline: none;
+  padding: 10px;
   width: 100%;
-  margin-left: 12px;
-  font-size: 15px;
+  outline: none;
+  font-size: 14px;
 }
 
 .table-wrapper {
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
   overflow: hidden;
-  border: 1px solid #f0f0f0;
 }
 
 .admin-data-table {
@@ -84,104 +72,64 @@
 }
 
 .admin-data-table th {
-  background-color: #fff;
-  padding: 18px 15px;
-  text-align: center;
-  font-weight: 800;
-  color: #000;
-  border-bottom: 2px solid #f0f0f0;
+  background-color: #f8fafc;
+  color: #5d7186;
+  font-size: 12px;
+  font-weight: 700;
   text-transform: uppercase;
-  font-size: 13px;
+  padding: 15px;
+  border-bottom: 1px solid #edf2f7;
+  text-align: center;
 }
 
 .admin-data-table td {
   padding: 15px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #3e4b5b;
+  font-size: 14px;
   text-align: center;
-  border-bottom: 1px solid #f5f5f5;
   vertical-align: middle;
 }
 
-.prod-name {
-  color: #2c3e50;
-  font-weight: 600;
-  text-align: left !important;
-}
-
-.prod-price {
-  font-weight: 700;
-  color: #333;
-}
-
-.img-tabla {
-  width: 70px;            
-  height: 50px;           
-  object-fit: cover;      
-  border-radius: 6px;
-  display: block;
+.container-img-tabla {
+  width: 50px;
+  height: 40px;
+  background-color: #ebf2f7;
+  border-radius: 4px;
   margin: 0 auto;
-  border: 1px solid #eee;
-  background-color: #f9f9f9;
 }
 
-.badge-status {
-  background: #f1c40f;    
-  color: #fff;
-  padding: 6px 14px;
-  border-radius: 25px;
+.prod-price-green {
+  color: #1a3353;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.badge-status-validated {
+  background-color: #f39c12;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 15px;
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 700;
   display: inline-block;
-  letter-spacing: 0.5px;
 }
 
-.btn-delete {
-  color: #e74c3c;
+.btn-delete-red {
   background: none;
   border: none;
+  color: #e74c3c;
   cursor: pointer;
-  font-size: 18px;
-  transition: transform 0.2s ease;
-  display: flex;
-  justify-content: center;
-  width: 100%;
+  font-size: 16px;
+  transition: opacity 0.2s;
 }
 
-.btn-delete:hover {
-  transform: scale(1.2);
+.btn-delete-red:hover {
+  opacity: 0.7;
 }
 
 .no-data {
-  padding: 60px;
-  color: #a0aec0;
+  color: #94a3b8;
+  padding: 40px !important;
   font-style: italic;
-  font-size: 16px;
-}
-
-.container-img-tabla {
-  width: 80px;
-  height: 60px;
-  margin: 0 auto;
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #ddd;
-}
-
-.img-tabla {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; 
-  display: block;
-}
-
-.badge-status {
-  background-color: #f1c40f;
-  color: white;
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-weight: bold;
-  font-size: 11px;
 }

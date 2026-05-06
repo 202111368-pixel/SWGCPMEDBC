@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import "../../styles/pages/Cajero/Pago.css";
 import qrYape from '../../assets/yape.png';
 
 const QR_YAPE = qrYape; 
 
-const Pago = () => {
+const Pago = ({ itemAPagar, totalCalculado }) => {
   const [metodoSeleccionado, setMetodoSeleccionado] = useState('tarjeta');
   const [pagoAprobado, setPagoAprobado] = useState(false);
   const [tarjeta, setTarjeta] = useState({
@@ -26,9 +26,32 @@ const Pago = () => {
     return val.replace(/\D/g, '').slice(0, 16).replace(/(.{4})/g, '$1 ').trim();
   };
 
-  const confirmarPago = () => setPagoAprobado(true);
+  const confirmarPago = () => {
+    if (itemAPagar) {
+      const datosVenta = {
+        id: Date.now(),
+        producto: itemAPagar.producto || "Producto",
+        venta: itemAPagar.venta || `S/ ${(totalCalculado || 0).toFixed(2)}`,
+        cantidad: 1,
+        total: totalCalculado || 0,
+        metodoPago: metodoSeleccionado.charAt(0).toUpperCase() + metodoSeleccionado.slice(1),
+        estado: "VALIDADO",
+        fecha: new Date().toLocaleDateString(),
+        imagen: itemAPagar.imagen || "https://via.placeholder.com/80x60?text=Producto"
+      };
+
+      const ventasRegistradas = JSON.parse(localStorage.getItem("ventas_registradas")) || [];
+      ventasRegistradas.push(datosVenta);
+      localStorage.setItem("ventas_registradas", JSON.stringify(ventasRegistradas));
+
+      window.dispatchEvent(new Event("ventaRegistrada"));
+    }
+
+    setPagoAprobado(true);
+  };
 
   if (pagoAprobado) {
+    const fechaVenta = new Date().toLocaleString();
     return (
       <div className="seccion-paso fade-in">
         <div className="pago-aprobado-card">
@@ -41,13 +64,13 @@ const Pago = () => {
           <div className="pago-aprobado-detalle">
             <h4>Detalles de la Compra</h4>
             <div className="pago-detalle-grid">
-              <div><span className="pago-detalle-label">Fecha de venta</span><span>2025-12-02 16:34:38</span></div>
+              <div><span className="pago-detalle-label">Fecha de venta</span><span>{fechaVenta}</span></div>
               <div><span className="pago-detalle-label">Tipo de venta</span><span>V001</span></div>
               <div><span className="pago-detalle-label">Tipo de Comprobante</span><span>Boleta</span></div>
               <div><span className="pago-detalle-label">N° de Comprobante</span><span>CV001</span></div>
               <div><span className="pago-detalle-label">Método de Pago</span><span>{metodoSeleccionado.toUpperCase()}</span></div>
             </div>
-            <div className="pago-aprobado-total">S/ 2,293.50</div>
+            <div className="pago-aprobado-total">S/ {(totalCalculado || 0).toFixed(2)}</div>
             <div className="pago-orden-aviso">
               📦 <strong>Orden de Compra</strong><br />
               <span>No se requiere orden de compra — Stock suficiente.</span>
@@ -66,11 +89,9 @@ const Pago = () => {
       <h3 className="pago-titulo">Pago con Mercado Pago</h3>
 
       <div className="pago-layout">
-        {/* Panel izquierdo */}
         <div className="pago-card">
           <p className="pago-label">Medios de pago</p>
 
-          {/* Tabs de métodos */}
           <div className="pago-tabs">
             <button
               className={`pago-tab ${metodoSeleccionado === 'tarjeta' ? 'active' : ''}`}
@@ -103,7 +124,6 @@ const Pago = () => {
             </div>
           </div>
 
-          {/* YAPE → QR */}
           {metodoSeleccionado === 'yape' && (
             <div className="yape-qr-section fade-in">
               <p className="yape-instruccion">Escanea el QR con tu app de Yape para completar el pago.</p>
@@ -113,7 +133,6 @@ const Pago = () => {
             </div>
           )}
 
-          {/* TARJETA / BCP / BN → Formulario */}
           {['tarjeta', 'bcp', 'bn'].includes(metodoSeleccionado) && (
             <div className="tarjeta-form fade-in">
               {metodoSeleccionado !== 'tarjeta' && (
@@ -123,7 +142,6 @@ const Pago = () => {
                 </p>
               )}
 
-              {/* Número de tarjeta */}
               <div className="form-group-pago">
                 <label className="pago-input-label">Número de la tarjeta</label>
                 <input
@@ -136,7 +154,6 @@ const Pago = () => {
                 />
               </div>
 
-              {/* Vencimiento + CVV */}
               <div className="pago-row-2">
                 <div className="form-group-pago">
                   <label className="pago-input-label">Vencimiento</label>
@@ -165,7 +182,6 @@ const Pago = () => {
                 </div>
               </div>
 
-              {/* Nombre */}
               <div className="form-group-pago">
                 <label className="pago-input-label">Nombre como aparece en la tarjeta</label>
                 <input
@@ -177,7 +193,6 @@ const Pago = () => {
                 />
               </div>
 
-              {/* Cuotas */}
               <div className="form-group-pago">
                 <label className="pago-input-label">Cuotas</label>
                 <select name="cuotas" value={tarjeta.cuotas} onChange={handleTarjeta} className="modal-input">
@@ -188,10 +203,8 @@ const Pago = () => {
                 </select>
               </div>
 
-              {/* Separador */}
               <p className="pago-seccion-sub">Completa la información</p>
 
-              {/* Email */}
               <div className="form-group-pago">
                 <label className="pago-input-label">Email</label>
                 <input
@@ -204,7 +217,6 @@ const Pago = () => {
                 />
               </div>
 
-              {/* Términos */}
               <label className="pago-terminos">
                 <input
                   type="checkbox"
