@@ -1,98 +1,115 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FaExclamationTriangle, FaBox, FaLayerGroup, FaArrowRight, FaTimes } from 'react-icons/fa';
+import { FaExclamationTriangle, FaBox, FaLayerGroup, FaCheck, FaTrashAlt, FaWarehouse, FaShoppingCart, FaHistory } from 'react-icons/fa';
 import "../../styles/pages/JefeAlmacen/Inventario.css"; 
 
 const Inventario = () => {
-  const navigate = useNavigate();
-  const [metricas, setMetricas] = useState({ criticos: 0, bajo: 0, total: 0 });
   const [alertas, setAlertas] = useState([]);
+  const [historial, setHistorial] = useState([]);
+  const [metricas, setMetricas] = useState({ criticos: 0, bajo: 0, total: 0 });
+
+  const cargarDatos = () => {
+    const datosVentas = JSON.parse(localStorage.getItem("ventas_registradas")) || [];
+    const datosHistorial = JSON.parse(localStorage.getItem("historial_inventario")) || [];
+    setAlertas(datosVentas);
+    setHistorial(datosHistorial);
+    setMetricas({
+      criticos: datosVentas.length,
+      bajo: Math.ceil(datosVentas.length * 0.2),
+      total: datosVentas.length + datosHistorial.length
+    });
+  };
 
   useEffect(() => {
-    const datosVentas = JSON.parse(localStorage.getItem("ventas_registradas")) || [];
-    const criticos = datosVentas.filter(v => (v.cantidad || 0) < 5).length; 
-    const total = datosVentas.length;
-
-    setMetricas({
-      criticos: criticos,
-      bajo: Math.ceil(total * 0.2), 
-      total: total
-    });
-
-    setAlertas(datosVentas.slice(0, 3)); 
+    cargarDatos();
+    window.addEventListener("storage", cargarDatos);
+    return () => window.removeEventListener("storage", cargarDatos);
   }, []);
 
-  const irATabla = () => {
-    window.location.href = "http://localhost:3001/admin/producto/gestionar";
+  const gestionarAccion = (index, accion) => {
+    let nuevasVentas = [...alertas];
+    let itemProcesado = { ...nuevasVentas[index], 
+      estado: accion === 'aceptar' ? 'ACEPTADO' : 'RECHAZADO',
+      fechaAccion: new Date().toLocaleDateString()
+    };
+
+    const nuevoHistorial = [itemProcesado, ...historial];
+    localStorage.setItem("historial_inventario", JSON.stringify(nuevoHistorial));
+    
+    nuevasVentas.splice(index, 1);
+    localStorage.setItem("ventas_registradas", JSON.stringify(nuevasVentas));
+    cargarDatos();
   };
 
   return (
     <div className="inventario-page-wrapper">
       <header className="inventario-header">
-        <h1>Inventario y Alertas</h1>
-        <p>Resumen de existencias sincronizado con Gestión de Productos</p>
+        <div className="header-content">
+          <h1><FaWarehouse /> Gestión de Inventario</h1>
+          <button className="btn-recompra-header" onClick={() => window.location.href = "http://localhost:3000/carrito"}>
+            <FaShoppingCart /> IR AL CARRITO
+          </button>
+        </div>
       </header>
 
       <div className="kpi-grid">
-        <div className="kpi-card-alt critical clickable" onClick={irATabla}>
-          <div className="kpi-info">
-            <span className="kpi-num">{metricas.criticos}</span>
-            <span className="kpi-label">Alertas Críticas</span>
-          </div>
+        <div className="kpi-card-alt critical">
+          <div className="kpi-info"><span className="kpi-num">{metricas.criticos}</span><span className="kpi-label">Pendientes</span></div>
           <FaExclamationTriangle className="kpi-icon-bg" />
         </div>
-
-        <div className="kpi-card-alt warning clickable" onClick={irATabla}>
-          <div className="kpi-info">
-            <span className="kpi-num">{metricas.bajo}</span>
-            <span className="kpi-label">Stock Bajo</span>
-          </div>
+        <div className="kpi-card-alt warning">
+          <div className="kpi-info"><span className="kpi-num">{metricas.bajo}</span><span className="kpi-label">Stock Bajo</span></div>
           <FaLayerGroup className="kpi-icon-bg" />
         </div>
-
-        <div className="kpi-card-alt total clickable" onClick={irATabla}>
-          <div className="kpi-info">
-            <span className="kpi-num">{metricas.total}</span>
-            <span className="kpi-label">Total Productos</span>
-          </div>
+        <div className="kpi-card-alt total">
+          <div className="kpi-info"><span className="kpi-num">{metricas.total}</span><span className="kpi-label">Total Histórico</span></div>
           <FaBox className="kpi-icon-bg" />
         </div>
       </div>
 
-      <h2 className="section-title">Materiales que Requieren Atención <span className="badge-count">{alertas.length} materiales</span></h2>
-
+      <h2 className="section-title">Control de Decisiones</h2>
       <div className="material-grid">
         {alertas.map((item, index) => (
           <div className="material-card" key={index}>
             <div className="card-top">
-              <div>
-                <h3>{item.producto || "Sin Nombre"}</h3>
-                <span className="cat-text">{item.metodoPago || "Melamina"}</span>
-              </div>
-              <span className="badge-critico">Crítico</span>
+              <h3>{item.producto}</h3>
+              <span className="badge-status-validated">VALIDADO</span>
             </div>
-
             <div className="stock-display">
-              <div className="stock-box">
-                <span className="stock-label">Total Venta</span>
-                <span className="stock-val" style={{color: '#27ae60'}}>{item.venta || item.total}</span>
-              </div>
-              <div className="stock-box">
-                <span className="stock-label">Fecha Reg.</span>
-                <span className="stock-val" style={{fontSize: '14px'}}>{item.fecha}</span>
-              </div>
+              <div className="stock-box"><span className="stock-label">Monto</span><span className="stock-val">S/ {item.venta || item.total}</span></div>
+              <div className="stock-box"><span className="stock-label">Método</span><span className="stock-val-mini">{item.metodoPago || 'Yape'}</span></div>
             </div>
-
-            <div className="suggestion-box">
-              <p>Estado Actual</p>
-              <strong>{item.estado || "VALIDADO"}</strong>
-            </div>
-
             <div className="card-actions">
-              <button className="btn-planificar" onClick={irATabla}>Ver en Tabla <FaArrowRight /></button>
+              <button className="btn-aceptar-pago" onClick={() => gestionarAccion(index, 'aceptar')}><FaCheck /> ACEPTAR</button>
+              <button className="btn-rechazar-pago" onClick={() => gestionarAccion(index, 'rechazar')}><FaTrashAlt /> RECHAZAR</button>
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="inventory-table-section">
+        <h2><FaHistory /> Historial de Inventario</h2>
+        <table className="admin-data-table">
+          <thead>
+            <tr>
+              <th>PRODUCTO</th>
+              <th>MONTO</th>
+              <th>ESTADO</th>
+              <th>FECHA</th>
+              <th>ACCIÓN</th>
+            </tr>
+          </thead>
+          <tbody>
+            {historial.map((h, i) => (
+              <tr key={i}>
+                <td><strong>{h.producto}</strong></td>
+                <td className="prod-price-green">{h.venta || h.total}</td>
+                <td><span className={`badge-historial ${h.estado.toLowerCase()}`}>{h.estado}</span></td>
+                <td>{h.fechaAccion}</td>
+                <td><button className="btn-table-recompra" onClick={() => window.location.href = "http://localhost:3000/carrito"}><FaShoppingCart /></button></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

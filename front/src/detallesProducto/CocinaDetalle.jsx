@@ -15,7 +15,7 @@ import cocina4b from "../img/cocina4b.jpg";
 
 const CocinaDetalle = () => {
   const navigate = useNavigate();
-  const [modalImg, setModalImg] = useState(null);
+  const [modalImg, setModalImg] = useState(null); 
   const [timeLeft, setTimeLeft] = useState({ horas: 22, minutos: 32, segundos: 15 });
   const [itemsEnCarrito, setItemsEnCarrito] = useState([]);
   const [notificacion, setNotificacion] = useState({ visible: false, mensaje: "", tipo: "" });
@@ -27,9 +27,30 @@ const CocinaDetalle = () => {
     { id: 4, nombre: "Cocina en U", precio: 2000, off: "20% OFF", imgActual: cocina4a, variantes: [cocina4a, cocina4b], colores: ["#e6e6e6", "#b5b5b5"] },
   ]);
 
+  const hablarBienvenida = () => {
+    const texto = "¡Bienvenidos! Aprovecha nuestra oferta especial por el Día de la Madre, solo por esta semana. Sorprende a mamá con algo único y hecho con mucho cariño.";
+    const mensaje = new SpeechSynthesisUtterance(texto);
+        const voces = window.speechSynthesis.getVoices();
+    const vozEspañol = voces.find(v => v.lang.includes('es-ES') || v.lang.includes('es-MX'));
+    
+    if (vozEspañol) mensaje.voice = vozEspañol;
+    
+    mensaje.rate = 0.95; 
+    mensaje.pitch = 1.1; 
+    window.speechSynthesis.speak(mensaje);
+  };
+
   useEffect(() => {
+    const handleInteraccion = () => {
+      hablarBienvenida();
+      document.removeEventListener('click', handleInteraccion);
+    };
+    document.addEventListener('click', handleInteraccion);
+
     const carritoActual = JSON.parse(localStorage.getItem("carrito")) || [];
     setItemsEnCarrito(carritoActual.map(item => item.id));
+
+    return () => document.removeEventListener('click', handleInteraccion);
   }, []);
 
   useEffect(() => {
@@ -93,8 +114,8 @@ const CocinaDetalle = () => {
             <FaArrowLeft /> REGRESAR
           </button> 
           <div className="detalle-title">
-            <h1>Cocinas <span>Integrales</span></h1>
-            <p>Diseños exclusivos con acabados de alta resistencia</p>
+            <h1>Especial <span>Día de la Madre</span></h1>
+            <h1>COCINA <span>INTEGRAL</span></h1>
           </div>
         </header>
 
@@ -104,12 +125,13 @@ const CocinaDetalle = () => {
             return (
               <div key={p.id} className="producto-card-ia">
                 <div className="card-badge"><FaTag /> {p.off}</div>
-                <div className="img-container-ia" onClick={() => setModalImg(p.imgActual)}>
+                
+                <div className="img-container-ia">
                   <img src={p.imgActual} alt={p.nombre} className="img-ia-main" />
-                  <div className="img-hover-overlay">Click para ampliar</div>
                 </div>
+
                 <div className="timer-ia-box">
-                  <div className="timer-label">La oferta termina en:</div>
+                  <div className="timer-label">¡Venta de Locura Semanal!</div>
                   <div className="timer-numbers">
                     {String(timeLeft.horas).padStart(2, '0')}h : {String(timeLeft.minutos).padStart(2, '0')}m : {String(timeLeft.segundos).padStart(2, '0')}s
                   </div>
@@ -139,15 +161,6 @@ const CocinaDetalle = () => {
           })}
         </div>
       </div>
-
-      {modalImg && (
-        <div className="modal-ia-overlay" onClick={() => setModalImg(null)}>
-          <div className="modal-ia-box">
-            <img src={modalImg} alt="Preview" />
-            <button className="modal-ia-close">×</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
