@@ -34,7 +34,6 @@ const Carrito = () => {
     }));
     
     localStorage.removeItem("carrito");
-<<<<<<< Updated upstream
     window.location.href = `http://localhost:3000/admin/caja/administrar?data=${datosVentaString}`;
     
   };
