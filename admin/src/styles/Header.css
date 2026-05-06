@@ -47,3 +47,15 @@
   .header-top-right { right: 12px; }
   .header-email { display: none; }
 }
+
+.header-menu { position: absolute; right: -8px; top: 100%; background: #fff; border-radius: 10px; box-shadow: 0 8px 24px rgba(2,6,23,0.12); padding: 12px; min-width: 280px; margin-top: 8px; z-index: 1300; }
+.header-menu-row { display:flex; gap:12px; align-items:center; }
+.header-menu-avatar { flex:0 0 auto; }
+.header-menu-info { flex:1 1 auto; }
+.header-menu-name { font-weight:700; color:#0f172a; }
+.header-menu-email { font-size:0.85rem; color:#6b7280; margin-top:4px; }
+.header-menu-divider { height:1px; background:#eef2f7; margin:10px 0; }
+.header-menu-gender { display:flex; gap:10px; flex-direction:column; }
+.header-menu-gender label { font-size:0.9rem; color:#0f172a; }
+.btn-primary { background:#2563eb; color:#fff; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; }
+.btn-secondary { background:#f3f4f6; color:#111827; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; }

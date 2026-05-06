@@ -34,11 +34,13 @@ const Carrito = () => {
     }));
     
     localStorage.removeItem("carrito");
+<<<<<<< Updated upstream
     window.location.href = `http://localhost:3000/admin/caja/administrar?data=${datosVentaString}`;
+    
   };
 
   const irAProductos = () => {
-    window.location.href = `http://localhost:3000/admin/producto/gestionar`;
+    window.location.href = `http://localhost:3001/admin/producto/gestionar`;
   };
 
   const eliminarProducto = (index) => {
