@@ -45,7 +45,7 @@ const Inventario = () => {
       <header className="inventario-header">
         <div className="header-content">
           <h1><FaWarehouse /> Gestión de Inventario</h1>
-          <button className="btn-recompra-header" onClick={() => window.location.href = "http://localhost:3000/carrito"}>
+          <button className="btn-recompra-header" onClick={() => window.location.href = "http://localhost:3001/carrito"}>
             <FaShoppingCart /> IR AL CARRITO
           </button>
         </div>
@@ -105,7 +105,7 @@ const Inventario = () => {
                 <td className="prod-price-green">{h.venta || h.total}</td>
                 <td><span className={`badge-historial ${h.estado.toLowerCase()}`}>{h.estado}</span></td>
                 <td>{h.fechaAccion}</td>
-                <td><button className="btn-table-recompra" onClick={() => window.location.href = "http://localhost:3000/carrito"}><FaShoppingCart /></button></td>
+                <td><button className="btn-table-recompra" onClick={() => window.location.href = "http://localhost:3001/carrito"}><FaShoppingCart /></button></td>
               </tr>
             ))}
           </tbody>
