@@ -16,8 +16,6 @@ import Administrador from "./pages/Administrador/Administrador";
 import Producto from "./pages/Producto/Producto";
 import Catalogo from "./pages/Producto/Catalogo"; 
 
-
-
 /* Clientes */
 import Cliente from "./pages/Cliente/Cliente"; 
 
@@ -25,9 +23,9 @@ import Cliente from "./pages/Cliente/Cliente";
 import JefeAlmacen from "./pages/JefeAlmacen/JefeAlmacen"; 
 import Inventario from "./pages/JefeAlmacen/Inventario";
 
-
-/* Reportes */
-import Reportes from "./pages/Reportes/Reportes";
+/* Diseñador*/
+import Arquitecto from "./pages/Diseñador/Aquirtecto.jsx"; 
+import Carpintero from "./pages/Diseñador/Carpintero.jsx";
 
 /* Login */
 import Login from "./pages/Login";
@@ -65,8 +63,10 @@ const App = () => {
                   <Route path="producto/gestionar" element={<Producto />} />
                   <Route path="producto/catalogo" element={<Catalogo />} />
                 
-                  {/* REPORTES */}
-                  <Route path="reportes" element={<Reportes />} />
+                  {/* DISEÑADOR */}
+                  <Route path="disenador/arquitecto" element={<Arquitecto />} /> 
+                  <Route path="disenador/carpintero" element={<Carpintero />} />
+
                   {/* CAJERO */}
                   <Route path="cajero" element={<Cajero />} />
                   <Route path="caja/administrar" element={<AdministrarCaja />} /> 
@@ -75,8 +75,6 @@ const App = () => {
                   {/* JEFEALMACEN */}
                   <Route path="jefeAlmacen" element={<JefeAlmacen />} />
                   <Route path="inventario" element={<Inventario />} /> 
-
-
 
                   {/* CONFIGURACIÓN */}
                   <Route path="configuración" element={<Configuración />} />

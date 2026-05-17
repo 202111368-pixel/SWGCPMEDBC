@@ -1,0 +1,171 @@
+.marcas-page-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #fdfcfb;
+  align-items: center;
+}
+
+.disenador-central-wrapper {
+  max-width: 1000px;
+  width: 90%;
+  padding: 40px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.amedida-container {
+  display: flex;
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  align-items: center;
+  min-height: 500px;
+}
+
+.amedida-left-image {
+  flex: 1;
+  height: 500px;
+  position: relative;
+}
+
+.carpinteria-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-overlay-badge {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(139, 92, 26, 0.9);
+  color: #ffffff;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.amedida-right-content {
+  flex: 1.2;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.amedida-header h1 {
+  font-size: 2rem;
+  color: #1a202c;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.amedida-header .badge-ia {
+  display: inline-block;
+  background-color: #f5efe6;
+  color: #8b5c1a;
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.amedida-header .subtitulo {
+  font-size: 0.95rem;
+  color: #718096;
+  margin-bottom: 20px;
+}
+
+.form-label-custom {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.options-grid-custom {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.option-btn-custom {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  padding: 10px 5px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.option-btn-custom.selected {
+  border-color: #8b5c1a;
+  background-color: #fcf8f2;
+  color: #8b5c1a;
+  font-weight: 700;
+}
+
+.submit-btn-amedida {
+  background-color: #8b5c1a;
+  color: #ffffff;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.submit-btn-amedida:disabled {
+  background-color: #e2e8f0;
+  cursor: not-allowed;
+}
+
+.civil-badge {
+  background: rgba(26, 84, 139, 0.9) !important;
+}
+
+.civil-tag {
+  background-color: #e6eff5 !important;
+  color: #1a648b !important;
+}
+
+.option-btn-custom.civil-btn.selected {
+  border-color: #1a648b !important;
+  background-color: #f2f7fc !important;
+  color: #1a648b !important;
+}
+
+.civil-submit-btn {
+  background-color: #1a648b !important;
+}
+
+@media (max-width: 768px) {
+  .disenador-central-wrapper {
+    width: 95%;
+  }
+  .amedida-container {
+    flex-direction: column;
+  }
+  .amedida-left-image {
+    width: 100%;
+    height: 250px;
+  }
+}

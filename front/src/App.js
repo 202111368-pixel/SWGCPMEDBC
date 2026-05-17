@@ -9,7 +9,7 @@ import Contacto from './pages/Contacto/Contacto';
 import Denuncia from './pages/Denuncia/Denuncia';
 import Carrito from "./pages/Carrito/Carrito";
 import Blog from "./pages/Blog/Blog";
-import Marcas from "./pages/Marcas/Marcas";
+import Diseñador from "./pages/Diseñador/Diseñador";
 
 
 
@@ -32,7 +32,7 @@ function App() {
         <Route path="/contacto" element={<Contacto />} />
         <Route path="/denuncia" element={<Denuncia />} />
         <Route path="/blog" element={<Blog />} />
-        <Route path="/marcas" element={<Marcas />} />
+        <Route path="/diseñador" element={<Diseñador />} />
 
 
         {/*  Carrito */}

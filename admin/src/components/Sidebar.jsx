@@ -4,7 +4,7 @@ import {
   FaCashRegister, FaChartLine, FaBox, FaUsers, FaChartBar, 
   FaSignOutAlt, FaMoneyCheckAlt, FaTools, FaWarehouse,
   FaChevronDown, FaChevronUp, FaThLarge, FaClipboardList,
-  FaBoxes 
+  FaBoxes, FaDraftingCompass, FaHammer 
 } from "react-icons/fa";
 import "../styles/Sidebar.css";
 
@@ -12,6 +12,8 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const [openCaja, setOpenCaja] = useState(false); 
   const [openProductos, setOpenProductos] = useState(false); 
+  // Nuevo estado para controlar el menú desplegable del Diseñador
+  const [openDisenador, setOpenDisenador] = useState(false); 
 
   const handleLogout = () => {
     if (window.confirm("¿Deseas cerrar sesión?")) {
@@ -62,12 +64,33 @@ const Sidebar = () => {
         </li>
         
         <li className="menu-section-title">OPERACIONES</li>
-        <li>
-          <NavLink to="/admin/reportes" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
-            <FaChartBar /> <span>Reportes</span>
-          </NavLink>
+        
+        {/* DISEÑADOR DESPLEGABLE (Reemplaza a Reportes) */}
+        <li className={`menu-item-desplegable ${openDisenador ? "open" : ""}`}>
+          <div className="menu-link" onClick={() => setOpenDisenador(!openDisenador)} style={{ cursor: 'pointer' }}>
+            <FaChartBar /> <span>Diseñador</span>
+            <span className="icon-arrow">
+              {openDisenador ? <FaChevronUp size={12} /> : <FaChevronDown size={12} />}
+            </span>
+          </div>
+          
+          {openDisenador && (
+            <ul className="submenu">
+              <li>
+                <NavLink to="/admin/disenador/arquitecto" className="submenu-link">
+                  <FaDraftingCompass size={14}/> Administrar Arquitecto
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/admin/disenador/carpintero" className="submenu-link">
+                  <FaHammer size={14}/> Administrar Carpintero
+                </NavLink>
+              </li>
+            </ul>
+          )}
         </li>
         
+        {/* CAJERO DESPLEGABLE */}
         <li className={`menu-item-desplegable ${openCaja ? "open" : ""}`}>
           <div className="menu-link" onClick={() => setOpenCaja(!openCaja)} style={{ cursor: 'pointer' }}>
             <FaCashRegister /> <span>Cajero</span>
