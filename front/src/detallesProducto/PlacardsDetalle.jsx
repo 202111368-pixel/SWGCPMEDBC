@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
-import { FaArrowLeft, FaShoppingCart, FaBolt, FaHistory } from "react-icons/fa";
+import { FaArrowLeft, FaShoppingCart, FaShieldAlt, FaLock, FaTruck, FaTools, FaStar } from "react-icons/fa";
 import "./PlacardsDetalle.css";
 
 import Vestidores1 from "../img/Vestidores/Vestidores1.jpg";
@@ -13,40 +13,25 @@ import Vestidores2b from "../img/Vestidores/Vestidores2b.jpg";
 import Vestidores3a from "../img/Vestidores/Vestidores3a.jpg";
 import Vestidores3b from "../img/Vestidores/Vestidores3b.jpg";
 
-const RelojOferta = ({ segundosTotales }) => {
-  const [tiempo, setTiempo] = useState(segundosTotales);
-  useEffect(() => {
-    const cuenta = setInterval(() => {
-      setTiempo((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
-    return () => clearInterval(cuenta);
-  }, []);
-
-  const d = Math.floor(tiempo / (3600 * 24));
-  const h = Math.floor((tiempo % (3600 * 24)) / 3600);
-  const m = Math.floor((tiempo % 3600) / 60);
-  const s = tiempo % 60;
-
-  return (
-    <div className="ia-cronometro">
-      <div className="ia-tiempo-item"><span>{d}</span><small>DÍAS</small></div>
-      <div className="ia-tiempo-item"><span>{h.toString().padStart(2, '0')}</span><small>HRS</small></div>
-      <div className="ia-tiempo-item"><span>{m.toString().padStart(2, '0')}</span><small>MIN</small></div>
-      <div className="ia-tiempo-item"><span>{s.toString().padStart(2, '0')}</span><small>SEG</small></div>
-    </div>
-  );
-};
-
 const VestidoresDetalle = () => {
   const navigate = useNavigate();
-  const [img1, setImg1] = useState(Vestidores1);
-  const [img2, setImg2] = useState(Vestidores1a);
-  const [img3, setImg3] = useState(Vestidores2a);
-  const [img4, setImg4] = useState(Vestidores3a);
+  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
 
-  const añadirCarrito = (producto) => {
+  const [productos] = useState([
+    { id: 1, name: "Vestidor Modular Alpha", price: 1500, imgActual: Vestidores1, variantes: [Vestidores1, Vestidores2, Vestidores1a], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
+    { id: 2, name: "Vestidor Modular Sigma", price: 1650, imgActual: Vestidores1a, variantes: [Vestidores1a, Vestidores1b, Vestidores2b], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
+    { id: 3, name: "Vestidor Modular Delta", price: 1780, imgActual: Vestidores2a, variantes: [Vestidores2a, Vestidores2b, Vestidores3a], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
+    { id: 4, name: "Vestidor Modular Omega", price: 1900, imgActual: Vestidores3a, variantes: [Vestidores3a, Vestidores3b, Vestidores1b], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] }
+  ]);
+
+  const cambiarImagenPrincipal = (nuevaImg) => {
+    setProductoSeleccionado({ ...productoSeleccionado, imgActual: nuevaImg });
+  };
+
+  const añadirCarrito = (p) => {
     const carritoActual = JSON.parse(localStorage.getItem("carrito")) || [];
-    carritoActual.push(producto);
+    const nuevoProducto = { id: p.id, nombre: p.name, precio: p.price, imagen: p.imgActual };
+    carritoActual.push(nuevoProducto);
     localStorage.setItem("carrito", JSON.stringify(carritoActual));
     window.dispatchEvent(new Event("carritoActualizado"));
   };
@@ -56,46 +41,107 @@ const VestidoresDetalle = () => {
       <Navbar />
       <div className="placards-wrapper">
         <header className="placards-header">
-          <button className="btn-back-nav" onClick={() => navigate(-1)}>
+          <button className="btn-back-nav" onClick={() => productoSeleccionado ? setProductoSeleccionado(null) : navigate(-1)}>
             <FaArrowLeft /> REGRESAR
           </button>
-          <div className="placards-title-box">
-            <h1>Placards y <span>Vestidores</span></h1>
-            <p>Diseño de interiores optimizado con IA.</p>
-          </div>
+          {!productoSeleccionado && (
+            <div className="placards-title-box">
+              <h1>Placards y <span>Vestidores</span></h1>
+              <p>Diseño de interiores elegante para tu organización personal.</p>
+            </div>
+          )}
         </header>
 
-        <div className="placards-grid-modern">
-          {[
-            { id: 1, name: "Vestidor Alpha", price: 1500, old: 1765, img: img1, set: setImg1, v1: Vestidores1, v2: Vestidores2, time: 172800 },
-            { id: 2, name: "Vestidor Sigma", price: 1650, old: 2060, img: img2, set: setImg2, v1: Vestidores1a, v2: Vestidores1b, time: 86400 },
-            { id: 3, name: "Vestidor Delta", price: 1780, old: 1978, img: img3, set: setImg3, v1: Vestidores2a, v2: Vestidores2b, time: 259200 },
-            { id: 4, name: "Vestidor Omega", price: 1900, old: 2533, img: img4, set: setImg4, v1: Vestidores3a, v2: Vestidores3b, time: 43200 }
-          ].map(p => (
-            <div className="placard-card-ia" key={p.id}>
-              <div className="badge-promo"><FaBolt /> OFERTA</div>
-              <div className="placard-img-container"><img src={p.img} alt={p.name} /></div>
-              <div className="placard-info-ia">
-                <h4>{p.name}</h4>
-                <div className="placard-pricing">
-                  <span className="old">S/ {p.old}</span>
-                  <span className="current">S/ {p.price}</span>
+        {!productoSeleccionado ? (
+          <div className="placards-grid-modern">
+            {productos.map((p) => (
+              <div className="placard-card-ia" key={p.id}>
+                <div className="placard-img-container">
+                  <img src={p.imgActual} alt={p.name} />
                 </div>
-                <div className="ia-countdown-container">
-                  <p><FaHistory /> FINALIZA EN:</p>
-                  <RelojOferta segundosTotales={p.time} />
+                <div className="placard-info-ia">
+                  <h4>{p.name}</h4>
+                  <div className="placard-pricing">
+                    <span className="current">S/ {p.price}</span>
+                  </div>
+                  <button className="btn-ver-completo" onClick={() => setProductoSeleccionado(p)}>
+                    VER COMPLETO
+                  </button>
                 </div>
-                <div className="placard-colors">
-                  <span className="dot" style={{ background: "#d7ccc8" }} onClick={() => p.set(p.v1)}></span>
-                  <span className="dot" style={{ background: "#5d4037" }} onClick={() => p.set(p.v2)}></span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="vista-producto-modelo">
+            <div className="modelo-col-izquierda">
+              <img src={productoSeleccionado.imgActual} alt={productoSeleccionado.name} className="modelo-img-principal" />
+            </div>
+
+            <div className="modelo-col-miniaturas">
+              {productoSeleccionado.variantes.map((img, index) => (
+                <div key={index} className={`modelo-mini-box ${productoSeleccionado.imgActual === img ? 'activa' : ''}`} onClick={() => cambiarImagenPrincipal(img)}>
+                  <img src={img} alt={`Miniatura ${index}`} />
                 </div>
-                <button className="btn-buy-ia" onClick={() => añadirCarrito({ nombre: p.name, precio: p.price, imagen: p.img })}>
-                  <FaShoppingCart /> AÑADIR AL PEDIDO
+              ))}
+            </div>
+
+            <div className="modelo-col-derecha">
+              <h1 className="modelo-titulo">{productoSeleccionado.name.toUpperCase()}</h1>
+              
+              <div className="modelo-estrellas">
+                <FaStar /><FaStar /><FaStar /><FaStar /><FaStar />
+              </div>
+
+              <div className="modelo-badges-container">
+                <span className="m-badge"><FaShieldAlt /> Garantía</span>
+                <span className="m-badge"><FaLock /> Pago Seguro</span>
+                <span className="m-badge"><FaTruck /> Transporte</span>
+                <span className="m-badge"><FaTools /> Instalación</span>
+              </div>
+
+              <div className="modelo-precio-box">
+                <span className="m-desde">Desde:</span>
+                <span className="m-precio">S/ {productoSeleccionado.price}.00</span>
+                <span className="m-igv">Incluye IGV</span>
+              </div>
+
+              <p className="modelo-entrega">🚚 Fecha de entrega a la medida: 1. junio</p>
+
+              <div className="modelo-medidas-seccion">
+                <span className="m-medidas-label">MEDIDAS TABLERO</span>
+                <div className="m-medidas-opciones">
+                  {productoSeleccionado.medidas.map((medida, idx) => (
+                    <div key={idx} className="m-medida-item">
+                      Mesa: {medida} x 75 cm Alto
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="modelo-precio-box replica">
+                <span className="m-desde">Desde:</span>
+                <span className="m-precio">S/ {productoSeleccionado.price}.00</span>
+                <span className="m-igv">Incluye IGV</span>
+              </div>
+
+              <div className="modelo-acciones">
+                <div className="m-cantidad-selector">
+                  <span className="cant-label">CANT.</span>
+                  <div className="cant-control">
+                    <button className="btn-cant">-</button>
+                    <span className="cant-num">1</span>
+                    <button className="btn-cant">+</button>
+                  </div>
+                </div>
+
+                <button className="btn-buy-ia" onClick={() => añadirCarrito(productoSeleccionado)}>
+                  <FaShoppingCart /> AÑADIR AL CARRITO
                 </button>
               </div>
+
             </div>
-          ))}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
