@@ -8,9 +8,17 @@ const Producto = () => {
   const [ventas, setVentas] = useState([]);
   const [busqueda, setBusqueda] = useState("");
 
+  // Función interna para leer el almacenamiento local
+  const cargarVentas = () => {
+    const ventasGuardadas = JSON.parse(localStorage.getItem("ventas_registradas")) || [];
+    setVentas(ventasGuardadas);
+  };
+
   useEffect(() => {
+    // Al cargar la vista de gestión, lee los productos recién pagados desde el storage
     cargarVentas();
     
+    // Escuchadores en tiempo real para mantener la tabla actualizada ante cualquier cambio
     window.addEventListener("storage", (e) => {
       if (e.key === "ventas_registradas") {
         cargarVentas();
@@ -24,11 +32,6 @@ const Producto = () => {
       window.removeEventListener("ventaRegistrada", cargarVentas);
     };
   }, []);
-
-  const cargarVentas = () => {
-    const ventasGuardadas = JSON.parse(localStorage.getItem("ventas_registradas")) || [];
-    setVentas(ventasGuardadas);
-  };
 
   const eliminarVenta = (index) => {
     const nuevaLista = [...ventas];
@@ -47,7 +50,7 @@ const Producto = () => {
       v.producto || "Sin nombre", 
       v.venta || "S/ 0.00", 
       v.metodoPago || "Yape",
-      v.estado || "VALIDADO",
+      v.estado || "PENDIENTE",
       v.fecha || ""
     ]);
 
@@ -56,7 +59,7 @@ const Producto = () => {
       body: tablaData,
       startY: 20,
       theme: 'grid',
-      headStyles: { fillColor: [39, 174, 96] }
+      headStyles: { fillColor: [45, 52, 54] }
     });
 
     doc.save("reporte-productos-dbary.pdf");
@@ -109,25 +112,33 @@ const Producto = () => {
                   <td>{i + 1}</td>
                   <td className="prod-name-bold">{v.producto}</td>
                   <td>
-                    <div className="container-img-tabla">
+                    <div className="container-img-tabla" style={{ display: "flex", justifyContent: "center" }}>
                       <img 
                         src={v.imagen} 
                         alt={v.producto} 
                         className="img-tabla-fixed" 
+                        style={{
+                          width: "90px",
+                          height: "65px",
+                          objectFit: "cover",
+                          borderRadius: "8px",
+                          border: "1px solid #ddd",
+                          boxShadow: "0 2px 5px rgba(0,0,0,0.1)"
+                        }}
                         onError={(e) => { 
-                          e.target.src = "https://via.placeholder.com/80x60?text=Error+Img"; 
+                          e.target.src = "https://via.placeholder.com/90x65?text=Mueble"; 
                         }}
                       />
                     </div>
                   </td>
-                  <td className="prod-price-green">{v.venta || v.total}</td>
-                  <td className="method-text">{v.metodoPago || "Yape"}</td>
+                  <td className="prod-price-green" style={{ color: "#2ecc71", fontWeight: "bold" }}>{v.venta}</td>
+                  <td className="method-text">{v.metodoPago}</td>
                   <td>
-                    <span className="badge-status-validated">
-                      {v.estado || "VALIDADO"}
+                    <span className="badge-status-validated" style={{ background: "#f1c40f", color: "white", padding: "5px 10px", borderRadius: "12px", fontSize: "11px", fontWeight: "bold" }}>
+                      {v.estado}
                     </span>
                   </td>
-                  <td className="date-text">{v.fecha || new Date().toLocaleDateString()}</td>
+                  <td className="date-text">{v.fecha}</td>
                   <td>
                     <button onClick={() => eliminarVenta(i)} className="btn-delete-red">
                       <FaTrash />
@@ -137,8 +148,8 @@ const Producto = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="8" className="no-data">
-                  No hay ventas del carrito. Esperando datos de http://localhost:3000/carrito
+                <td colSpan="8" className="no-data" style={{ textAlign: "center", padding: "40px", color: "#999" }}>
+                  No hay ventas del carrito. Esperando que realices un pago en el carrito.
                 </td>
               </tr>
             )}

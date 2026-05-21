@@ -4,7 +4,7 @@ import {
   FaCashRegister, FaChartLine, FaBox, FaUsers, FaChartBar, 
   FaSignOutAlt, FaMoneyCheckAlt, FaTools, FaWarehouse,
   FaChevronDown, FaChevronUp, FaThLarge, FaClipboardList,
-  FaBoxes, FaDraftingCompass, FaHammer 
+  FaBoxes, FaDraftingCompass, FaHammer, FaTruck 
 } from "react-icons/fa";
 import "../styles/Sidebar.css";
 
@@ -12,7 +12,6 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const [openCaja, setOpenCaja] = useState(false); 
   const [openProductos, setOpenProductos] = useState(false); 
-  // Nuevo estado para controlar el menú desplegable del Diseñador
   const [openDisenador, setOpenDisenador] = useState(false); 
 
   const handleLogout = () => {
@@ -65,7 +64,7 @@ const Sidebar = () => {
         
         <li className="menu-section-title">OPERACIONES</li>
         
-        {/* DISEÑADOR DESPLEGABLE (Reemplaza a Reportes) */}
+        {/* DISEÑADOR DESPLEGABLE */}
         <li className={`menu-item-desplegable ${openDisenador ? "open" : ""}`}>
           <div className="menu-link" onClick={() => setOpenDisenador(!openDisenador)} style={{ cursor: 'pointer' }}>
             <FaChartBar /> <span>Diseñador</span>
@@ -116,6 +115,12 @@ const Sidebar = () => {
         <li>
           <NavLink to="/admin/inventario" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
             <FaBoxes /> <span>Inventario</span>
+          </NavLink>
+        </li>        
+        {/* PROVEEDORES */}
+        <li>
+          <NavLink to="/admin/proveedor" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
+            <FaTruck /> <span>Proveedores</span>
           </NavLink>
         </li>        
 

@@ -1,0 +1,140 @@
+.tab-content-p {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.kpi-row-p {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+.kpi-card-p {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.kpi-value-p {
+  display: block;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+}
+.kpi-title-p {
+  display: block;
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 600;
+  margin-top: 2px;
+}
+.kpi-sub-p {
+  display: block;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+.kpi-icon-p {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+.charts-row-p {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+@media (max-width: 992px) {
+  .charts-row-p { grid-template-columns: 1fr; }
+}
+.chart-card-p {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+.chart-title-p {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 20px;
+}
+.hbar-chart-p {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.hbar-row-p {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hbar-label-p {
+  width: 200px;
+  font-size: 12px;
+  color: #475569;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hbar-track-p {
+  flex: 1;
+  height: 10px;
+  background: #f1f5f9;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.hbar-fill-p {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.4s ease;
+}
+.hbar-val-p {
+  width: 35px;
+  text-align: right;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+}
+.donut-wrap-p {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.donut-legend-p {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+.donut-legend-item-p {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  color: #475569;
+}
+.dot-p {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+.donut-legend-item-p strong {
+  margin-left: auto;
+  color: #1e293b;
+}
+.fade-in-p {
+  animation: fadeInP 0.4s ease-in-out;
+}
+@keyframes fadeInP {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}

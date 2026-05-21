@@ -22,6 +22,7 @@ import Cliente from "./pages/Cliente/Cliente";
 /* JefeAlmacen */
 import JefeAlmacen from "./pages/JefeAlmacen/JefeAlmacen"; 
 import Inventario from "./pages/JefeAlmacen/Inventario";
+import Proveedor from "./pages/JefeAlmacen/Proveedor";
 
 /* Diseñador*/
 import Arquitecto from "./pages/Diseñador/Aquirtecto.jsx"; 
@@ -37,6 +38,7 @@ import HistorialCaja from "./pages/Cajero/HistorialCaja";
 
 /* Configuración */
 import Configuración from "./pages/Configuración/Configuración";
+
 
 
 const App = () => {
@@ -75,7 +77,9 @@ const App = () => {
                   {/* JEFEALMACEN */}
                   <Route path="jefeAlmacen" element={<JefeAlmacen />} />
                   <Route path="inventario" element={<Inventario />} /> 
-
+                  <Route path="proveedor" element={<Proveedor />} />
+                  
+                  
                   {/* CONFIGURACIÓN */}
                   <Route path="configuración" element={<Configuración />} />
                   
