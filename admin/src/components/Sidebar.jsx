@@ -102,6 +102,7 @@ const Sidebar = () => {
             <ul className="submenu">
               <li><NavLink to="/admin/caja/administrar" className="submenu-link">Administrar Caja</NavLink></li>
               <li><NavLink to="/admin/caja/historial" className="submenu-link">Historial de Caja</NavLink></li>
+              <li><NavLink to="/admin/caja/movimiento" className="submenu-link">Movimiento de Caja</NavLink></li>
             </ul>
           )}
         </li>

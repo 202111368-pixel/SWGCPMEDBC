@@ -30,13 +30,18 @@ body { font-family: 'Poppins', sans-serif; background: var(--bg-right); }
   display: flex;
   background-color: var(--navy-900);
   background-size: cover;
-  background-position: center;
+  background-position: center right;
+  background-repeat: no-repeat;
+  /* Blend the image with a dark color so foreground text stays readable */
+  background-blend-mode: multiply;
+  background-color: rgba(6,13,31,0.55);
   overflow: hidden;
 }
 
 .auth-overlay {
   flex: 1;
-  background: linear-gradient(150deg, rgba(6,13,31,0.60) 0%, rgba(6,13,31,0.88) 55%, rgba(6,13,31,0.97) 100%);
+  /* slightly lighter overlay so background image is still visible */
+  background: linear-gradient(150deg, rgba(6,13,31,0.45) 0%, rgba(6,13,31,0.75) 55%, rgba(6,13,31,0.85) 100%);
   padding: 52px 64px 60px;
   display: flex;
   flex-direction: column;

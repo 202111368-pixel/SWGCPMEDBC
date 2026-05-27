@@ -34,6 +34,7 @@ const formatTotal = (total, venta) => {
 
 const HistorialCaja = () => {
   const [ventas, setVentas] = useState([]);
+  const [confirmId, setConfirmId] = useState(null);
 
   useEffect(() => {
     const cargarVentas = () => {
@@ -74,6 +75,7 @@ const HistorialCaja = () => {
               <th>Total</th>
               <th>Método</th>
               <th>Estado</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -88,6 +90,50 @@ const HistorialCaja = () => {
                     <span className={`estado-pill estado-${String(venta.estado || "").toLowerCase()}`}>
                       {ESTADO_LABELS[venta.estado] || venta.estado || "-"}
                     </span>
+                  </td>
+                  <td>
+                    {confirmId === venta.id ? (
+                      <div style={{ display: 'flex', gap: 8 }}>
+                        <button className="btn-confirm" onClick={() => {
+                          // confirmar y mover
+                          try {
+                            const ventasActuales = JSON.parse(localStorage.getItem('ventas_registradas')) || [];
+                            const nuevasVentas = ventasActuales.filter(v => v.id !== venta.id);
+                            localStorage.setItem('ventas_registradas', JSON.stringify(nuevasVentas));
+
+                            const montoNum = (typeof venta.total === 'number' && !Number.isNaN(venta.total))
+                              ? venta.total
+                              : (venta.venta ? parseFloat(String(venta.venta).replace(/[^0-9.-]+/g, '')) : 0);
+
+                            const nuevoMovimiento = {
+                              id: Date.now(),
+                              fecha: venta.fecha || new Date().toISOString().slice(0,10),
+                              descripcion: `Venta: ${venta.producto || ''}`,
+                              tipo: 'Ajuste',
+                              monto: montoNum || 0,
+                              metodo: venta.metodoPago || venta.metodo || '-',
+                              estado: 'Registrado'
+                            };
+
+                            const mov = JSON.parse(localStorage.getItem('movimientos_caja')) || [];
+                            mov.push(nuevoMovimiento);
+                            localStorage.setItem('movimientos_caja', JSON.stringify(mov));
+
+                            window.dispatchEvent(new Event('ventaRegistrada'));
+                            window.dispatchEvent(new Event('movimientoRegistrado'));
+                            setVentas([...nuevasVentas].reverse());
+                            setConfirmId(null);
+                          } catch (e) {
+                            console.error('Error moviendo venta:', e);
+                            setConfirmId(null);
+                          }
+                        }}>Eliminar</button>
+
+                        <button className="btn-cancel" onClick={() => setConfirmId(null)}>Cancelar</button>
+                      </div>
+                    ) : (
+                      <button className="btn-mover" onClick={() => setConfirmId(venta.id)}>Editar</button>
+                    )}
                   </td>
                 </tr>
               ))

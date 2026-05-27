@@ -35,6 +35,7 @@ import Login from "./pages/Login";
 import Cajero from "./pages/Cajero/Cajero";
 import AdministrarCaja from "./pages/Cajero/AdministrarCaja"; 
 import HistorialCaja from "./pages/Cajero/HistorialCaja";
+import MovimientoCaja from "./pages/Cajero/MovimientoCaja";
 
 /* Configuración */
 import Configuración from "./pages/Configuración/Configuración";
@@ -73,6 +74,7 @@ const App = () => {
                   <Route path="cajero" element={<Cajero />} />
                   <Route path="caja/administrar" element={<AdministrarCaja />} /> 
                   <Route path="caja/historial" element={<HistorialCaja />} />
+                  <Route path="caja/movimiento" element={<MovimientoCaja />} />
 
                   {/* JEFEALMACEN */}
                   <Route path="jefeAlmacen" element={<JefeAlmacen />} />
