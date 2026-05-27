@@ -31,16 +31,14 @@
 }
 
 .input-date,
-.btn-search,
-.btn-pdf {
+.btn-search {
 	border-radius: 12px;
 	border: 1px solid #d6dbe6;
 	padding: 10px 14px;
 	font-size: 14px;
 }
 
-.btn-search,
-.btn-pdf {
+.btn-search {
 	background: #ffffff;
 	color: #334155;
 	display: inline-flex;

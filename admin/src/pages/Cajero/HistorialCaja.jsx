@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { FaHistory, FaFilePdf, FaSearch } from "react-icons/fa";
+import { FaHistory, FaSearch } from "react-icons/fa";
 import "../../styles/pages/Cajero/HistorialCaja.css"; 
 
 const ESTADO_LABELS = {
@@ -58,7 +58,6 @@ const HistorialCaja = () => {
     <div className="historial-caja-container">
       <div className="header-box">
         <h2><FaHistory /> Historial de Ventas</h2>
-        <button className="btn-pdf"><FaFilePdf /> Exportar PDF</button>
       </div>
 
       <div className="search-section">
