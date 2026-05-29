@@ -21,7 +21,17 @@ const AdministrarCaja = () => {
     if (dataString) {
       try {
         const decodedData = JSON.parse(decodeURIComponent(dataString));
-        setItemAPagar(decodedData[0]);
+        const ventaPendiente = { ...decodedData[0], estado: decodedData[0]?.estado || "PENDIENTE" };
+        setItemAPagar(ventaPendiente);
+
+        const ventasRegistradas = JSON.parse(localStorage.getItem("ventas_registradas")) || [];
+        const existePendiente = ventasRegistradas.some(v => v.id === ventaPendiente.id);
+
+        if (!existePendiente) {
+          ventasRegistradas.push(ventaPendiente);
+          localStorage.setItem("ventas_registradas", JSON.stringify(ventasRegistradas));
+          window.dispatchEvent(new Event("ventaRegistrada"));
+        }
       } catch (e) {
         console.error("Error al decodificar datos", e);
       }

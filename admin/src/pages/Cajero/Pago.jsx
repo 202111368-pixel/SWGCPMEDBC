@@ -29,7 +29,7 @@ const Pago = ({ itemAPagar, totalCalculado }) => {
   const confirmarPago = () => {
     if (itemAPagar) {
       const datosVenta = {
-        id: Date.now(),
+        id: itemAPagar.id || Date.now(),
         producto: itemAPagar.producto || "Producto",
         venta: itemAPagar.venta || `S/ ${(totalCalculado || 0).toFixed(2)}`,
         cantidad: 1,
@@ -41,7 +41,14 @@ const Pago = ({ itemAPagar, totalCalculado }) => {
       };
 
       const ventasRegistradas = JSON.parse(localStorage.getItem("ventas_registradas")) || [];
-      ventasRegistradas.push(datosVenta);
+      const index = ventasRegistradas.findIndex(v => v.id === datosVenta.id);
+
+      if (index >= 0) {
+        ventasRegistradas[index] = { ...ventasRegistradas[index], ...datosVenta };
+      } else {
+        ventasRegistradas.push(datosVenta);
+      }
+
       localStorage.setItem("ventas_registradas", JSON.stringify(ventasRegistradas));
 
       window.dispatchEvent(new Event("ventaRegistrada"));
