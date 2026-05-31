@@ -44,7 +44,7 @@ const Navbar = () => {
         <Link to="/contacto">Contacto</Link>
         <Link to="/denuncia">Denuncia</Link>
         <Link to="/blog">Blog</Link>
-        <Link to="/marcas">Marcas</Link>
+        <Link to="/diseñador">Diseñador</Link>
       </nav>
 
       <div className="navbar-right">

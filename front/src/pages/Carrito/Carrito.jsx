@@ -10,31 +10,28 @@ const Carrito = () => {
     setCarrito(data);
   }, []);
 
-  const eliminarProducto = (index) => {
-    const nuevoCarrito = carrito.filter((_, i) => i !== index);
-    setCarrito(nuevoCarrito);
-    localStorage.setItem("carrito", JSON.stringify(nuevoCarrito));
-    window.dispatchEvent(new Event("carritoActualizado"));
-  };
+  const irAPagar = () => {
+    if (carrito.length === 0) return;
 
-  const finalizarCompra = () => {
-    if (carrito.length === 0) {
-      alert("El carrito está vacío");
-      return;
-    }
-
-    const datosParaAdmin = carrito.map(item => ({
-      ...item,
-      imagen: item.imagen.startsWith('http') 
-        ? item.imagen 
-        : `http://localhost:3000${item.imagen}`
+    const datosVenta = carrito.map(item => ({
+      id: Date.now() + Math.random(),
+      producto: item.nombre,
+      imagen: item.imagen, 
+      venta: `S/ ${item.precio.toFixed(2)}`,
+      estado: "PENDIENTE"
     }));
 
-    const datosCodificados = btoa(JSON.stringify(datosParaAdmin));
-
+    const datosVentaString = encodeURIComponent(JSON.stringify(datosVenta));
+    
     localStorage.removeItem("carrito");
+    window.location.href = `http://localhost:3000/admin/caja/administrar?data=${datosVentaString}`;
+  };
+
+  const eliminarProducto = (index) => {
+    const nuevo = carrito.filter((_, i) => i !== index);
+    setCarrito(nuevo);
+    localStorage.setItem("carrito", JSON.stringify(nuevo));
     window.dispatchEvent(new Event("carritoActualizado"));
-    window.location.href = `http://localhost:3001/admin/producto?data=${datosCodificados}`;
   };
 
   const total = carrito.reduce((acc, item) => acc + item.precio, 0);
@@ -43,33 +40,38 @@ const Carrito = () => {
     <>
       <Navbar />
       <div className="carrito-container">
-        <h1>🛒 Carrito de Compras</h1>
-        {carrito.length === 0 ? (
-          <p className="carrito-vacio">Tu carrito está vacío</p>
-        ) : (
-          <>
-            <div className="carrito-lista">
-              {carrito.map((item, index) => (
-                <div className="carrito-item" key={index}>
-                  <img src={item.imagen} alt={item.nombre} />
-                  <div className="carrito-info">
-                    <h4>{item.nombre}</h4>
-                    <p>S/ {item.precio.toFixed(2)}</p>
-                  </div>
-                  <button className="btn-eliminar" onClick={() => eliminarProducto(index)}>
-                    Eliminar
-                  </button>
+        <h1>Tu Carrito</h1>
+        <div className="carrito-lista">
+          {carrito.length === 0 ? (
+            <p className="carrito-vacio">El carrito está vacío</p>
+          ) : (
+            carrito.map((item, index) => (
+              <div className="carrito-item" key={index}>
+                <img src={item.imagen} alt={item.nombre} className="img-cart" />
+                <div className="carrito-info">
+                  <h4>{item.nombre}</h4>
+                  <p className="item-precio">S/ {item.precio.toFixed(2)}</p>
                 </div>
-              ))}
-            </div>
-            <div className="carrito-total">
-              <h3>Total: S/ {total.toFixed(2)}</h3>
-              <button className="btn-comprar" onClick={finalizarCompra}>
-                Finalizar Compra
-              </button>
-            </div>
-          </>
-        )}
+                <button className="btn-eliminar" onClick={() => eliminarProducto(index)}>
+                  Eliminar
+                </button>
+              </div>
+            ))
+          )}
+        </div>
+
+        <div className="carrito-footer">
+          <div className="subtotal-container">
+            <span>Subtotal</span>
+            <span className="subtotal-monto">S/. {total.toFixed(2)}</span>
+          </div>
+          
+          <div className="acciones-carrito">
+            <button className="btn-azul" onClick={irAPagar}>
+              VER DETALLE Y PAGAR
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );

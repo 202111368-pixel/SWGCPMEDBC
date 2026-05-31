@@ -9,9 +9,11 @@ import Contacto from './pages/Contacto/Contacto';
 import Denuncia from './pages/Denuncia/Denuncia';
 import Carrito from "./pages/Carrito/Carrito";
 import Blog from "./pages/Blog/Blog";
-import Marcas from "./pages/Marcas/Marcas";
+import Diseñador from "./pages/Diseñador/Diseñador";
 
-
+// NUEVAS IMPORTACIONES PARA LOS FORMULARIOS SEPARADOS
+import SolicitudNicolas from "./pages/Diseñador/SolicitudNicolas";
+import SolicitudChristian from "./pages/Diseñador/SolicitudChristian";
 
 // detalles de productos
 import CocinaDetalle from "./detallesProducto/CocinaDetalle";
@@ -32,10 +34,13 @@ function App() {
         <Route path="/contacto" element={<Contacto />} />
         <Route path="/denuncia" element={<Denuncia />} />
         <Route path="/blog" element={<Blog />} />
-        <Route path="/marcas" element={<Marcas />} />
+        <Route path="/diseñador" element={<Diseñador />} />
+        
+        {/* Nuevas sub-rutas para los diseñadores independientes */}
+        <Route path="/diseñador/nicolas" element={<SolicitudNicolas />} />
+        <Route path="/diseñador/christian" element={<SolicitudChristian />} />
 
-
-        {/*  Carrito */}
+        {/* Carrito */}
         <Route path="/carrito" element={<Carrito />} />
 
         {/* Detalles de productos */}

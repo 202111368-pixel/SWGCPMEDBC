@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
-import { FaArrowLeft, FaShoppingCart, FaClock, FaTag, FaCheckCircle, FaExclamationTriangle } from "react-icons/fa";
+import { FaArrowLeft, FaShoppingCart, FaCheckCircle, FaExclamationTriangle, FaShieldAlt, FaLock, FaTruck, FaTools, FaStar } from "react-icons/fa";
 import "./Detalles.css";
 
 import cocina1a from "../img/cocina1a.jpg";
@@ -15,16 +15,15 @@ import cocina4b from "../img/cocina4b.jpg";
 
 const CocinaDetalle = () => {
   const navigate = useNavigate();
-  const [modalImg, setModalImg] = useState(null);
-  const [timeLeft, setTimeLeft] = useState({ horas: 22, minutos: 32, segundos: 15 });
   const [itemsEnCarrito, setItemsEnCarrito] = useState([]);
   const [notificacion, setNotificacion] = useState({ visible: false, mensaje: "", tipo: "" });
+  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
 
-  const [productos, setProductos] = useState([
-    { id: 1, nombre: "UrbanBrew", precio: 1500, off: "20% OFF", imgActual: cocina1a, variantes: [cocina1a, cocina1b], colores: ["#9db8a0", "#c8c2b8"] },
-    { id: 2, nombre: "Moderna", precio: 1450, off: "10% OFF", imgActual: cocina2a, variantes: [cocina2a, cocina2b], colores: ["#d9c9b2", "#9fa1a3"] },
-    { id: 3, nombre: "Empotrada", precio: 1700, off: "15% OFF", imgActual: cocina3a, variantes: [cocina3a, cocina3b], colores: ["#caa574", "#e0c39a"] },
-    { id: 4, nombre: "Cocina en U", precio: 2000, off: "20% OFF", imgActual: cocina4a, variantes: [cocina4a, cocina4b], colores: ["#e6e6e6", "#b5b5b5"] },
+  const [productos] = useState([
+    { id: 1, nombre: "Cocina Integral UrbanBrew", precio: 1500, imgActual: cocina1a, variantes: [cocina1a, cocina1b], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
+    { id: 2, nombre: "Cocina Integral Moderna", precio: 1450, imgActual: cocina2a, variantes: [cocina2a, cocina2b], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
+    { id: 3, nombre: "Cocina Integral Empotrada", precio: 1700, imgActual: cocina3a, variantes: [cocina3a, cocina3b], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
+    { id: 4, nombre: "Cocina Integral en U", precio: 2000, imgActual: cocina4a, variantes: [cocina4a, cocina4b], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
   ]);
 
   useEffect(() => {
@@ -32,27 +31,8 @@ const CocinaDetalle = () => {
     setItemsEnCarrito(carritoActual.map(item => item.id));
   }, []);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        let { horas, minutos, segundos } = prev;
-        if (segundos > 0) segundos--;
-        else {
-          segundos = 59;
-          if (minutos > 0) minutos--;
-          else {
-            minutos = 59;
-            if (horas > 0) horas--;
-          }
-        }
-        return { horas, minutos, segundos };
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const cambiarColor = (id, nuevaImg) => {
-    setProductos(productos.map(p => p.id === id ? { ...p, imgActual: nuevaImg } : p));
+  const cambiarImagenPrincipal = (nuevaImg) => {
+    setProductoSeleccionado({ ...productoSeleccionado, imgActual: nuevaImg });
   };
 
   const lanzarNotificacion = (msj, tipo) => {
@@ -89,65 +69,130 @@ const CocinaDetalle = () => {
 
       <div className="catalogo-wrapper">
         <header className="detalle-header">
-          <button className="btn-regresar" onClick={() => navigate(-1)}>
+          <button 
+            className="btn-regresar" 
+            onClick={() => productoSeleccionado ? setProductoSeleccionado(null) : navigate(-1)}
+          >
             <FaArrowLeft /> REGRESAR
           </button> 
-          <div className="detalle-title">
-            <h1>Cocinas <span>Integrales</span></h1>
-            <p>Diseños exclusivos con acabados de alta resistencia</p>
-          </div>
+          {!productoSeleccionado && (
+            <div className="detalle-title">
+              <h1>NUESTRAS <span>COCINAS INTEGRALES</span></h1>
+            </div>
+          )}
         </header>
 
-        <div className="productos-grid-modern">
-          {productos.map((p) => {
-            const yaComprado = itemsEnCarrito.includes(p.id);
-            return (
+        {/* VISTA 1: GRILLA GENERAL DEL CATÁLOGO */}
+        {!productoSeleccionado ? (
+          <div className="productos-grid-modern">
+            {productos.map((p) => (
               <div key={p.id} className="producto-card-ia">
-                <div className="card-badge"><FaTag /> {p.off}</div>
-                <div className="img-container-ia" onClick={() => setModalImg(p.imgActual)}>
+                <div className="img-container-ia">
                   <img src={p.imgActual} alt={p.nombre} className="img-ia-main" />
-                  <div className="img-hover-overlay">Click para ampliar</div>
-                </div>
-                <div className="timer-ia-box">
-                  <div className="timer-label">La oferta termina en:</div>
-                  <div className="timer-numbers">
-                    {String(timeLeft.horas).padStart(2, '0')}h : {String(timeLeft.minutos).padStart(2, '0')}m : {String(timeLeft.segundos).padStart(2, '0')}s
-                  </div>
                 </div>
                 <div className="card-info-ia">
                   <h4>{p.nombre}</h4>
                   <p className="ia-price">S/ {p.precio}.00</p>
-                  <div className="colores-ia">
-                    {p.colores.map((color, index) => (
-                      <span 
-                        key={index} 
-                        className="color-dot" 
-                        style={{ background: color }} 
-                        onClick={() => !yaComprado && cambiarColor(p.id, p.variantes[index])}
-                      />
-                    ))}
-                  </div>
                   <button 
-                    className={`btn-ia-cart ${yaComprado ? 'btn-added' : ''}`} 
-                    onClick={() => añadirCarrito(p)}
+                    className="btn-ver-completo" 
+                    onClick={() => setProductoSeleccionado(p)}
                   >
-                    {yaComprado ? <><FaCheckCircle /> COMPRADO</> : <><FaShoppingCart /> AÑADIR AL CARRITO</>}
+                    VER COMPLETO
                   </button>
                 </div>
               </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {modalImg && (
-        <div className="modal-ia-overlay" onClick={() => setModalImg(null)}>
-          <div className="modal-ia-box">
-            <img src={modalImg} alt="Preview" />
-            <button className="modal-ia-close">×</button>
+            ))}
           </div>
-        </div>
-      )}
+        ) : (
+          /* VISTA 2: INTERFAZ DETALLADA BASADA EN EL MODELO */
+          <div className="vista-producto-modelo">
+            
+            {/* Columna Izquierda: Imagen del producto */}
+            <div className="modelo-col-izquierda">
+              <img src={productoSeleccionado.imgActual} alt={productoSeleccionado.nombre} className="modelo-img-principal" />
+            </div>
+
+            {/* Columna Central: Carrusel Vertical de Miniaturas */}
+            <div className="modelo-col-miniaturas">
+              {productoSeleccionado.variantes.map((img, index) => (
+                <div 
+                  key={index} 
+                  className={`modelo-mini-box ${productoSeleccionado.imgActual === img ? 'activa' : ''}`}
+                  onClick={() => cambiarImagenPrincipal(img)}
+                >
+                  <img src={img} alt={`Miniatura ${index}`} />
+                </div>
+              ))}
+            </div>
+
+            {/* Columna Derecha: Panel Técnico y de Compra */}
+            <div className="modelo-col-derecha">
+              <h1 className="modelo-titulo">{productoSeleccionado.nombre.toUpperCase()}</h1>
+              
+              <div className="modelo-estrellas">
+                <FaStar /><FaStar /><FaStar /><FaStar /><FaStar />
+              </div>
+
+              <div className="modelo-badges-container">
+                <span className="m-badge"><FaShieldAlt /> Garantía</span>
+                <span className="m-badge"><FaLock /> Pago Seguro</span>
+                <span className="m-badge"><FaTruck /> Transporte</span>
+                <span className="m-badge"><FaTools /> Instalación</span>
+              </div>
+
+              <div className="modelo-precio-box">
+                <span className="m-desde">Desde:</span>
+                <span className="m-precio">S/ {productoSeleccionado.precio}.00</span>
+                <span className="m-igv">Incluye IGV</span>
+              </div>
+
+              <p className="modelo-entrega">
+                <span className="icono-camion">🚚</span> Fecha de entrega a la medida: 1. junio
+              </p>
+
+              <div className="modelo-medidas-seccion">
+                <span className="m-medidas-label">MEDIDAS TABLERO</span>
+                <div className="m-medidas-opciones">
+                  {productoSeleccionado.medidas.map((medida, idx) => (
+                    <div key={idx} className="m-medida-item">
+                      Mesa: {medida} x 75 cm Alto
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="modelo-precio-box replica">
+                <span className="m-desde">Desde:</span>
+                <span className="m-precio">S/ {productoSeleccionado.precio}.00</span>
+                <span className="m-igv">Incluye IGV</span>
+              </div>
+
+              <div className="modelo-acciones">
+                <div className="m-cantidad-selector">
+                  <span className="cant-label">CANT.</span>
+                  <div className="cant-control">
+                    <button className="btn-cant">-</button>
+                    <span className="cant-num">1</span>
+                    <button className="btn-cant">+</button>
+                  </div>
+                </div>
+
+                <button 
+                  className={`btn-ia-cart ${itemsEnCarrito.includes(productoSeleccionado.id) ? 'btn-added' : ''}`} 
+                  onClick={() => añadirCarrito(productoSeleccionado)}
+                >
+                  {itemsEnCarrito.includes(productoSeleccionado.id) ? (
+                    <><FaCheckCircle /> COMPRADO</>
+                  ) : (
+                    <><FaShoppingCart /> AÑADIR AL CARRITO</>
+                  )}
+                </button>
+              </div>
+
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
