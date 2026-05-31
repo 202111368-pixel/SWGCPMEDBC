@@ -7,6 +7,7 @@ const QR_YAPE = qrYape;
 const Pago = ({ itemAPagar, totalCalculado }) => {
   const [metodoSeleccionado, setMetodoSeleccionado] = useState('tarjeta');
   const [pagoAprobado, setPagoAprobado] = useState(false);
+  const [mostrarToast, setMostrarToast] = useState(false); // 👈 nuevo
   const [tarjeta, setTarjeta] = useState({
     numero: '',
     vencimiento: '',
@@ -50,11 +51,15 @@ const Pago = ({ itemAPagar, totalCalculado }) => {
       }
 
       localStorage.setItem("ventas_registradas", JSON.stringify(ventasRegistradas));
-
       window.dispatchEvent(new Event("ventaRegistrada"));
     }
 
-    setPagoAprobado(true);
+    // 👇 Mostrar toast y luego aprobar
+    setMostrarToast(true);
+    setTimeout(() => {
+      setMostrarToast(false);
+      setPagoAprobado(true);
+    }, 2500);
   };
 
   if (pagoAprobado) {
@@ -93,6 +98,14 @@ const Pago = ({ itemAPagar, totalCalculado }) => {
 
   return (
     <div className="seccion-paso fade-in">
+
+      {/* 👇 Toast de correo */}
+      {mostrarToast && (
+        <div className="toast-correo">
+          ✉️ Se ha enviado una confirmación a tu correo electrónico.
+        </div>
+      )}
+
       <h3 className="pago-titulo">Pago con Mercado Pago</h3>
 
       <div className="pago-layout">
@@ -180,7 +193,7 @@ const Pago = ({ itemAPagar, totalCalculado }) => {
                       name="cvv"
                       value={tarjeta.cvv}
                       onChange={handleTarjeta}
-                      placeholder="S/ 0.0"
+                      placeholder="CVV"
                       className="modal-input"
                       maxLength={4}
                     />
