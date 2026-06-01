@@ -16,12 +16,12 @@ import Vestidores3b from "../img/Vestidores/Vestidores3b.jpg";
 const VestidoresDetalle = () => {
   const navigate = useNavigate();
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
-
+  const [cantidad, setCantidad] = useState(1);
   const [productos] = useState([
-    { id: 1, name: "Vestidor Modular Alpha", price: 1500, imgActual: Vestidores1, variantes: [Vestidores1, Vestidores2, Vestidores1a], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
-    { id: 2, name: "Vestidor Modular Sigma", price: 1650, imgActual: Vestidores1a, variantes: [Vestidores1a, Vestidores1b, Vestidores2b], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
-    { id: 3, name: "Vestidor Modular Delta", price: 1780, imgActual: Vestidores2a, variantes: [Vestidores2a, Vestidores2b, Vestidores3a], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
-    { id: 4, name: "Vestidor Modular Omega", price: 1900, imgActual: Vestidores3a, variantes: [Vestidores3a, Vestidores3b, Vestidores1b], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] }
+    { id: "placard-1", name: "Vestidor Modular Alpha", price: 1500, imgActual: Vestidores1, variantes: [Vestidores1, Vestidores2, Vestidores1a], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
+    { id: "placard-2", name: "Vestidor Modular Sigma", price: 1650, imgActual: Vestidores1a, variantes: [Vestidores1a, Vestidores1b, Vestidores2b], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
+    { id: "placard-3", name: "Vestidor Modular Delta", price: 1780, imgActual: Vestidores2a, variantes: [Vestidores2a, Vestidores2b, Vestidores3a], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
+    { id: "placard-4", name: "Vestidor Modular Omega", price: 1900, imgActual: Vestidores3a, variantes: [Vestidores3a, Vestidores3b, Vestidores1b], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] }
   ]);
 
   const cambiarImagenPrincipal = (nuevaImg) => {
@@ -30,10 +30,23 @@ const VestidoresDetalle = () => {
 
   const añadirCarrito = (p) => {
     const carritoActual = JSON.parse(localStorage.getItem("carrito")) || [];
-    const nuevoProducto = { id: p.id, nombre: p.name, precio: p.price, imagen: p.imgActual };
+    if (carritoActual.find(item => item.id === p.id)) {
+      alert("Este vestidor ya está en el carrito, no puedes añadirlo de nuevo.");
+      return;
+    }
+
+    const nuevoProducto = { 
+      id: p.id, 
+      nombre: p.name, 
+      precio: p.price, 
+      imagen: p.imgActual,
+      cantidad: cantidad 
+    };
+    
     carritoActual.push(nuevoProducto);
     localStorage.setItem("carrito", JSON.stringify(carritoActual));
     window.dispatchEvent(new Event("carritoActualizado"));
+    alert("Vestidor añadido con éxito");
   };
 
   return (
@@ -128,9 +141,9 @@ const VestidoresDetalle = () => {
                 <div className="m-cantidad-selector">
                   <span className="cant-label">CANT.</span>
                   <div className="cant-control">
-                    <button className="btn-cant">-</button>
-                    <span className="cant-num">1</span>
-                    <button className="btn-cant">+</button>
+                    <button className="btn-cant" onClick={() => setCantidad(prev => prev > 1 ? prev - 1 : 1)}>-</button>
+                    <span className="cant-num">{cantidad}</span>
+                    <button className="btn-cant" onClick={() => setCantidad(prev => prev + 1)}>+</button>
                   </div>
                 </div>
 

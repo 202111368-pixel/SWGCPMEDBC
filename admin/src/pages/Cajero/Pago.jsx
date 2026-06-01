@@ -4,7 +4,7 @@ import qrYape from '../../assets/yape.png';
 
 const QR_YAPE = qrYape; 
 
-const Pago = ({ itemAPagar, totalCalculado }) => {
+const Pago = ({ itemAPagar, totalCalculado, productsList }) => {
   const [metodoSeleccionado, setMetodoSeleccionado] = useState('tarjeta');
   const [pagoAprobado, setPagoAprobado] = useState(false);
   const [tarjeta, setTarjeta] = useState({
@@ -27,31 +27,40 @@ const Pago = ({ itemAPagar, totalCalculado }) => {
   };
 
   const confirmarPago = () => {
-    if (itemAPagar) {
+    // Jalamos la lista desglosada de productos; si no existiera, creamos un respaldo con el item individual
+    const listaAProcesar = productsList && productsList.length > 0 
+      ? productsList 
+      : (itemAPagar ? [itemAPagar] : []);
+
+    const ventasRegistradas = JSON.parse(localStorage.getItem("ventas_registradas")) || [];
+
+    // Recorremos el carrito para guardar cada producto con su cantidad verídica
+    listaAProcesar.forEach((item, index) => {
+      const cantidadUnidades = item.cantidad || 1;
+      const precioTotalItem = item.precio ? (item.precio * cantidadUnidades) : (totalCalculado || 0);
+
       const datosVenta = {
-        id: Date.now(),
-        producto: itemAPagar.producto || "Producto",
-        venta: itemAPagar.venta || `S/ ${(totalCalculado || 0).toFixed(2)}`,
-        cantidad: 1,
-        total: totalCalculado || 0,
+        id: Date.now() + index, // Evitamos colisión de IDs en el mapeo de React
+        producto: item.nombre || item.producto || "Producto",
+        venta: `S/ ${precioTotalItem.toFixed(2)}`,
+        cantidad: cantidadUnidades, 
+        total: precioTotalItem,
         metodoPago: metodoSeleccionado.charAt(0).toUpperCase() + metodoSeleccionado.slice(1),
         estado: "VALIDADO",
-        fecha: new Date().toLocaleDateString(),
-        imagen: itemAPagar.imagen || "https://via.placeholder.com/80x60?text=Producto"
+        fecha: new Date().toLocaleDateString("es-PE"),
+        imagen: item.imagen || item.imagenUrl || "https://via.placeholder.com/80x60?text=Producto"
       };
 
-      const ventasRegistradas = JSON.parse(localStorage.getItem("ventas_registradas")) || [];
       ventasRegistradas.push(datosVenta);
-      localStorage.setItem("ventas_registradas", JSON.stringify(ventasRegistradas));
+    });
 
-      window.dispatchEvent(new Event("ventaRegistrada"));
-    }
-
+    localStorage.setItem("ventas_registradas", JSON.stringify(ventasRegistradas));
+    window.dispatchEvent(new Event("ventaRegistrada"));
     setPagoAprobado(true);
   };
 
   if (pagoAprobado) {
-    const fechaVenta = new Date().toLocaleString();
+    const fechaVenta = new Date().toLocaleString("es-PE");
     return (
       <div className="seccion-paso fade-in">
         <div className="pago-aprobado-card">

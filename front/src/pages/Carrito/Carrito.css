@@ -97,3 +97,24 @@
   background-color: #002244;
 }
 
+.item-multiplicador {
+  color: #777;
+  font-weight: normal;
+  font-size: 0.85rem;
+  margin-left: 5px;
+}
+
+.item-subtotal-parcial {
+  display: block;
+  font-size: 0.8rem;
+  color: #003366;
+  margin-top: 3px;
+  font-weight: 500;
+}
+
+.carrito-vacio {
+  text-align: center;
+  color: #666;
+  margin: 40px 0;
+}
+

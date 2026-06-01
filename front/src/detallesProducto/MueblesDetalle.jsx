@@ -13,11 +13,11 @@ import muebles2a from "../img/Muebles/muebles2a.jpg";
 const MueblesDetalle = () => {
   const navigate = useNavigate();
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
-
+  const [cantidad, setCantidad] = useState(1);
   const [productos] = useState([
-    { id: 1, name: "Escritorio Gerencial Alpha", price: 850, imgActual: muebles1, variantes: [muebles1, muebles2, muebles1a], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
-    { id: 2, name: "Escritorio Gerencial Sigma", price: 920, imgActual: muebles1a, variantes: [muebles1a, muebles2b, muebles2], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
-    { id: 3, name: "Escritorio Gerencial Delta", price: 780, imgActual: muebles2a, variantes: [muebles2a, muebles2b, muebles1], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] }
+    { id: "mueble-1", name: "Escritorio Gerencial Alpha", price: 850, imgActual: muebles1, variantes: [muebles1, muebles2, muebles1a], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
+    { id: "mueble-2", name: "Escritorio Gerencial Sigma", price: 920, imgActual: muebles1a, variantes: [muebles1a, muebles2b, muebles2], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
+    { id: "mueble-3", name: "Escritorio Gerencial Delta", price: 780, imgActual: muebles2a, variantes: [muebles2a, muebles2b, muebles1], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] }
   ]);
 
   const cambiarImagenPrincipal = (nuevaImg) => {
@@ -26,10 +26,23 @@ const MueblesDetalle = () => {
 
   const añadirCarrito = (p) => {
     const carritoActual = JSON.parse(localStorage.getItem("carrito")) || [];
-    const nuevoProducto = { id: p.id, nombre: p.name, precio: p.price, imagen: p.imgActual };
+    if (carritoActual.find(item => item.id === p.id)) {
+      alert("Este mueble ya está en el carrito, no puedes añadirlo de nuevo.");
+      return;
+    }
+
+    const nuevoProducto = { 
+      id: p.id, 
+      nombre: p.name, 
+      precio: p.price, 
+      imagen: p.imgActual,
+      cantidad: cantidad 
+    };
+    
     carritoActual.push(nuevoProducto);
     localStorage.setItem("carrito", JSON.stringify(carritoActual));
     window.dispatchEvent(new Event("carritoActualizado"));
+    alert("Mueble añadido con éxito");
   };
 
   return (
@@ -124,9 +137,9 @@ const MueblesDetalle = () => {
                 <div className="m-cantidad-selector">
                   <span className="cant-label">CANT.</span>
                   <div className="cant-control">
-                    <button className="btn-cant">-</button>
-                    <span className="cant-num">1</span>
-                    <button className="btn-cant">+</button>
+                    <button className="btn-cant" onClick={() => setCantidad(prev => prev > 1 ? prev - 1 : 1)}>-</button>
+                    <span className="cant-num">{cantidad}</span>
+                    <button className="btn-cant" onClick={() => setCantidad(prev => prev + 1)}>+</button>
                   </div>
                 </div>
 
