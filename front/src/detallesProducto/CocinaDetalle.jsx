@@ -18,12 +18,12 @@ const CocinaDetalle = () => {
   const [itemsEnCarrito, setItemsEnCarrito] = useState([]);
   const [notificacion, setNotificacion] = useState({ visible: false, mensaje: "", tipo: "" });
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
-
+  const [cantidad, setCantidad] = useState(1);
   const [productos] = useState([
-    { id: 1, nombre: "Cocina Integral UrbanBrew", precio: 1500, imgActual: cocina1a, variantes: [cocina1a, cocina1b], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
-    { id: 2, nombre: "Cocina Integral Moderna", precio: 1450, imgActual: cocina2a, variantes: [cocina2a, cocina2b], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
-    { id: 3, nombre: "Cocina Integral Empotrada", precio: 1700, imgActual: cocina3a, variantes: [cocina3a, cocina3b], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
-    { id: 4, nombre: "Cocina Integral en U", precio: 2000, imgActual: cocina4a, variantes: [cocina4a, cocina4b], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
+    { id: "cocina-1", nombre: "Cocina Integral UrbanBrew", precio: 1500, imgActual: cocina1a, variantes: [cocina1a, cocina1b], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
+    { id: "cocina-2", nombre: "Cocina Integral Moderna", precio: 1450, imgActual: cocina2a, variantes: [cocina2a, cocina2b], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
+    { id: "cocina-3", nombre: "Cocina Integral Empotrada", precio: 1700, imgActual: cocina3a, variantes: [cocina3a, cocina3b], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
+    { id: "cocina-4", nombre: "Cocina Integral en U", precio: 2000, imgActual: cocina4a, variantes: [cocina4a, cocina4b], medidas: ["180 cm Largo x 80 cm Ancho", "200 cm Largo x 80 cm Ancho"] },
   ]);
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const CocinaDetalle = () => {
       return;
     }
 
-    const nuevoProducto = { id: p.id, nombre: p.nombre, precio: p.precio, imagen: p.imgActual };
+    const nuevoProducto = { id: p.id, nombre: p.nombre, precio: p.precio, imagen: p.imgActual, cantidad: cantidad };
     carritoActual.push(nuevoProducto);
     localStorage.setItem("carrito", JSON.stringify(carritoActual));
     setItemsEnCarrito([...itemsEnCarrito, p.id]);
@@ -82,7 +82,7 @@ const CocinaDetalle = () => {
           )}
         </header>
 
-        {/* VISTA 1: GRILLA GENERAL DEL CATÁLOGO */}
+        
         {!productoSeleccionado ? (
           <div className="productos-grid-modern">
             {productos.map((p) => (
@@ -104,15 +104,15 @@ const CocinaDetalle = () => {
             ))}
           </div>
         ) : (
-          /* VISTA 2: INTERFAZ DETALLADA BASADA EN EL MODELO */
+         
           <div className="vista-producto-modelo">
             
-            {/* Columna Izquierda: Imagen del producto */}
+            
             <div className="modelo-col-izquierda">
               <img src={productoSeleccionado.imgActual} alt={productoSeleccionado.nombre} className="modelo-img-principal" />
             </div>
 
-            {/* Columna Central: Carrusel Vertical de Miniaturas */}
+            
             <div className="modelo-col-miniaturas">
               {productoSeleccionado.variantes.map((img, index) => (
                 <div 
@@ -125,7 +125,7 @@ const CocinaDetalle = () => {
               ))}
             </div>
 
-            {/* Columna Derecha: Panel Técnico y de Compra */}
+            
             <div className="modelo-col-derecha">
               <h1 className="modelo-titulo">{productoSeleccionado.nombre.toUpperCase()}</h1>
               
@@ -171,9 +171,9 @@ const CocinaDetalle = () => {
                 <div className="m-cantidad-selector">
                   <span className="cant-label">CANT.</span>
                   <div className="cant-control">
-                    <button className="btn-cant">-</button>
-                    <span className="cant-num">1</span>
-                    <button className="btn-cant">+</button>
+                    <button className="btn-cant" onClick={() => setCantidad(prev => prev > 1 ? prev - 1 : 1)}>-</button>
+                    <span className="cant-num">{cantidad}</span>
+                    <button className="btn-cant" onClick={() => setCantidad(prev => prev + 1)}>+</button>
                   </div>
                 </div>
 

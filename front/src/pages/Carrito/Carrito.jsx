@@ -1,79 +1,99 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import "./Carrito.css";
 
 const Carrito = () => {
-  const [carrito, setCarrito] = useState([]);
+  const [productosEnCarrito, setProductosEnCarrito] = useState([]);
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("carrito")) || [];
-    setCarrito(data);
+    const carritoGuardado = JSON.parse(localStorage.getItem("carrito")) || [];
+    setProductosEnCarrito(carritoGuardado);
   }, []);
 
-  const irAPagar = () => {
-    if (carrito.length === 0) return;
-
-    const datosVenta = carrito.map(item => ({
-      id: Date.now() + Math.random(),
-      producto: item.nombre,
-      imagen: item.imagen, 
-      venta: `S/ ${item.precio.toFixed(2)}`,
-      estado: "PENDIENTE"
-    }));
-
-    const datosVentaString = encodeURIComponent(JSON.stringify(datosVenta));
-    
-    localStorage.removeItem("carrito");
-    window.location.href = `http://localhost:3000/admin/caja/administrar?data=${datosVentaString}`;
-  };
-
-  const eliminarProducto = (index) => {
-    const nuevo = carrito.filter((_, i) => i !== index);
-    setCarrito(nuevo);
-    localStorage.setItem("carrito", JSON.stringify(nuevo));
+  const eliminarProducto = (indexAEliminar) => {
+    const carritoFiltrado = productosEnCarrito.filter((_, index) => index !== indexAEliminar);
+    setProductosEnCarrito(carritoFiltrado);
+    localStorage.setItem("carrito", JSON.stringify(carritoFiltrado));
     window.dispatchEvent(new Event("carritoActualizado"));
   };
 
-  const total = carrito.reduce((acc, item) => acc + item.precio, 0);
+  const calcularSubtotal = () => {
+    return productosEnCarrito.reduce((acumulador, item) => {
+      const cant = item.cantidad || 1;
+      return acumulador + (item.precio * cant);
+    }, 0);
+  };
+
+  const calcularCantidadTotal = () => {
+    return productosEnCarrito.reduce((acumulador, item) => acumulador + (item.cantidad || 1), 0);
+  };
+
+  const irAPagar = () => {
+    if (productosEnCarrito.length === 0) {
+      alert("Tu carrito está vacío.");
+      return;
+    }
+
+    const datosCaja = {
+      items: productosEnCarrito,
+      subtotal: calcularSubtotal(),
+      cantidadTotal: calcularCantidadTotal()
+    };
+
+    const dataString = encodeURIComponent(JSON.stringify(datosCaja));
+    window.location.href = `http://localhost:3001/admin/caja/administrar?data=${dataString}`;
+  };
 
   return (
-    <>
+    <div className="carrito-page-wrapper">
       <Navbar />
+      
       <div className="carrito-container">
-        <h1>Tu Carrito</h1>
-        <div className="carrito-lista">
-          {carrito.length === 0 ? (
-            <p className="carrito-vacio">El carrito está vacío</p>
-          ) : (
-            carrito.map((item, index) => (
-              <div className="carrito-item" key={index}>
-                <img src={item.imagen} alt={item.nombre} className="img-cart" />
-                <div className="carrito-info">
-                  <h4>{item.nombre}</h4>
-                  <p className="item-precio">S/ {item.precio.toFixed(2)}</p>
+        <h1>Tu Carrito ({calcularCantidadTotal()} productos)</h1>
+
+        {productosEnCarrito.length === 0 ? (
+          <p className="carrito-vacio">No hay productos en el carrito actualmente.</p>
+        ) : (
+          <div className="carrito-lista">
+            {productosEnCarrito.map((item, index) => {
+              const cantidadItem = item.cantidad || 1;
+              return (
+                <div className="carrito-item" key={index}>
+                  <img src={item.imagen} alt={item.nombre} className="img-cart" />
+                  
+                  <div className="carrito-info">
+                    <h4>{item.nombre}</h4>
+                    <p className="item-precio">
+                      S/ {item.precio.toFixed(2)} <span className="item-multiplicador">x {cantidadItem}</span>
+                    </p>
+                    <span className="item-subtotal-parcial">
+                      Total: S/ {(item.precio * cantidadItem).toFixed(2)}
+                    </span>
+                  </div>
+
+                  <button className="btn-eliminar" onClick={() => eliminarProducto(index)}>
+                    Eliminar
+                  </button>
                 </div>
-                <button className="btn-eliminar" onClick={() => eliminarProducto(index)}>
-                  Eliminar
-                </button>
-              </div>
-            ))
-          )}
-        </div>
+              );
+            })}
+          </div>
+        )}
 
         <div className="carrito-footer">
           <div className="subtotal-container">
-            <span>Subtotal</span>
-            <span className="subtotal-monto">S/. {total.toFixed(2)}</span>
+            <span>Subtotal:</span>
+            <span>S/. {calcularSubtotal().toFixed(2)}</span>
           </div>
-          
+
           <div className="acciones-carrito">
             <button className="btn-azul" onClick={irAPagar}>
-              VER DETALLE Y PAGAR
+              Ver Detalle y Pagar
             </button>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

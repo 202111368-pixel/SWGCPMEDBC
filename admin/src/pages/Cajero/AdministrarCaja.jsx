@@ -11,7 +11,9 @@ const AdministrarCaja = () => {
   const [status, setStatus] = useState('CERRADA'); 
   const [showModalDir, setShowModalDir] = useState(false);
   const [notificacion, setNotificacion] = useState("");
-  const [itemAPagar, setItemAPagar] = useState(null);
+  const [itemsEnOrden, setItemsEnOrden] = useState([]);
+  const [totalOrden, setTotalOrden] = useState(0);
+  const [cantidadTotalProductos, setCantidadTotalProductos] = useState(0);
   const [pasoActual, setPasoActual] = useState(2); 
   const distritosPeru = ["Lima", "Miraflores", "San Isidro", "Comas", "Los Olivos", "Surco", "Ate", "Callao", "La Molina", "San Miguel"];
 
@@ -21,7 +23,9 @@ const AdministrarCaja = () => {
     if (dataString) {
       try {
         const decodedData = JSON.parse(decodeURIComponent(dataString));
-        setItemAPagar(decodedData[0]);
+        setItemsEnOrden(decodedData.items || []);
+        setTotalOrden(decodedData.subtotal || 0);
+        setCantidadTotalProductos(decodedData.cantidadTotal || 0);
       } catch (e) {
         console.error("Error al decodificar datos", e);
       }
@@ -41,7 +45,7 @@ const AdministrarCaja = () => {
     }, 2000);
   };
 
-  const totalCalculado = itemAPagar ? parseFloat(itemAPagar.venta.replace(/[^\d.-]/g, '')) : 0;
+  const totalCalculado = totalOrden;
   const subtotal = totalCalculado / 1.18;
   const igv = totalCalculado - subtotal;
   const estaCerrada = status === 'CERRADA';
@@ -49,15 +53,17 @@ const AdministrarCaja = () => {
   const irSiguiente = () => { if (pasoActual < 5) setPasoActual(pasoActual + 1); };
   const irAtras = () => { if (pasoActual > 2) setPasoActual(pasoActual - 1); };
 
-  // Mostrar el botón en el paso 1 y 2
-const esPasoCarrito = pasoActual === 1 || pasoActual === 2;
+  const esPasoCarrito = pasoActual === 1 || pasoActual === 2;
+
+  // Extraemos de forma segura el primer elemento o un objeto vacío si no hay datos
+  const primerItemSeguro = itemsEnOrden.length > 0 ? itemsEnOrden[0] : null;
 
   return (
     <div className="admin-caja-wrapper">
       {notificacion && <div className="notificacion-exito">{notificacion}</div>}
 
       <div className="checkout-stepper">
-        <div className={`step ${pasoActual > 1 ? 'completed' : ''}`}><FaShoppingCart /><span>Carrito</span></div>
+        <div className={`step ${pasoActual > 1 ? 'completed' : ''}`}><FaShoppingCart /><span>Carrito ({cantidadTotalProductos})</span></div>
         <div className={`step ${pasoActual === 2 ? 'active' : pasoActual > 2 ? 'completed' : ''}`}><FaTruck /><span>Envío</span></div>
         <div className={`step ${pasoActual === 3 ? 'active' : pasoActual > 3 ? 'completed' : ''}`}><FaFileAlt /><span>Facturación</span></div>
         <div className={`step ${pasoActual === 4 ? 'active' : pasoActual > 4 ? 'completed' : ''}`}><FaTag /><span>Cupón</span></div>
@@ -67,7 +73,6 @@ const esPasoCarrito = pasoActual === 1 || pasoActual === 2;
       <div className="caja-main-layout">
         <div className="caja-left-panel">
 
-          {/* ✅ Header: badge siempre visible, botón solo en paso Carrito */}
           <div className="caja-top-nav">
             <div className="caja-title-section">
               <h2>Administrar Caja</h2>
@@ -108,7 +113,7 @@ const esPasoCarrito = pasoActual === 1 || pasoActual === 2;
 
             {pasoActual === 3 && <Facturacion />}
             {pasoActual === 4 && <Cupon />}
-            {pasoActual === 5 && <Pago itemAPagar={itemAPagar} totalCalculado={totalCalculado} />}
+            {pasoActual === 5 && <Pago itemAPagar={primerItemSeguro} totalCalculado={totalCalculado} productsList={itemsEnOrden} />}
 
           </div>
         </div>
@@ -153,4 +158,3 @@ const esPasoCarrito = pasoActual === 1 || pasoActual === 2;
 };
 
 export default AdministrarCaja;
-
