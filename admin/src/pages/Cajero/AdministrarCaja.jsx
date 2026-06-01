@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  FaUnlock, FaLock, FaShoppingCart, FaTruck, FaFileAlt, FaTag, FaCreditCard 
-} from "react-icons/fa";
+import { FaUnlock, FaLock, FaShoppingCart, FaTruck, FaFileAlt, FaTag, FaCreditCard } from "react-icons/fa";
 import "../../styles/pages/Cajero/AdmintrarCaja.css";
 import Facturacion from './Facturacion';
 import Cupon from './Cupon';
@@ -25,9 +23,9 @@ const AdministrarCaja = () => {
         const decodedData = JSON.parse(decodeURIComponent(dataString));
         setItemsEnOrden(decodedData.items || []);
         setTotalOrden(decodedData.subtotal || 0);
-        setCantidadTotalProductos(decodedData.cantidadTotal || 0);
+        setCantidadTotalProductos(decodedData.cantidadTotal || decodedData.amountTotal || 0);
       } catch (e) {
-        console.error("Error al decodificar datos", e);
+        console.error(e);
       }
     }
   }, []);
@@ -50,18 +48,36 @@ const AdministrarCaja = () => {
   const igv = totalCalculado - subtotal;
   const estaCerrada = status === 'CERRADA';
 
-  const irSiguiente = () => { if (pasoActual < 5) setPasoActual(pasoActual + 1); };
+  const irSiguiente = () => { 
+    if (pasoActual < 5) {
+      setPasoActual(pasoActual + 1); 
+    } else if (pasoActual === 5) {
+      // ENVIAR SIN ALTERAR NADA HACIA LA GESTIÓN DE PRODUCTOS
+      const datosFinales = {
+        items: itemsEnOrden.map((item, idx) => ({
+          id: item.id || Date.now() + idx,
+          producto: item.producto || item.nombre,
+          cantidad: item.cantidad || 1,
+          precio: item.precio,
+          imagen: item.imagen // Mantenemos viva la cadena/URL original de la imagen
+        })),
+        subtotal: totalCalculado,
+        cantidadTotal: cantidadTotalProductos
+      };
+
+      const dataString = encodeURIComponent(JSON.stringify(datosFinales));
+      window.location.href = `http://localhost:3000/admin/producto/gestionar?data=${dataString}`;
+    }
+  };
+  
   const irAtras = () => { if (pasoActual > 2) setPasoActual(pasoActual - 1); };
 
   const esPasoCarrito = pasoActual === 1 || pasoActual === 2;
-
-  // Extraemos de forma segura el primer elemento o un objeto vacío si no hay datos
   const primerItemSeguro = itemsEnOrden.length > 0 ? itemsEnOrden[0] : null;
 
   return (
     <div className="admin-caja-wrapper">
       {notificacion && <div className="notificacion-exito">{notificacion}</div>}
-
       <div className="checkout-stepper">
         <div className={`step ${pasoActual > 1 ? 'completed' : ''}`}><FaShoppingCart /><span>Carrito ({cantidadTotalProductos})</span></div>
         <div className={`step ${pasoActual === 2 ? 'active' : pasoActual > 2 ? 'completed' : ''}`}><FaTruck /><span>Envío</span></div>
@@ -72,7 +88,6 @@ const AdministrarCaja = () => {
 
       <div className="caja-main-layout">
         <div className="caja-left-panel">
-
           <div className="caja-top-nav">
             <div className="caja-title-section">
               <h2>Administrar Caja</h2>
@@ -80,19 +95,14 @@ const AdministrarCaja = () => {
                 {status === 'ABIERTA' ? '● ABIERTA' : '● CERRADA'}
               </span>
             </div>
-
             {esPasoCarrito && (
-              <button
-                className={`caja-btn-toggle ${status === 'ABIERTA' ? 'btn-cerrar' : 'btn-abrir'}`}
-                onClick={toggleCaja}
-              >
+              <button className={`caja-btn-toggle ${status === 'ABIERTA' ? 'btn-cerrar' : 'btn-abrir'}`} onClick={toggleCaja}>
                 {estaCerrada ? <><FaUnlock /> ABRIR CAJA</> : <><FaLock /> CERRAR CAJA</>}
               </button>
             )}
           </div>
 
           <div className={`envio-section-box ${estaCerrada ? 'disabled-section' : ''}`}>
-            
             {pasoActual === 2 && (
               <div className="fade-in">
                 <h3>Detalles de Envío</h3>
@@ -110,11 +120,15 @@ const AdministrarCaja = () => {
                 </div>
               </div>
             )}
-
             {pasoActual === 3 && <Facturacion />}
             {pasoActual === 4 && <Cupon />}
-            {pasoActual === 5 && <Pago itemAPagar={primerItemSeguro} totalCalculado={totalCalculado} productsList={itemsEnOrden} />}
-
+            {pasoActual === 5 && (
+              <Pago 
+                itemAPagar={primerItemSeguro} 
+                totalCalculado={totalCalculado} 
+                productsList={itemsEnOrden}
+              />
+            )}
           </div>
         </div>
 
@@ -124,7 +138,6 @@ const AdministrarCaja = () => {
             <div className="resumen-line"><span>Subtotal</span><span>S/ {subtotal.toFixed(2)}</span></div>
             <div className="resumen-line"><span>IGV 18%</span><span>S/ {igv.toFixed(2)}</span></div>
             <div className="resumen-line total"><span>Total</span><span>S/ {totalCalculado.toFixed(2)}</span></div>
-            
             <div className="resumen-actions">
               <button className="btn-atras" onClick={irAtras} disabled={pasoActual === 2}>ATRÁS</button>
               <button className="btn-siguiente" onClick={irSiguiente} disabled={estaCerrada}>

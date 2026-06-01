@@ -1,0 +1,82 @@
+@keyframes carpinteroFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Contenedor del módulo */
+.carpintero-container {
+  animation: carpinteroFadeIn 0.4s ease-out forwards;
+}
+
+.resultado-despiece-container {
+  background: #ffffff;
+  border-radius: 8px;
+}
+
+.tabla-responsiva {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  background-color: #ffffff;
+}
+
+.tabla-responsiva table th {
+  color: #4a3f35;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.tabla-responsiva table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.tabla-responsiva table tbody tr:hover {
+  background-color: #fdfbf9;
+}
+
+.btn-ver-coohom, .btn-ver-imagenes {
+  transition: transform 0.2s ease, filter 0.2s ease !important;
+}
+
+.btn-ver-coohom:hover {
+  filter: brightness(0.9);
+  transform: translateY(-1px);
+}
+
+.btn-ver-imagenes:hover {
+  filter: brightness(0.9);
+  transform: translateY(-1px);
+}
+
+.galeria-planos-derecha {
+  animation: carpinteroFadeIn 0.3s ease-in-out forwards;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+}
+
+.galeria-planos-derecha img {
+  transition: transform 0.3s ease;
+  cursor: zoom-in;
+}
+
+.galeria-planos-derecha img:hover {
+  transform: scale(1.02);
+}
+
+@media (max-width: 992px) {
+  .layout-tecnico-split {
+    flex-direction: column;
+  }
+  
+  .tabla-responsiva, .galeria-planos-derecha {
+    width: 100%;
+    flex: none !important;
+  }
+}
