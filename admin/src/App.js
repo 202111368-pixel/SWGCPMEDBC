@@ -74,6 +74,7 @@ const App = () => {
                   <Route path="caja/administrar" element={<AdministrarCaja />} /> 
                   <Route path="caja/historial" element={<HistorialCaja />} />
 
+
                   {/* JEFEALMACEN */}
                   <Route path="jefeAlmacen" element={<JefeAlmacen />} />
                   <Route path="inventario" element={<Inventario />} /> 
