@@ -14,7 +14,7 @@ import Administrador from "./pages/Administrador/Administrador";
 
 /* Producto */ 
 import Producto from "./pages/Producto/Producto";
-import Catalogo from "./pages/Producto/Catalogo"; 
+import ProveedorProducto from "./pages/Producto/Proveedor"; 
 
 /* Clientes */
 import Cliente from "./pages/Cliente/Cliente"; 
@@ -22,11 +22,10 @@ import Cliente from "./pages/Cliente/Cliente";
 /* JefeAlmacen */
 import JefeAlmacen from "./pages/JefeAlmacen/JefeAlmacen"; 
 import Inventario from "./pages/JefeAlmacen/Inventario";
-import Proveedor from "./pages/JefeAlmacen/Proveedor";
 
-/* Diseñador*/
-import Arquitecto from "./pages/Diseñador/Aquirtecto.jsx"; 
-import Carpintero from "./pages/Diseñador/Carpintero.jsx";
+/* Diseñador (CORREGIDO según tus imágenes reales) */
+import Arquitecto from "./pages/Diseñador/Aquirtecto.jsx"; // <- Con 'ñ' en la carpeta y 'r' antes de la 'q'
+import Carpintero from "./pages/Diseñador/Carpintero.jsx";  // <- Con 'ñ' en la carpeta
 
 /* Login */
 import Login from "./pages/Login";
@@ -35,11 +34,10 @@ import Login from "./pages/Login";
 import Cajero from "./pages/Cajero/Cajero";
 import AdministrarCaja from "./pages/Cajero/AdministrarCaja"; 
 import HistorialCaja from "./pages/Cajero/HistorialCaja";
+import MovimientoCaja from "./pages/Cajero/MovimientoCaja";
 
 /* Configuración */
 import Configuración from "./pages/Configuración/Configuración";
-
-
 
 const App = () => {
   return (
@@ -57,13 +55,16 @@ const App = () => {
                 <Routes>
                   {/* INICIO */}
                   <Route path="inicio" element={<Inicio />} />
+                  
                   {/* CLIENTES */}
                   <Route path="clientes" element={<Cliente />} />
-                  {/*ADMINISTRADOR */}
+                  
+                  {/* ADMINISTRADOR */}
                   <Route path="administrador" element={<Administrador />} />
+                  
                   {/* PRODUCTO */}
                   <Route path="producto/gestionar" element={<Producto />} />
-                  <Route path="producto/catalogo" element={<Catalogo />} />
+                  <Route path="producto/proveedor" element={<ProveedorProducto />} /> 
                 
                   {/* DISEÑADOR */}
                   <Route path="disenador/arquitecto" element={<Arquitecto />} /> 
@@ -73,13 +74,11 @@ const App = () => {
                   <Route path="cajero" element={<Cajero />} />
                   <Route path="caja/administrar" element={<AdministrarCaja />} /> 
                   <Route path="caja/historial" element={<HistorialCaja />} />
+                  <Route path="caja/movimiento" element={<MovimientoCaja />} />
 
-
-                  {/* JEFEALMACEN */}
+                  {/* JEFE ALMACEN & INVENTARIO */}
                   <Route path="jefeAlmacen" element={<JefeAlmacen />} />
                   <Route path="inventario" element={<Inventario />} /> 
-                  <Route path="proveedor" element={<Proveedor />} />
-                  
                   
                   {/* CONFIGURACIÓN */}
                   <Route path="configuración" element={<Configuración />} />

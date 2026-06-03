@@ -4,8 +4,8 @@ import {
   FaCashRegister, FaChartLine, FaBox, FaUsers, FaChartBar, 
   FaSignOutAlt, FaMoneyCheckAlt, FaTools, FaWarehouse,
   FaChevronDown, FaChevronUp, FaThLarge, FaClipboardList,
-  FaBoxes, FaDraftingCompass, FaHammer, FaTruck 
-} from "react-icons/fa";
+  FaBoxes, FaDraftingCompass, FaHammer 
+} from "react-icons/fa"; 
 import "../styles/Sidebar.css";
 
 const Sidebar = () => {
@@ -56,8 +56,16 @@ const Sidebar = () => {
           
           {openProductos && (
             <ul className="submenu">
-              <li><NavLink to="/admin/producto/gestionar" className="submenu-link"><FaThLarge size={14}/> Gestionar Productos</NavLink></li>
-              <li><NavLink to="/admin/producto/catalogo" className="submenu-link"><FaClipboardList size={14}/> Gestionar Catálogo</NavLink></li>
+              <li>
+                <NavLink to="/admin/producto/gestionar" className={({isActive}) => isActive ? "submenu-link active" : "submenu-link"}>
+                  <FaThLarge size={14}/> Gestión Productos
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/admin/producto/proveedor" className={({isActive}) => isActive ? "submenu-link active" : "submenu-link"}>
+                  <FaClipboardList size={14}/> Gestión Proveedor
+                </NavLink>
+              </li>
             </ul>
           )}
         </li>
@@ -102,6 +110,7 @@ const Sidebar = () => {
             <ul className="submenu">
               <li><NavLink to="/admin/caja/administrar" className="submenu-link">Administrar Caja</NavLink></li>
               <li><NavLink to="/admin/caja/historial" className="submenu-link">Historial de Caja</NavLink></li>
+              <li><NavLink to="/admin/caja/movimiento" className="submenu-link">Movimiento de Caja</NavLink></li>
             </ul>
           )}
         </li>
@@ -115,12 +124,6 @@ const Sidebar = () => {
         <li>
           <NavLink to="/admin/inventario" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
             <FaBoxes /> <span>Inventario</span>
-          </NavLink>
-        </li>        
-        {/* PROVEEDORES */}
-        <li>
-          <NavLink to="/admin/proveedor" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
-            <FaTruck /> <span>Proveedores</span>
           </NavLink>
         </li>        
 

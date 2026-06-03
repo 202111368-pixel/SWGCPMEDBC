@@ -19,11 +19,11 @@ const MovimientoCaja = () => {
     };
   }, []);
 
+  // eslint-disable-next-line no-unused-vars
   const guardarMovimientos = (lista) => {
     localStorage.setItem('movimientos_caja', JSON.stringify(lista));
     window.dispatchEvent(new Event('movimientoRegistrado'));
   };
-
 
   return (
     <div className="movimiento-caja-container">

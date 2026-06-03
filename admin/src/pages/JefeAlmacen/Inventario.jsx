@@ -45,7 +45,7 @@ const Inventario = () => {
       <header className="inventario-header">
         <div className="header-content">
           <h1><FaWarehouse /> Gestión de Inventario</h1>
-          <button className="btn-recompra-header" onClick={() => window.location.href = "http://localhost:3001/carrito"}>
+          <button className="btn-recompra-header" onClick={() => window.location.href = "http://localhost:3001/producto"}>
             <FaShoppingCart /> IR AL CARRITO
           </button>
         </div>

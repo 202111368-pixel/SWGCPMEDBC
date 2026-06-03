@@ -1,17 +1,15 @@
 import React, { useState } from "react";
 import { FaBox, FaUsers, FaClipboardList } from "react-icons/fa";
 
-// Importamos tus 3 nuevas pestañas modulares
 import TabUsuarios from "./TabUsuarios";
 import TabProductos from "./TabProductos";
-import TabInventarioProveedor from "./TabInventarioProveedor";
 
 import "../styles/pages/Inicio.css";
 
 const TABS = [
-  { key: "usuarios",   label: "CLIENTE Y ADMINISTRADOR", icon: FaUsers,         color: "#3b82f6" },
-  { key: "productos",  label: "PRODUCTOS Y STOCK",       icon: FaBox,           color: "#d35400" },
-  { key: "inventario", label: "INVENTARIO Y PROVEEDOR",  icon: FaClipboardList, color: "#8e44ad" },
+  { key: "usuarios",   label: "CLIENTE Y ADMINISTRADOR", icon: FaUsers,          color: "#3b82f6" },
+  { key: "productos",  label: "PRODUCTOS Y STOCK",       icon: FaBox,            color: "#d35400" },
+  { key: "inventario", label: "INVENTARIO Y PROVEEDOR",  icon: FaClipboardList,  color: "#8e44ad" },
 ];
 
 const Inicio = () => {
@@ -23,9 +21,7 @@ const Inicio = () => {
         return <TabUsuarios />;
       case "productos":
         return <TabProductos />;
-      case "inventario":
-        return <TabInventarioProveedor />;
-      default:
+        default:
         return null;
     }
   };
