@@ -27,20 +27,18 @@ const Pago = ({ itemAPagar, totalCalculado, productsList }) => {
   };
 
   const confirmarPago = () => {
-    // Jalamos la lista desglosada de productos; si no existiera, creamos un respaldo con el item individual
     const listaAProcesar = productsList && productsList.length > 0 
       ? productsList 
       : (itemAPagar ? [itemAPagar] : []);
 
     const ventasRegistradas = JSON.parse(localStorage.getItem("ventas_registradas")) || [];
 
-    // Recorremos el carrito para guardar cada producto con su cantidad verídica
     listaAProcesar.forEach((item, index) => {
       const cantidadUnidades = item.cantidad || 1;
       const precioTotalItem = item.precio ? (item.precio * cantidadUnidades) : (totalCalculado || 0);
 
       const datosVenta = {
-        id: Date.now() + index, // Evitamos colisión de IDs en el mapeo de React
+        id: Date.now() + index, 
         producto: item.nombre || item.producto || "Producto",
         venta: `S/ ${precioTotalItem.toFixed(2)}`,
         cantidad: cantidadUnidades, 
