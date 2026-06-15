@@ -1,4 +1,5 @@
 import React, { useState } from 'react'; 
+import emailjs from '@emailjs/browser';
 import "../../styles/pages/Cajero/Pago.css";
 import qrYape from '../../assets/yape.png';
 
@@ -7,13 +8,13 @@ const QR_YAPE = qrYape;
 const Pago = ({ itemAPagar, totalCalculado, productsList }) => {
   const [metodoSeleccionado, setMetodoSeleccionado] = useState('tarjeta');
   const [pagoAprobado, setPagoAprobado] = useState(false);
+  const [emailGlobal, setEmailGlobal] = useState('');
   const [tarjeta, setTarjeta] = useState({
     numero: '',
     vencimiento: '',
     cvv: '',
     nombre: '',
     cuotas: '1',
-    email: '',
     terminos: false,
   });
 
@@ -26,20 +27,64 @@ const Pago = ({ itemAPagar, totalCalculado, productsList }) => {
     return val.replace(/\D/g, '').slice(0, 16).replace(/(.{4})/g, '$1 ').trim();
   };
 
+  const obtenerMontoTotal = () => {
+    if (productsList && productsList.length > 0) {
+      return productsList.reduce((acc, item) => acc + ((item.precio || item.total || 0) * (item.cantidad || 1)), 0);
+    }
+    if (itemAPagar) {
+      return (itemAPagar.precio || itemAPagar.total || 0) * (itemAPagar.cantidad || 1);
+    }
+    return totalCalculado || 0;
+  };
+
+  const enviarCorreoBoleta = (productosProcesados, totalFinal, emailCliente) => {
+    emailjs.init('TU_PUBLIC_KEY_AQUI');
+
+    const listaProductosHTML = productosProcesados.map(item => 
+      `<li style="margin-bottom: 8px;"><strong>${item.producto}</strong> (x${item.cantidad}) - S/ ${(item.total).toFixed(2)}</li>`
+    ).join('');
+
+    const templateParams = {
+      to_email: emailCliente.trim(),
+      to_name: tarjeta.nombre.trim() || "Cliente Registrado",
+      nro_comprobante: "CV001",
+      fecha_venta: new Date().toLocaleString("es-PE"),
+      metodo_pago: metodoSeleccionado.toUpperCase(),
+      total_pago: `S/ ${totalFinal.toFixed(2)}`,
+      productos_lista: `<ul style="padding-left: 20px; color: #333;">${listaProductosHTML}</ul>`
+    };
+
+    emailjs.send(
+      'TU_SERVICE_ID_AQUI', 
+      'template_7ib4w45', 
+      templateParams
+    )
+    .then((response) => {
+      console.log(response.status, response.text);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  };
+
   const confirmarPago = () => {
     const listaAProcesar = productsList && productsList.length > 0 
       ? productsList 
       : (itemAPagar ? [itemAPagar] : []);
 
     const ventasRegistradas = JSON.parse(localStorage.getItem("ventas_registradas")) || [];
+    const nuevosProductosVenta = [];
+    let sumaTotalCalculada = 0;
 
     listaAProcesar.forEach((item, index) => {
       const cantidadUnidades = item.cantidad || 1;
-      const precioTotalItem = item.precio ? (item.precio * cantidadUnidades) : (totalCalculado || 0);
+      const precioBase = item.precio || (item.total ? (item.total / cantidadUnidades) : 0) || (totalCalculado / listaAProcesar.length) || 0;
+      const precioTotalItem = precioBase * cantidadUnidades;
+      sumaTotalCalculada += precioTotalItem;
 
       const datosVenta = {
         id: Date.now() + index, 
-        producto: item.nombre || item.producto || "Producto",
+        producto: item.nombre || item.producto || "Producto General",
         venta: `S/ ${precioTotalItem.toFixed(2)}`,
         cantidad: cantidadUnidades, 
         total: precioTotalItem,
@@ -49,13 +94,21 @@ const Pago = ({ itemAPagar, totalCalculado, productsList }) => {
         imagen: item.imagen || item.imagenUrl || "https://via.placeholder.com/80x60?text=Producto"
       };
 
+      nuevosProductosVenta.push(datosVenta);
       ventasRegistradas.push(datosVenta);
     });
 
     localStorage.setItem("ventas_registradas", JSON.stringify(ventasRegistradas));
     window.dispatchEvent(new Event("ventaRegistrada"));
+    
+    const emailDestino = emailGlobal ? emailGlobal : "tu-correo-personal@gmail.com";
+    
+    enviarCorreoBoleta(nuevosProductosVenta, sumaTotalCalculada, emailDestino);
+    window.open("https://mail.google.com/mail/u/0/#inbox", "_blank");
     setPagoAprobado(true);
   };
+
+  const totalFinalDeVenta = obtenerMontoTotal();
 
   if (pagoAprobado) {
     const fechaVenta = new Date().toLocaleString("es-PE");
@@ -77,13 +130,13 @@ const Pago = ({ itemAPagar, totalCalculado, productsList }) => {
               <div><span className="pago-detalle-label">N° de Comprobante</span><span>CV001</span></div>
               <div><span className="pago-detalle-label">Método de Pago</span><span>{metodoSeleccionado.toUpperCase()}</span></div>
             </div>
-            <div className="pago-aprobado-total">S/ {(totalCalculado || 0).toFixed(2)}</div>
+            <div className="pago-aprobado-total">S/ {totalFinalDeVenta.toFixed(2)}</div>
             <div className="pago-orden-aviso">
               📦 <strong>Orden de Compra</strong><br />
               <span>No se requiere orden de compra — Stock suficiente.</span>
             </div>
           </div>
-          <button className="btn-continuar-comprando" onClick={() => { setPagoAprobado(false); setMetodoSeleccionado('tarjeta'); }}>
+          <button className="btn-continuar-comprando" onClick={() => { setPagoAprobado(false); setMetodoSeleccionado('tarjeta'); setEmailGlobal(''); }}>
             CONTINUAR COMPRANDO
           </button>
         </div>
@@ -136,7 +189,26 @@ const Pago = ({ itemAPagar, totalCalculado, productsList }) => {
               <p className="yape-instruccion">Escanea el QR con tu app de Yape para completar el pago.</p>
               <img src={QR_YAPE} alt="QR Yape" className="yape-qr-img" />  
               <p className="yape-numero">📱 Número Yape: <strong>999 888 777</strong></p>
-              <button className="btn-pagar" onClick={confirmarPago}>Pagar</button>
+              
+              <div className="form-group-pago" style={{ marginTop: '20px' }}>
+                <label className="pago-input-label">Email obligatorio para envío de boleta</label>
+                <input
+                  value={emailGlobal}
+                  onChange={(e) => setEmailGlobal(e.target.value)}
+                  placeholder="ejemplo@mail.com"
+                  type="email"
+                  className="modal-input"
+                />
+              </div>
+              
+              <button 
+                className="btn-pagar" 
+                onClick={confirmarPago} 
+                style={{ marginTop: '15px' }}
+                disabled={!emailGlobal.includes('@')}
+              >
+                Pagar con Yape
+              </button>
             </div>
           )}
 
@@ -215,9 +287,8 @@ const Pago = ({ itemAPagar, totalCalculado, productsList }) => {
               <div className="form-group-pago">
                 <label className="pago-input-label">Email</label>
                 <input
-                  name="email"
-                  value={tarjeta.email}
-                  onChange={handleTarjeta}
+                  value={emailGlobal}
+                  onChange={(e) => setEmailGlobal(e.target.value)}
                   placeholder="ejemplo@mail.com"
                   type="email"
                   className="modal-input"
@@ -237,9 +308,9 @@ const Pago = ({ itemAPagar, totalCalculado, productsList }) => {
               <button
                 className="btn-pagar"
                 onClick={confirmarPago}
-                disabled={!tarjeta.terminos}
+                disabled={!tarjeta.terminos || !emailGlobal.includes('@')}
               >
-                Pagar
+                Pagar S/ {totalFinalDeVenta.toFixed(2)}
               </button>
             </div>
           )}

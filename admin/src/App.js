@@ -22,10 +22,11 @@ import Cliente from "./pages/Cliente/Cliente";
 /* JefeAlmacen */
 import JefeAlmacen from "./pages/JefeAlmacen/JefeAlmacen"; 
 import Inventario from "./pages/JefeAlmacen/Inventario";
+import Taller from "./pages/JefeAlmacen/Taller";
 
 /* Diseñador (CORREGIDO según tus imágenes reales) */
-import Arquitecto from "./pages/Diseñador/Aquirtecto.jsx"; // <- Con 'ñ' en la carpeta y 'r' antes de la 'q'
-import Carpintero from "./pages/Diseñador/Carpintero.jsx";  // <- Con 'ñ' en la carpeta
+import Arquitecto from "./pages/Diseñador/Aquirtecto.jsx"; 
+import Carpintero from "./pages/Diseñador/Carpintero.jsx";  
 
 /* Login */
 import Login from "./pages/Login";
@@ -79,7 +80,8 @@ const App = () => {
                   {/* JEFE ALMACEN & INVENTARIO */}
                   <Route path="jefeAlmacen" element={<JefeAlmacen />} />
                   <Route path="inventario" element={<Inventario />} /> 
-                  
+                   <Route path="taller" element={<Taller />} /> 
+
                   {/* CONFIGURACIÓN */}
                   <Route path="configuración" element={<Configuración />} />
                   

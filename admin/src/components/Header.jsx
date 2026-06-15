@@ -117,7 +117,13 @@ const Sidebar = () => {
           <NavLink to="/admin/inventario" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
             <FaBoxes /> <span>Inventario</span>
           </NavLink>
-        </li>        
+        </li>   
+
+        <li>
+          <NavLink to="/admin/taller" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
+            <FaBoxes /> <span>Taller</span>
+          </NavLink>
+        </li>       
 
         <li className="menu-section-title">SISTEMA</li>
         <li>

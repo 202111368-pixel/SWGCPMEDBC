@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { FaTrash, FaSearch, FaBoxOpen, FaSyncAlt, FaImages, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import "../../styles/pages/Producto/Producto.css"; 
+
 import cocina1a from "../../img/cocina1a.jpg";
 import cocina2a from "../../img/cocina2a.jpg";
 import cocina3a from "../../img/cocina3a.jpg";
@@ -41,24 +42,17 @@ const Producto = () => {
 
   const obtenerImagenFielLocal = (nombreProducto) => {
     const nombre = (nombreProducto || "").toLowerCase();
-
-    // Cocinas Integrales
     if (nombre.includes("urbanbrew")) return cocina1a; 
     if (nombre.includes("moderna")) return cocina2a; 
     if (nombre.includes("empotrada")) return cocina3a; 
     if (nombre.includes("en u")) return cocina4a; 
-
-    // Escritorios (Muebles de Oficina)
     if (nombre.includes("alpha")) return muebles1; 
     if (nombre.includes("sigma")) return muebles1a; 
     if (nombre.includes("delta")) return muebles2; 
-
-    // Vestidores Modulares
     if (nombre.includes("vestidor modular alpha")) return Vestidores1;
     if (nombre.includes("vestidor modular sigma")) return Vestidores1a;
     if (nombre.includes("vestidor modular delta")) return Vestidores2;
     if (nombre.includes("omega")) return Vestidores2a;
-
     return cocina1a;
   };
 
@@ -94,7 +88,7 @@ const Producto = () => {
           setVentas(listaActualizada);
         }
       } catch (e) {
-        console.error("Error al decodificar la data:", e);
+        console.error(e);
       }
     }
   }, []);
@@ -107,12 +101,28 @@ const Producto = () => {
   };
 
   const eliminarVenta = (index) => {
-    const nuevaLista = [...ventas];
-    nuevaLista.splice(index, 1);
-    localStorage.setItem("ventas_registradas", JSON.stringify(nuevaLista));
-    localStorage.setItem("ventas_vista_congelada", JSON.stringify(nuevaLista));
-    setVentas(nuevaLista);
-    if (expandedId === index) setExpandedId(null);
+    if (window.confirm("¿Está seguro de eliminar este producto?")) {
+      const productoAEliminar = ventas[index];
+      const nuevaLista = [...ventas];
+      nuevaLista.splice(index, 1);
+
+      localStorage.setItem("ventas_registradas", JSON.stringify(nuevaLista));
+      localStorage.setItem("ventas_vista_congelada", JSON.stringify(nuevaLista));
+      setVentas(nuevaLista);
+
+      const movsExistentes = JSON.parse(localStorage.getItem("movimientos_almacen")) || [];
+      const nuevoMovimiento = {
+        id: Date.now(),
+        producto: productoAEliminar.producto,
+        cantidad: productoAEliminar.cantidad || 1,
+        total: productoAEliminar.venta,
+        tipo: "ELIMINADO DESDE PRODUCTOS",
+        fechaHora: new Date().toLocaleString("es-PE")
+      };
+      localStorage.setItem("movimientos_almacen", JSON.stringify([nuevoMovimiento, ...movsExistentes]));
+
+      if (expandedId === index) setExpandedId(null);
+    }
   };
 
   const toggleExpand = useCallback((id) => {
@@ -209,11 +219,7 @@ const Producto = () => {
                           <div ref={(el) => { expandedRefs.current[i] = el; }} style={{ overflow: "hidden", height: 0, opacity: 0, backgroundColor: "#f8fafc" }}>
                             <div style={{ padding: "15px" }}>
                               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", backgroundColor: "#fff", padding: "10px", borderRadius: "8px", width: "140px", border: "1px solid #e2e8f0" }}>
-                                <img 
-                                  src={v.imagen} 
-                                  alt={v.producto} 
-                                  style={{ width: "120px", height: "90px", objectFit: "cover", borderRadius: "6px" }}
-                                />
+                                <img src={v.imagen} alt={v.producto} style={{ width: "120px", height: "90px", objectFit: "cover", borderRadius: "6px" }} />
                                 <span style={{ fontSize: "11px", color: "#64748b", marginTop: "6px", textAlign: "center" }}>{v.producto}</span>
                               </div>
                             </div>
