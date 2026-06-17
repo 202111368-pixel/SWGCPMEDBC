@@ -4,7 +4,7 @@ import {
   FaCashRegister, FaChartLine, FaBox, FaUsers, FaChartBar, 
   FaSignOutAlt, FaMoneyCheckAlt, FaTools, FaWarehouse,
   FaChevronDown, FaChevronUp, FaThLarge, FaClipboardList,
-  FaBoxes, FaDraftingCompass, FaHammer 
+  FaBoxes
 } from "react-icons/fa"; 
 import "../styles/Sidebar.css";
 
@@ -85,12 +85,12 @@ const Sidebar = () => {
             <ul className="submenu">
               <li>
                 <NavLink to="/admin/disenador/arquitecto" className="submenu-link">
-                  <FaDraftingCompass size={14}/> Administrar Arquitecto
+                  Administrar Arquitecto
                 </NavLink>
               </li>
               <li>
                 <NavLink to="/admin/disenador/carpintero" className="submenu-link">
-                  <FaHammer size={14}/> Administrar Carpintero
+                  Administrar Carpintero
                 </NavLink>
               </li>
             </ul>
@@ -115,7 +115,7 @@ const Sidebar = () => {
           )}
         </li>
 
-        {/* SECCIÓN ALMACÉN / INVENTARIO */}
+        {/* SECCIÓN ALMACÉN / INVENTARIO / TALLER */}
         <li>
           <NavLink to="/admin/jefeAlmacen" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
             <FaWarehouse /> <span>Jefe Almacén</span>
@@ -126,6 +126,11 @@ const Sidebar = () => {
             <FaBoxes /> <span>Inventario</span>
           </NavLink>
         </li>        
+        <li>
+          <NavLink to="/admin/taller" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
+            <FaBoxes /> <span>Taller</span>
+          </NavLink>
+        </li>       
 
         <li className="menu-section-title">SISTEMA</li>
         <li>

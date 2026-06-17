@@ -1,145 +1,122 @@
-import React, { useState } from "react"; 
-import { NavLink, useNavigate } from "react-router-dom";
-import {
-  FaCashRegister, FaChartLine, FaBox, FaUsers, FaChartBar, 
-  FaSignOutAlt, FaMoneyCheckAlt, FaTools, FaWarehouse,
-  FaChevronDown, FaChevronUp, FaThLarge, FaClipboardList,
-  FaBoxes, FaDraftingCompass, FaHammer 
-} from "react-icons/fa"; 
-import "../styles/Sidebar.css";
+import React, { useEffect, useState, useRef } from "react";
+import maleAvatar from "../assets/avatar-male.svg";
+import femaleAvatar from "../assets/avatar-female.svg";
+import "../styles/Header.css";
 
-const Sidebar = () => {
-  const navigate = useNavigate();
-  const [openCaja, setOpenCaja] = useState(false); 
-  const [openProductos, setOpenProductos] = useState(false); 
-  const [openDisenador, setOpenDisenador] = useState(false); 
+const Header = () => {
+  const [session, setSession] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [selectedGender, setSelectedGender] = useState("");
+  const menuRef = useRef(null);
 
-  const handleLogout = () => {
-    if (window.confirm("¿Deseas cerrar sesión?")) {
-      localStorage.removeItem("user_session");
-      navigate("/");
+  useEffect(() => {
+    const s = localStorage.getItem("user_session");
+    if (s) {
+      const parsed = JSON.parse(s);
+      setSession(parsed);
+      setSelectedGender(parsed.user?.gender || "");
     }
+
+    const onStorage = (e) => {
+      if (e.key === "user_session") {
+        const parsed = e.newValue ? JSON.parse(e.newValue) : null;
+        setSession(parsed);
+        setSelectedGender(parsed?.user?.gender || "");
+      }
+    };
+    window.addEventListener("storage", onStorage);
+
+    const onDocClick = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
+    };
+    document.addEventListener("click", onDocClick);
+
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      document.removeEventListener("click", onDocClick);
+    };
+  }, []);
+
+  if (!session || !session.user) return null;
+
+  const { email } = session.user;
+  const gender = session.user.gender || selectedGender;
+
+  const getAvatarSource = () => {
+    if (gender === "male") return maleAvatar;
+    if (gender === "female") return femaleAvatar;
+    return null;
+  };
+
+  const saveGender = (g) => {
+    const s = JSON.parse(localStorage.getItem("user_session") || "{}");
+    s.user = s.user || {};
+    s.user.gender = g;
+    localStorage.setItem("user_session", JSON.stringify(s));
+    setSession(s);
+    setSelectedGender(g);
+    setMenuOpen(false);
+  };
+
+  const Avatar = () => {
+    const avatarSource = getAvatarSource();
+    if (avatarSource) return <img src={avatarSource} alt="avatar" className="header-avatar-img" />;
+    
+    return (
+      <svg viewBox="0 0 64 64" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="32" cy="32" r="32" fill="#6b7280" />
+        <g transform="translate(12,10)" fill="#fff">
+          <circle cx="20" cy="12" r="8" />
+          <path d="M2 44c0-11 18-11 18-11s18 0 18 11v3H2v-3z" />
+        </g>
+      </svg>
+    );
   };
 
   return (
-    <div className="sidebar">
-      <div className="sidebar-header">
-        <h3>D’Bary Company</h3>
+    <div className="header-top-right" ref={menuRef}>
+      <div className="header-user" title={email} style={{ position: "relative" }}>
+        <div className="header-avatar" onClick={(e) => { e.stopPropagation(); setMenuOpen(!menuOpen); }} style={{ cursor: "pointer" }}>
+          <Avatar />
+        </div>
+        <div className="header-email">{email}</div>
+
+        {menuOpen && (
+          <div className="header-menu">
+            <div className="header-menu-row">
+              <div className="header-menu-avatar">
+                {getAvatarSource() ? (
+                  <img src={getAvatarSource()} alt="avatar-large" style={{ width: 56, height: 56, borderRadius: 8, objectFit: "cover" }} />
+                ) : (
+                  <div style={{ width: 56, height: 56, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 8, background: "#6b7280", color: "#fff", fontWeight: 700 }}>?</div>
+                )}
+              </div>
+              <div className="header-menu-info">
+                <div className="header-menu-name">{(session.user.nombres || session.user.name || "Usuario")}</div>
+                <div className="header-menu-email">{email}</div>
+              </div>
+            </div>
+
+            <div className="header-menu-divider" />
+
+            <div className="header-menu-gender">
+              <label>
+                <input type="radio" name="gender" value="male" checked={selectedGender === "male"} onChange={() => setSelectedGender("male")} /> Masculino
+              </label>
+              <label>
+                <input type="radio" name="gender" value="female" checked={selectedGender === "female"} onChange={() => setSelectedGender("female")} /> Femenino
+              </label>
+            </div>
+
+            <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+              <button className="btn-primary" onClick={() => saveGender(selectedGender)}>Guardar</button>
+              <button className="btn-secondary" onClick={() => setMenuOpen(false)}>Cancelar</button>
+            </div>
+          </div>
+        )}
       </div>
-      
-      <ul className="sidebar-menu">
-        <li className="menu-section-title">GENERAL</li>
-        <li>
-          <NavLink to="/admin/inicio" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
-            <FaChartLine /> <span>Dashboard</span>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/admin/clientes" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
-            <FaUsers /> <span>Clientes</span>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/admin/administrador" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
-            <FaMoneyCheckAlt /> <span>Administrador</span>
-          </NavLink>
-        </li>
-        
-        {/* PRODUCTO DESPLEGABLE */}
-        <li className={`menu-item-desplegable ${openProductos ? "open" : ""}`}>
-          <div className="menu-link" onClick={() => setOpenProductos(!openProductos)} style={{ cursor: 'pointer' }}>
-            <FaBox /> <span>Productos</span>
-            <span className="icon-arrow">
-              {openProductos ? <FaChevronUp size={12} /> : <FaChevronDown size={12} />}
-            </span>
-          </div>
-          
-          {openProductos && (
-            <ul className="submenu">
-              <li><NavLink to="/admin/producto/gestionar" className="submenu-link"><FaThLarge size={14}/> Gestión Productos</NavLink></li>
-              <li><NavLink to="/admin/producto/proveedor" className="submenu-link"><FaClipboardList size={14}/> Gestión Proveedor</NavLink></li>
-            </ul>
-          )}
-        </li>
-        
-        <li className="menu-section-title">OPERACIONES</li>
-        
-        {/* DISEÑADOR DESPLEGABLE */}
-        <li className={`menu-item-desplegable ${openDisenador ? "open" : ""}`}>
-          <div className="menu-link" onClick={() => setOpenDisenador(!openDisenador)} style={{ cursor: 'pointer' }}>
-            <FaChartBar /> <span>Diseñador</span>
-            <span className="icon-arrow">
-              {openDisenador ? <FaChevronUp size={12} /> : <FaChevronDown size={12} />}
-            </span>
-          </div>
-          
-          {openDisenador && (
-            <ul className="submenu">
-              <li>
-                <NavLink to="/admin/disenador/arquitecto" className="submenu-link">
-                  <FaDraftingCompass size={14}/> {`Administrar Arquitecto`}
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/admin/disenador/carpintero" className="submenu-link">
-                  <FaHammer size={14}/> {`Administrar Carpintero`}
-                </NavLink>
-              </li>
-            </ul>
-          )}
-        </li>
-        
-        {/* CAJERO DESPLEGABLE */}
-        <li className={`menu-item-desplegable ${openCaja ? "open" : ""}`}>
-          <div className="menu-link" onClick={() => setOpenCaja(!openCaja)} style={{ cursor: 'pointer' }}>
-            <FaCashRegister /> <span>Cajero</span>
-            <span className="icon-arrow">
-              {openCaja ? <FaChevronUp size={12} /> : <FaChevronDown size={12} />}
-            </span>
-          </div>
-          
-          {openCaja && (
-            <ul className="submenu">
-              <li><NavLink to="/admin/caja/administrar" className="submenu-link">Administrar Caja</NavLink></li>
-              <li><NavLink to="/admin/caja/historial" className="submenu-link">Historial de Caja</NavLink></li>
-              <li><NavLink to="/admin/caja/movimiento" className="submenu-link">Movimiento de Caja</NavLink></li>
-            </ul>
-          )}
-        </li>
-
-        {/* SECCIÓN ALMACÉN / INVENTARIO */}
-        <li>
-          <NavLink to="/admin/jefeAlmacen" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
-            <FaWarehouse /> <span>Jefe Almacén</span>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/admin/inventario" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
-            <FaBoxes /> <span>Inventario</span>
-          </NavLink>
-        </li>   
-
-        <li>
-          <NavLink to="/admin/taller" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
-            <FaBoxes /> <span>Taller</span>
-          </NavLink>
-        </li>       
-
-        <li className="menu-section-title">SISTEMA</li>
-        <li>
-          <NavLink to="/admin/configuración" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
-            <FaTools /> <span>Configuración</span>
-          </NavLink>
-        </li>
-        
-        <li className="cerrar-sesion">
-          <button onClick={handleLogout} className="btn-logout">
-            <FaSignOutAlt /> <span>Cerrar Sesión</span>
-          </button>
-        </li>
-      </ul>
     </div>
   );
 };
 
-export default Sidebar;
+export default Header;
