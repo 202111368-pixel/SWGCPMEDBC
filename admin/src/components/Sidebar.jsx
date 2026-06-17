@@ -45,6 +45,7 @@ const Sidebar = () => {
           </NavLink>
         </li>
         
+        
         {/* PRODUCTO DESPLEGABLE */}
         <li className={`menu-item-desplegable ${openProductos ? "open" : ""}`}>
           <div className="menu-link" onClick={() => setOpenProductos(!openProductos)} style={{ cursor: 'pointer' }}>
