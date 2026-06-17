@@ -37,8 +37,6 @@ import AdministrarCaja from "./pages/Cajero/AdministrarCaja";
 import HistorialCaja from "./pages/Cajero/HistorialCaja";
 import MovimientoCaja from "./pages/Cajero/MovimientoCaja";
 
-/* Configuración */
-import Configuración from "./pages/Configuración/Configuración";
 
 const App = () => {
   return (
@@ -81,9 +79,6 @@ const App = () => {
                   <Route path="jefeAlmacen" element={<JefeAlmacen />} />
                   <Route path="inventario" element={<Inventario />} /> 
                    <Route path="taller" element={<Taller />} /> 
-
-                  {/* CONFIGURACIÓN */}
-                  <Route path="configuración" element={<Configuración />} />
                   
                   {/* ERROR 404 */}
                   <Route path="*" element={<div>Página no encontrada en Admin</div>} />

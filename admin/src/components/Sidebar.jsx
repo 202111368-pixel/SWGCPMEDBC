@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   FaCashRegister, FaChartLine, FaBox, FaUsers, FaChartBar, 
-  FaSignOutAlt, FaMoneyCheckAlt, FaTools, FaWarehouse,
+  FaSignOutAlt, FaMoneyCheckAlt, FaWarehouse,
   FaChevronDown, FaChevronUp, FaThLarge, FaClipboardList,
   FaBoxes
 } from "react-icons/fa"; 
@@ -132,13 +132,6 @@ const Sidebar = () => {
             <FaBoxes /> <span>Taller</span>
           </NavLink>
         </li>       
-
-        <li className="menu-section-title">SISTEMA</li>
-        <li>
-          <NavLink to="/admin/configuración" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
-            <FaTools /> <span>Configuración</span>
-          </NavLink>
-        </li>
         
         <li className="cerrar-sesion">
           <button onClick={handleLogout} className="btn-logout">
