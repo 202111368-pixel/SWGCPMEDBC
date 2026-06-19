@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom"; 
-import { FaEye, FaExternalLinkAlt, FaTools, FaArrowLeft } from "react-icons/fa";
+import { FaEye, FaExternalLinkAlt, FaTools, FaArrowLeft, FaClipboardList } from "react-icons/fa";
 import "../../styles/pages/Diseñador/Carpintero.css"; 
 
 import cocinaImg from "../../img/DiseñadorImg/cocina.jpg";
@@ -8,6 +8,17 @@ import planoImg from "../../img/DiseñadorImg/plano.jpg";
 
 const Carpintero = () => {
   const [mostrarGaleria, setMostrarGaleria] = useState(false);
+  const [modalAbierto, setModalAbierto] = useState(false);
+  
+  const [respuestas, setRespuestas] = useState({
+    servicioAnterior: "",
+    calidadAcabados: "",
+    instalacionMueble: "",
+    solicitarPresupuesto: "",
+    carpinteroEspecializado: "",
+    comentario: ""
+  });
+
   const queryParams = new URLSearchParams(window.location.search);
   const dataRaw = queryParams.get("data");
   
@@ -17,7 +28,7 @@ const Carpintero = () => {
     try {
       solicitud = JSON.parse(decodeURIComponent(dataRaw));
     } catch (error) {
-      console.error("Error al decodificar los datos de la URL", error);
+      console.error(error);
     }
   }
 
@@ -31,109 +42,191 @@ const Carpintero = () => {
     { nombre: "TAPAS DE CAJÓN", cantidad: 3, largo: 247, ancho: 896, thickness: "18MM" },
   ];
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setRespuestas({ ...respuestas, [name]: value });
+  };
+
+  const handleEnviarEncuesta = (e) => {
+    e.preventDefault();
+    setModalAbierto(false);
+  };
+
   return (
-    <div className="carpintero-container" style={{ padding: "40px 20px", maxWidth: "1200px", margin: "0 auto", fontFamily: "sans-serif" }}>
-      
-      <div style={{ marginBottom: "20px" }}>
-        <Link to={-1} style={{ textDecoration: "none", color: "#8B5A2B", display: "inline-flex", alignItems: "center", gap: "5px", fontSize: "14px" }}>
-          <FaArrowLeft size={12} /> Volver a la solicitud
-        </Link>
-      </div>
-
-      <header style={{ borderBottom: "2px solid #8B5A2B", paddingBottom: "15px", marginBottom: "30px" }}>
-        <h2 style={{ color: "#333", display: "flex", alignItems: "center", gap: "10px", margin: 0 }}>
-          <FaTools color="#8B5A2B" /> Módulo de Carpintería - Panel de Producción
-        </h2>
-        <p style={{ color: "#666", marginTop: "5px" }}>Orden de fabricación asignada a taller.</p>
-      </header>
-      <div style={{ backgroundColor: "#fdf8f4", border: "1px solid #f1e2d3", borderRadius: "8px", padding: "20px", marginBottom: "30px" }}>
-        <h4 style={{ margin: "0 0 10px 0", color: "#8B5A2B" }}>Resumen de Requerimiento:</h4>
-        <p style={{ margin: "5px 0" }}><strong>Estructura Solicitada:</strong> {solicitud.mueble}</p>
-        <p style={{ margin: "5px 0" }}><strong>Lugar de Instalación:</strong> {solicitud.espacio}</p>
-      </div>
-
-      <div className="resultado-despiece-container" style={{ paddingTop: "10px" }}>
-        <h3 style={{ color: "#8B5A2B", marginBottom: "15px" }}>Optimización de Melamina Generada</h3>
+    <div className="carpintero-main-container">
+      <div className="carpintero-content-wrapper">
         
-        <div className="acciones-resultado" style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-          <a 
-            href="https://www.coohom.com/pub/tool/bim/cloud?redirecturl=/pub/saas/workbench&designid=3FO3EK2RJXIU&newproject=Design&em=0&cfloorplan=1&locale=es_ES" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="btn-ver-coohom"
-            style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "10px 15px", backgroundColor: "#007bff", color: "#fff", borderRadius: "5px", textDecoration: "none", fontSize: "14px", fontWeight: "bold" }}
-          >
-            <FaExternalLinkAlt /> Ver en Coohom 3D
-          </a>
-          
-          <button 
-            type="button"
-            onClick={() => setMostrarGaleria(!mostrarGaleria)}
-            className="btn-ver-imagenes"
-            style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "10px 15px", backgroundColor: "#28a745", color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer", fontSize: "14px", fontWeight: "bold" }}
-          >
-            <FaEye /> {mostrarGaleria ? "Ocultar Planos" : "Ver Planos e Imágenes"}
-          </button>
+        <div className="contenedor-volver-solicitud">
+          <Link to={-1} className="back-link-action">
+            <FaArrowLeft size={12} /> Volver a la solicitud
+          </Link>
         </div>
 
-        <div className="layout-tecnico-split" style={{ display: "flex", gap: "25px", alignItems: "flex-start", flexWrap: "wrap" }}>
-          
-          <div className="tabla-responsiva" style={{ flex: "2", minWidth: "300px", overflowX: "auto" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", fontSize: "14px" }}>
-              <thead>
-                <tr style={{ backgroundColor: "#f5f5f5", borderBottom: "2px solid #ddd" }}>
-                  <th style={{ padding: "12px 10px" }}>NOMBRES</th>
-                  <th style={{ padding: "12px 10px" }}>CANTIDADES</th>
-                  <th style={{ padding: "12px 10px" }}>LARGO (mm)</th>
-                  <th style={{ padding: "12px 10px" }}>ANCHO (mm)</th>
-                  <th style={{ padding: "12px 10px" }}>ESPESOR</th>
-                </tr>
-              </thead>
-              <tbody>
-                {despieceCocina.map((item, index) => (
-                  <tr key={index} style={{ borderBottom: "1px solid #eee" }}>
-                    <td style={{ padding: "12px 10px", fontWeight: "500" }}>{item.nombre}</td>
-                    <td style={{ padding: "12px 10px" }}>{item.cantidad}</td>
-                    <td style={{ padding: "12px 10px" }}>{item.largo}</td>
-                    <td style={{ padding: "12px 10px" }}>{item.ancho}</td>
-                    <td style={{ padding: "12px 10px", color: "#666" }}>{item.thickness}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        <div className="tarjeta-resumen-proyecto">
+          <header className="carpintero-header-box">
+            <h2>
+              <FaTools /> Módulo de Carpintería - Panel de Producción
+            </h2>
+            <p>Orden de fabricación asignada a taller.</p>
+          </header>
+
+          <div className="box-especificaciones-taller">
+            <h4>Resumen de Requerimiento de Melamina:</h4>
+            <div className="grid-especificaciones-valores">
+              <p><strong>Estructura a Fabricar:</strong> {solicitud.mueble}</p>
+              <p><strong>Lugar de Instalación:</strong> {solicitud.espacio}</p>
+            </div>
           </div>
 
-          {mostrarGaleria && (
-            <div 
-              className="galeria-planos-derecha" 
-              style={{ 
-                flex: "1", 
-                minWidth: "320px", 
-                backgroundColor: "#fafafa", 
-                padding: "15px", 
-                borderRadius: "8px", 
-                border: "1px solid #e8e8e8"
-              }}
+          <div className="acciones-resultado">
+            <a 
+              href="https://www.coohom.com/pub/tool/bim/cloud?redirecturl=/pub/saas/workbench&designid=3FO3EK2RJXIU&newproject=Design&em=0&cfloorplan=1&locale=es_ES" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="btn-ver-coohom-azul"
             >
-              <h4 style={{ marginBottom: "15px", color: "#333", fontSize: "15px", borderBottom: "1px solid #ddd", paddingBottom: "5px" }}>
-                Planos del Espacio ({solicitud.mueble}):
-              </h4>
-              
-              <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-                <div style={{ textAlign: "center" }}>
-                  <p style={{ fontSize: "12px", color: "#555", fontWeight: "bold", marginBottom: "6px" }}>Vista Render 3D Lineal</p>
-                  <img src={cocinaImg} alt="Render" style={{ width: "100%", maxHeight: "200px", objectFit: "cover", borderRadius: "6px", border: "1px solid #ccc" }} />
-                </div>
-                <div style={{ textAlign: "center" }}>
-                  <p style={{ fontSize: "12px", color: "#555", fontWeight: "bold", marginBottom: "6px" }}>Plano de Distribución en Planta</p>
-                  <img src={planoImg} alt="Plano" style={{ width: "100%", maxHeight: "200px", objectFit: "cover", borderRadius: "6px", border: "1px solid #ccc" }} />
+              <FaExternalLinkAlt /> Ver en Coohom 3D
+            </a>
+            
+            <button 
+              type="button"
+              onClick={() => setMostrarGaleria(!mostrarGaleria)}
+              className="btn-ver-planos-verde"
+            >
+              <FaEye /> {mostrarGaleria ? "Ocultar Planos de Despiece" : "Ver Planos de Despiece"}
+            </button>
+
+            <button 
+              type="button"
+              onClick={() => setModalAbierto(true)}
+              className="btn-encuesta-amarillo"
+            >
+              <FaClipboardList /> Encuesta Técnica
+            </button>
+          </div>
+
+          <div className="carpintero-content-grid">
+            
+            <div className="table-side">
+              <table className="tabla-reporte-ventas">
+                <thead>
+                  <tr>
+                    <th>NOMBRES DE PIEZAS MELAMINA</th>
+                    <th>CANTIDADES</th>
+                    <th>LARGO (mm)</th>
+                    <th>ANCHO (mm)</th>
+                    <th>ESPESOR</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {despieceCocina.map((item, index) => (
+                    <tr key={index}>
+                      <td className="product-name-cell">{item.nombre}</td>
+                      <td>{item.cantidad}</td>
+                      <td>{item.largo}</td>
+                      <td>{item.ancho}</td>
+                      <td className="celda-espesor-texto">{item.thickness}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {mostrarGaleria && (
+              <div className="chart-side">
+                <h4>Planos del Espacio ({solicitud.mueble}):</h4>
+                <div className="galeria-vertical-planos">
+                  <div className="item-plano-galeria">
+                    <p>Vista Render 3D Lineal</p>
+                    <img src={cocinaImg} alt="Render" />
+                  </div>
+                  <div className="item-plano-galeria">
+                    <p>Plano de Distribución en Planta</p>
+                    <img src={planoImg} alt="Plano" />
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
+          </div>
         </div>
+
       </div>
+
+      {modalAbierto && (
+        <div className="modal-formulario-overlay">
+          <div className="modal-formulario-contenedor">
+            <h3>📋 Encuesta Técnica de Carpintería</h3>
+            
+            <form onSubmit={handleEnviarEncuesta}>
+              
+              <div className="seccion-pregunta-modal">
+                <p>1. ¿Ha contratado anteriormente un servicio de carpintería en melamina?</p>
+                <div className="contenedor-radios-flex">
+                  <label><input type="radio" name="servicioAnterior" value="Si" checked={respuestas.servicioAnterior === "Si"} onChange={handleInputChange} /> Sí</label>
+                  <label><input type="radio" name="servicioAnterior" value="No" checked={respuestas.servicioAnterior === "No"} onChange={handleInputChange} /> No</label>
+                </div>
+              </div>
+
+              <div className="seccion-pregunta-modal">
+                <p>2. ¿Considera importante la calidad de los acabados del mueble?</p>
+                <div className="contenedor-radios-flex">
+                  <label><input type="radio" name="calidadAcabados" value="Si" checked={respuestas.calidadAcabados === "Si"} onChange={handleInputChange} /> Sí</label>
+                  <label><input type="radio" name="calidadAcabados" value="No" checked={respuestas.calidadAcabados === "No"} onChange={handleInputChange} /> No</label>
+                </div>
+              </div>
+
+              <div className="seccion-pregunta-modal">
+                <p>3. ¿Desea que el carpintero realice la instalación del mueble?</p>
+                <div className="contenedor-radios-flex">
+                  <label><input type="radio" name="instalacionMueble" value="Si" checked={respuestas.instalacionMueble === "Si"} onChange={handleInputChange} /> Sí</label>
+                  <label><input type="radio" name="instalacionMueble" value="No" checked={respuestas.instalacionMueble === "No"} onChange={handleInputChange} /> No</label>
+                </div>
+              </div>
+
+              <div className="seccion-pregunta-modal">
+                <p>4. ¿Solicitaría un presupuesto antes de contratar el servicio?</p>
+                <div className="contenedor-radios-flex">
+                  <label><input type="radio" name="solicitarPresupuesto" value="Si" checked={respuestas.solicitarPresupuesto === "Si"} onChange={handleInputChange} /> Sí</label>
+                  <label><input type="radio" name="solicitarPresupuesto" value="No" checked={respuestas.solicitarPresupuesto === "No"} onChange={handleInputChange} /> No</label>
+                </div>
+              </div>
+
+              <div className="seccion-pregunta-modal">
+                <p>5. ¿Contrataría un carpintero especializado en muebles de melamina?</p>
+                <div className="contenedor-radios-flex">
+                  <label><input type="radio" name="carpinteroEspecializado" value="Si" checked={respuestas.carpinteroEspecializado === "Si"} onChange={handleInputChange} /> Sí</label>
+                  <label><input type="radio" name="carpinteroEspecializado" value="No" checked={respuestas.carpinteroEspecializado === "No"} onChange={handleInputChange} /> No</label>
+                </div>
+              </div>
+
+              <div className="seccion-pregunta-modal">
+                <p>6. Observaciones o comentario:</p>
+                <input 
+                  type="text" 
+                  name="comentario" 
+                  maxLength={150}
+                  placeholder="Escriba un comentario o respuesta adicional..."
+                  value={respuestas.comentario} 
+                  onChange={handleInputChange} 
+                  className="input-comentario-modal"
+                />
+              </div>
+
+              <div className="botones-acciones-modal">
+                <button type="button" onClick={() => setModalAbierto(false)} className="btn-cerrar-modal">
+                  Cancelar
+                </button>
+                <button type="submit" className="btn-guardar-modal">
+                  Guardar Formato
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

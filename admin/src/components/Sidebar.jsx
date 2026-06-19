@@ -4,7 +4,7 @@ import {
   FaCashRegister, FaChartLine, FaBox, FaUsers, FaChartBar, 
   FaSignOutAlt, FaMoneyCheckAlt, FaWarehouse,
   FaChevronDown, FaChevronUp, FaThLarge, FaClipboardList,
-  FaBoxes
+  FaBoxes, FaTools
 } from "react-icons/fa"; 
 import "../styles/Sidebar.css";
 
@@ -13,6 +13,7 @@ const Sidebar = () => {
   const [openCaja, setOpenCaja] = useState(false); 
   const [openProductos, setOpenProductos] = useState(false); 
   const [openDisenador, setOpenDisenador] = useState(false); 
+  const [openTaller, setOpenTaller] = useState(false); 
 
   const handleLogout = () => {
     if (window.confirm("¿Deseas cerrar sesión?")) {
@@ -44,7 +45,6 @@ const Sidebar = () => {
             <FaMoneyCheckAlt /> <span>Administrador</span>
           </NavLink>
         </li>
-        
         
         {/* PRODUCTO DESPLEGABLE */}
         <li className={`menu-item-desplegable ${openProductos ? "open" : ""}`}>
@@ -116,7 +116,7 @@ const Sidebar = () => {
           )}
         </li>
 
-        {/* SECCIÓN ALMACÉN / INVENTARIO / TALLER */}
+        {/* SECCIÓN ALMACÉN / INVENTARIO */}
         <li>
           <NavLink to="/admin/jefeAlmacen" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
             <FaWarehouse /> <span>Jefe Almacén</span>
@@ -127,11 +127,31 @@ const Sidebar = () => {
             <FaBoxes /> <span>Inventario</span>
           </NavLink>
         </li>        
-        <li>
-          <NavLink to="/admin/taller" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
-            <FaBoxes /> <span>Taller</span>
-          </NavLink>
-        </li>       
+        
+        {/* TALLER DESPLEGABLE (Direccionado a las nuevas rutas) */}
+        <li className={`menu-item-desplegable ${openTaller ? "open" : ""}`}>
+          <div className="menu-link" onClick={() => setOpenTaller(!openTaller)} style={{ cursor: 'pointer' }}>
+            <FaTools /> <span>Taller</span>
+            <span className="icon-arrow">
+              {openTaller ? <FaChevronUp size={12} /> : <FaChevronDown size={12} />}
+            </span>
+          </div>
+          
+          {openTaller && (
+            <ul className="submenu">
+              <li>
+                <NavLink to="/admin/taller/arquitecto" className="submenu-link">
+                  Taller Arquitecto
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/admin/taller/carpinteria" className="submenu-link">
+                  Taller Carpintería
+                </NavLink>
+              </li>
+            </ul>
+          )}
+        </li>      
         
         <li className="cerrar-sesion">
           <button onClick={handleLogout} className="btn-logout">

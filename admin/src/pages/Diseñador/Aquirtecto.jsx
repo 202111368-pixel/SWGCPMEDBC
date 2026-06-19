@@ -1,12 +1,21 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom"; 
-import { FaEye, FaExternalLinkAlt, FaDraftingCompass, FaArrowLeft } from "react-icons/fa";
-import "../../styles/pages/Diseñador/Carpintero.css"; 
+import { FaEye, FaExternalLinkAlt, FaDraftingCompass, FaArrowLeft, FaClipboardList } from "react-icons/fa";
+import "../../styles/pages/Diseñador/Arquitecto.css"; 
 import plano2Img from "../../img/DiseñadorImg/plano2.jpg";
 import plano3Img from "../../img/DiseñadorImg/plano3.jpg";
 
 const Arquitecto = () => {
   const [mostrarGaleria, setMostrarGaleria] = useState(false);
+  const [modalAbierto, setModalAbierto] = useState(false);
+  
+  const [respuestas, setRespuestas] = useState({
+    ropaLarga: "",
+    planoPersonalizado: "",
+    importanciaPlano: "",
+    servicioProfesional: "",
+    comentario: ""
+  });
 
   const queryParams = new URLSearchParams(window.location.search);
   const dataRaw = queryParams.get("data");
@@ -17,7 +26,7 @@ const Arquitecto = () => {
     try {
       solicitud = JSON.parse(decodeURIComponent(dataRaw));
     } catch (error) {
-      console.error("Error al decodificar los datos de la URL de arquitectura", error);
+      console.error(error);
     }
   }
 
@@ -31,109 +40,183 @@ const Arquitecto = () => {
     { nombre: "TAPAS DE CAJÓN", cantidad: 3, largo: 247, ancho: 896, espesor: "18MM" },
   ];
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setRespuestas({ ...respuestas, [name]: value });
+  };
+
+  const handleEnviarEncuesta = (e) => {
+    e.preventDefault();
+    setModalAbierto(false);
+  };
+
   return (
-    <div className="arquitecto-container" style={{ padding: "40px 20px", maxWidth: "1200px", margin: "0 auto", fontFamily: 'sans-serif' }}>
-      
-      <div style={{ marginBottom: "20px" }}>
-        <Link to={-1} style={{ textDecoration: "none", color: "#8B5A2B", display: "inline-flex", alignItems: "center", gap: "5px", fontSize: "14px" }}>
-          <FaArrowLeft size={12} /> Volver a la solicitud
-        </Link>
-      </div>
-
-      <header style={{ borderBottom: "2px solid #007bff", paddingBottom: "15px", marginBottom: "30px" }}>
-        <h2 style={{ color: "#333", display: "flex", alignItems: "center", gap: "10px", margin: 0 }}>
-          <FaDraftingCompass color="#007bff" /> Módulo de Arquitectura - Panel Técnico de Control
-        </h2>
-        <p style={{ color: "#666", marginTop: "5px" }}>Modelado y despiece de estructuras civiles.</p>
-      </header>
-
-      <div style={{ backgroundColor: "#f4f8fd", border: "1px solid #d3e2f1", borderRadius: "8px", padding: "20px", marginBottom: "30px" }}>
-        <h4 style={{ margin: "0 0 10px 0", color: "#007bff" }}>Especificaciones del Plan Regulador:</h4>
-        <p style={{ margin: "5px 0" }}><strong>Modelo Requerido:</strong> {solicitud.mueble}</p>
-        <p style={{ margin: "5px 0" }}><strong>Destino de Edificación:</strong> {solicitud.espacio}</p>
-      </div>
-
-      <div className="resultado-despiece-container" style={{ paddingTop: "10px" }}>
-        <h3 style={{ color: "#333", marginBottom: "15px" }}>Optimización y Modelado de Planos</h3>
+    <div className="reportes-main-container">
+      <div className="reportes-content-wrapper">
         
-        <div className="acciones-resultado" style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-          <a 
-            href="https://www.coohom.com/pub/modelo/viewer/preview/3FO3EK2RJXIU?hl=es_ES" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="btn-ver-coohom"
-            style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "10px 15px", backgroundColor: "#007bff", color: "#fff", borderRadius: "5px", textDecoration: "none", fontSize: "14px", fontWeight: "bold" }}
-          >
-            <FaExternalLinkAlt /> Ver Vista Previa 3D
-          </a>
-          
-          <button 
-            type="button"
-            onClick={() => setMostrarGaleria(!mostrarGaleria)}
-            className="btn-ver-imagenes"
-            style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "10px 15px", backgroundColor: "#28a745", color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer", fontSize: "14px", fontWeight: "bold" }}
-          >
-            <FaEye /> {mostrarGaleria ? "Ocultar Planos" : "Ver Planos Desarrollados"}
-          </button>
+        <div className="contenedor-volver-solicitud">
+          <Link to={-1} className="back-link-action">
+            <FaArrowLeft size={12} /> Volver a la solicitud
+          </Link>
         </div>
 
-        <div className="layout-tecnico-split" style={{ display: "flex", gap: "25px", alignItems: "flex-start", flexWrap: "wrap" }}>
-          
-          <div className="tabla-responsiva" style={{ flex: "2", minWidth: "300px", overflowX: "auto" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", fontSize: "14px" }}>
-              <thead>
-                <tr style={{ backgroundColor: "#f5f5f5", borderBottom: "2px solid #ddd" }}>
-                  <th style={{ padding: "12px 10px" }}>NOMBRES</th>
-                  <th style={{ padding: "12px 10px" }}>CANTIDADES</th>
-                  <th style={{ padding: "12px 10px" }}>LARGO (mm)</th>
-                  <th style={{ padding: "12px 10px" }}>ANCHO (mm)</th>
-                  <th style={{ padding: "12px 10px" }}>ESPESOR</th>
-                </tr>
-              </thead>
-              <tbody>
-                {despieceCocina.map((item, index) => (
-                  <tr key={index} style={{ borderBottom: "1px solid #eee" }}>
-                    <td style={{ padding: "12px 10px", fontWeight: "500" }}>{item.nombre}</td>
-                    <td style={{ padding: "12px 10px" }}>{item.cantidad}</td>
-                    <td style={{ padding: "12px 10px" }}>{item.largo}</td>
-                    <td style={{ padding: "12px 10px" }}>{item.ancho}</td>
-                    <td style={{ padding: "12px 10px", color: "#666" }}>{item.espesor}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        <div className="tarjeta-resumen-proyecto">
+          <header className="reportes-header-box">
+            <h2>
+              <FaDraftingCompass /> Módulo de Arquitectura - Panel Técnico de Control
+            </h2>
+            <p>Modelado y despiece de estructuras civiles.</p>
+          </header>
+
+          <div className="box-especificaciones-regulador">
+            <h4>Resumen de Requerimiento de Estructura:</h4>
+            <div className="grid-especificaciones-valores">
+              <p><strong>Estructura a Fabricar:</strong> {solicitud.mueble}</p>
+              <p><strong>Lugar de Instalación / Destino:</strong> {solicitud.espacio}</p>
+            </div>
           </div>
-          {mostrarGaleria && (
-            <div 
-              className="galeria-planos-derecha" 
-              style={{ 
-                flex: "1", 
-                minWidth: "320px", 
-                backgroundColor: "#fafafa", 
-                padding: "15px", 
-                borderRadius: "8px", 
-                border: "1px solid #e8e8e8"
-              }}
+
+          <div className="acciones-resultado">
+            <a 
+              href="https://www.coohom.com/pub/modelo/viewer/preview/3FO3EK2RJXIU?hl=es_ES" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="btn-ver-coohom-azul"
             >
-              <h4 style={{ marginBottom: "15px", color: "#333", fontSize: "15px", borderBottom: "1px solid #ddd", paddingBottom: "5px" }}>
-                Planos y Elevaciones del Proyecto:
-              </h4>
-              
-              <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-                <div style={{ textAlign: "center" }}>
-                  <p style={{ fontSize: "12px", color: "#555", fontWeight: "bold", marginBottom: "6px" }}>Elevación Detallada (Plano 2)</p>
-                  <img src={plano2Img} alt="Plano 2" style={{ width: "100%", maxHeight: "200px", objectFit: "cover", borderRadius: "6px", border: "1px solid #ccc" }} />
-                </div>
-                <div style={{ textAlign: "center" }}>
-                  <p style={{ fontSize: "12px", color: "#555", fontWeight: "bold", marginBottom: "6px" }}>Plano de Planta Técnico (Plano 3)</p>
-                  <img src={plano3Img} alt="Plano 3" style={{ width: "100%", maxHeight: "200px", objectFit: "cover", borderRadius: "6px", border: "1px solid #ccc" }} />
+              <FaExternalLinkAlt /> Ver en Coohom 3D
+            </a>
+            
+            <button 
+              type="button"
+              onClick={() => setMostrarGaleria(!mostrarGaleria)}
+              className="btn-ver-planos-verde"
+            >
+              <FaEye /> {mostrarGaleria ? "Ocultar Planos de Despiece" : "Ver Planos de Despiece"}
+            </button>
+
+            <button 
+              type="button"
+              onClick={() => setModalAbierto(true)}
+              className="btn-encuesta-amarillo"
+            >
+              <FaClipboardList /> Encuesta Técnica
+            </button>
+          </div>
+
+          <div className="reporte-content-grid">
+            
+            <div className="table-side">
+              <table className="tabla-reporte-ventas">
+                <thead>
+                  <tr>
+                    <th>NOMBRES DE PIEZAS</th>
+                    <th>CANTIDADES</th>
+                    <th>LARGO (mm)</th>
+                    <th>ANCHO (mm)</th>
+                    <th>ESPESOR</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {despieceCocina.map((item, index) => (
+                    <tr key={index}>
+                      <td className="product-name-cell">{item.nombre}</td>
+                      <td>{item.cantidad}</td>
+                      <td>{item.largo}</td>
+                      <td>{item.ancho}</td>
+                      <td className="celda-espesor-texto">{item.espesor}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {mostrarGaleria && (
+              <div className="chart-side">
+                <h4>Planos y Elevaciones:</h4>
+                <div className="galeria-vertical-planos">
+                  <div className="item-plano-galeria">
+                    <p>Elevación Detallada (Plano 2)</p>
+                    <img src={plano2Img} alt="Plano 2" />
+                  </div>
+                  <div className="item-plano-galeria">
+                    <p>Plano de Planta Técnico (Plano 3)</p>
+                    <img src={plano3Img} alt="Plano 3" />
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
+          </div>
         </div>
+
       </div>
+
+      {modalAbierto && (
+        <div className="modal-formulario-overlay">
+          <div className="modal-formulario-contenedor">
+            <h3>📋 Encuesta Técnica de Arquitectura</h3>
+            
+            <form onSubmit={handleEnviarEncuesta}>
+              
+              <div className="seccion-pregunta-modal">
+                <p>1. ¿Desea incluir un espacio para colgar ropa larga?</p>
+                <div className="contenedor-radios-flex">
+                  <label><input type="radio" name="ropaLarga" value="Si" checked={respuestas.ropaLarga === "Si"} onChange={handleInputChange} /> Sí</label>
+                  <label><input type="radio" name="ropaLarga" value="No" checked={respuestas.ropaLarga === "No"} onChange={handleInputChange} /> No</label>
+                </div>
+              </div>
+
+              <div className="seccion-pregunta-modal">
+                <p>2. ¿Está dispuesto(a) a pagar por un diseño personalizado?</p>
+                <div className="contenedor-radios-flex">
+                  <label><input type="radio" name="planoPersonalizado" value="Si" checked={respuestas.planoPersonalizado === "Si"} onChange={handleInputChange} /> Sí</label>
+                  <label><input type="radio" name="planoPersonalizado" value="No" checked={respuestas.planoPersonalizado === "No"} onChange={handleInputChange} /> No</label>
+                </div>
+              </div>
+
+              <div className="seccion-pregunta-modal">
+                <p>3. ¿Considera importante contar con un plano?</p>
+                <div className="contenedor-radios-flex">
+                  <label><input type="radio" name="importanciaPlano" value="Si" checked={respuestas.importanciaPlano === "Si"} onChange={handleInputChange} /> Sí</label>
+                  <label><input type="radio" name="importanciaPlano" value="No" checked={respuestas.importanciaPlano === "No"} onChange={handleInputChange} /> No</label>
+                </div>
+              </div>
+
+              <div className="seccion-pregunta-modal">
+                <p>4. ¿Contrataría un servicio profesional?</p>
+                <div className="contenedor-radios-flex">
+                  <label><input type="radio" name="servicioProfesional" value="Si" checked={respuestas.servicioProfesional === "Si"} onChange={handleInputChange} /> Sí</label>
+                  <label><input type="radio" name="servicioProfesional" value="No" checked={respuestas.servicioProfesional === "No"} onChange={handleInputChange} /> No</label>
+                </div>
+              </div>
+
+              <div className="seccion-pregunta-modal">
+                <p>5. Observaciones o comentario:</p>
+                <input 
+                  type="text" 
+                  name="comentario" 
+                  maxLength={150}
+                  placeholder="Escriba un comentario o nota técnica aquí..."
+                  value={respuestas.comentario} 
+                  onChange={handleInputChange} 
+                  className="input-comentario-modal"
+                />
+              </div>
+
+              <div className="botones-acciones-modal">
+                <button type="button" onClick={() => setModalAbierto(false)} className="btn-cerrar-modal">
+                  Cancelar
+                </button>
+                <button type="submit" className="btn-guardar-modal">
+                  Guardar Formato
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

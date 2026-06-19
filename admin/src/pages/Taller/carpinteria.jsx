@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { 
   FaTools, FaDraftingCompass, FaEye, FaExternalLinkAlt, FaArrowLeft, FaBuilding 
 } from "react-icons/fa";
-import "../../styles/pages/JefeAlmacen/Taller.css"; 
+import "../../styles/pages/Taller/carpinteria.css"; 
 
 import cocinaImg from "../../img/DiseñadorImg/cocina.jpg";
 import planoImg from "../../img/DiseñadorImg/plano.jpg";

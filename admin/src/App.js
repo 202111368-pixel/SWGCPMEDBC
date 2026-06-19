@@ -22,9 +22,12 @@ import Cliente from "./pages/Cliente/Cliente";
 /* JefeAlmacen */
 import JefeAlmacen from "./pages/JefeAlmacen/JefeAlmacen"; 
 import Inventario from "./pages/JefeAlmacen/Inventario";
-import Taller from "./pages/JefeAlmacen/Taller";
 
-/* Diseñador (CORREGIDO según tus imágenes reales) */
+/* Taller (Nuevas importaciones usando tus nombres reales de archivo) */
+import TallerArqui from "./pages/Taller/arqui.jsx"; 
+import TallerCarpinteria from "./pages/Taller/carpinteria.jsx";
+
+/* Diseñador */
 import Arquitecto from "./pages/Diseñador/Aquirtecto.jsx"; 
 import Carpintero from "./pages/Diseñador/Carpintero.jsx";  
 
@@ -78,7 +81,10 @@ const App = () => {
                   {/* JEFE ALMACEN & INVENTARIO */}
                   <Route path="jefeAlmacen" element={<JefeAlmacen />} />
                   <Route path="inventario" element={<Inventario />} /> 
-                   <Route path="taller" element={<Taller />} /> 
+                  
+                  {/* CORREGIDO: Sub-rutas específicas para el taller desplegable */}
+                  <Route path="taller/arquitecto" element={<TallerArqui />} /> 
+                  <Route path="taller/carpinteria" element={<TallerCarpinteria />} /> 
                   
                   {/* ERROR 404 */}
                   <Route path="*" element={<div>Página no encontrada en Admin</div>} />
