@@ -1,19 +1,23 @@
 import React, { useState } from "react"; 
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   FaCashRegister, FaChartLine, FaBox, FaUsers, FaChartBar, 
-  FaSignOutAlt, FaMoneyCheckAlt, FaTools, FaWarehouse,
-  FaChevronDown, FaChevronUp 
-} from "react-icons/fa";
+  FaSignOutAlt, FaMoneyCheckAlt, FaWarehouse,
+  FaChevronDown, FaChevronUp, FaThLarge, FaClipboardList,
+  FaBoxes, FaTools
+} from "react-icons/fa"; 
 import "../styles/Sidebar.css";
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const [openCaja, setOpenCaja] = useState(false); 
+  const [openProductos, setOpenProductos] = useState(false); 
+  const [openDisenador, setOpenDisenador] = useState(false); 
+  const [openTaller, setOpenTaller] = useState(false); 
 
   const handleLogout = () => {
     if (window.confirm("¿Deseas cerrar sesión?")) {
-      localStorage.removeItem("userEmail");
+      localStorage.removeItem("user_session");
       navigate("/");
     }
   };
@@ -22,17 +26,80 @@ const Sidebar = () => {
     <div className="sidebar">
       <div className="sidebar-header">
         <h3>D’Bary Company</h3>
-        <p>Sistema de Melamina</p>
       </div>
+      
       <ul className="sidebar-menu">
-        <li><Link to="/admin/inicio" className="menu-link"><FaChartLine /> <span>Dashboard</span></Link></li>
-        <li><Link to="/admin/clientes" className="menu-link"><FaUsers /> <span>Clientes</span></Link></li>
-        <li><Link to="/admin/administrador" className="menu-link"><FaMoneyCheckAlt /> <span>Administrador</span></Link></li>
-        <li><Link to="/admin/producto" className="menu-link"><FaBox /> <span>Productos</span></Link></li>
-        <hr className="sidebar-divider" />
-        <li><Link to="/admin/reportes" className="menu-link"><FaChartBar /> <span>Reportes</span></Link></li>
-        {/*  Cajero con Submenú */}
-        <li className={`menu-item-desplegable ${openCaja ? "active" : ""}`}>
+        <li className="menu-section-title">GENERAL</li>
+        <li>
+          <NavLink to="/admin/inicio" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
+            <FaChartLine /> <span>Dashboard</span>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/admin/clientes" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
+            <FaUsers /> <span>Clientes</span>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/admin/administrador" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
+            <FaMoneyCheckAlt /> <span>Administrador</span>
+          </NavLink>
+        </li>
+        
+        {/* PRODUCTO DESPLEGABLE */}
+        <li className={`menu-item-desplegable ${openProductos ? "open" : ""}`}>
+          <div className="menu-link" onClick={() => setOpenProductos(!openProductos)} style={{ cursor: 'pointer' }}>
+            <FaBox /> <span>Productos</span>
+            <span className="icon-arrow">
+              {openProductos ? <FaChevronUp size={12} /> : <FaChevronDown size={12} />}
+            </span>
+          </div>
+          
+          {openProductos && (
+            <ul className="submenu">
+              <li>
+                <NavLink to="/admin/producto/gestionar" className={({isActive}) => isActive ? "submenu-link active" : "submenu-link"}>
+                  <FaThLarge size={14}/> Gestión Productos
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/admin/producto/proveedor" className={({isActive}) => isActive ? "submenu-link active" : "submenu-link"}>
+                  <FaClipboardList size={14}/> Gestión Proveedor
+                </NavLink>
+              </li>
+            </ul>
+          )}
+        </li>
+        
+        <li className="menu-section-title">OPERACIONES</li>
+        
+        {/* DISEÑADOR DESPLEGABLE */}
+        <li className={`menu-item-desplegable ${openDisenador ? "open" : ""}`}>
+          <div className="menu-link" onClick={() => setOpenDisenador(!openDisenador)} style={{ cursor: 'pointer' }}>
+            <FaChartBar /> <span>Diseñador</span>
+            <span className="icon-arrow">
+              {openDisenador ? <FaChevronUp size={12} /> : <FaChevronDown size={12} />}
+            </span>
+          </div>
+          
+          {openDisenador && (
+            <ul className="submenu">
+              <li>
+                <NavLink to="/admin/disenador/arquitecto" className="submenu-link">
+                  Administrar Arquitecto
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/admin/disenador/carpintero" className="submenu-link">
+                  Administrar Carpintero
+                </NavLink>
+              </li>
+            </ul>
+          )}
+        </li>
+        
+        {/* CAJERO DESPLEGABLE */}
+        <li className={`menu-item-desplegable ${openCaja ? "open" : ""}`}>
           <div className="menu-link" onClick={() => setOpenCaja(!openCaja)} style={{ cursor: 'pointer' }}>
             <FaCashRegister /> <span>Cajero</span>
             <span className="icon-arrow">
@@ -42,17 +109,54 @@ const Sidebar = () => {
           
           {openCaja && (
             <ul className="submenu">
-              <li><Link to="/admin/caja/administrar" className="submenu-link">Administrar Caja</Link></li>
-              <li><Link to="/admin/caja/historial" className="submenu-link">Historial de Caja</Link></li>
+              <li><NavLink to="/admin/caja/administrar" className="submenu-link">Administrar Caja</NavLink></li>
+              <li><NavLink to="/admin/caja/historial" className="submenu-link">Historial de Caja</NavLink></li>
+              <li><NavLink to="/admin/caja/movimiento" className="submenu-link">Movimiento de Caja</NavLink></li>
             </ul>
           )}
         </li>
 
-        <li><Link to="/admin/jefeAlmacen" className="menu-link"><FaWarehouse /> <span>Jefe Almacén</span></Link></li>
-        <hr className="sidebar-divider" />
-        <li><Link to="/admin/configuración" className="menu-link"><FaTools /> <span>Configuración</span></Link></li>
+        {/* SECCIÓN ALMACÉN / INVENTARIO */}
+        <li>
+          <NavLink to="/admin/jefeAlmacen" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
+            <FaWarehouse /> <span>Jefe Almacén</span>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/admin/inventario" className={({isActive}) => isActive ? "menu-link active" : "menu-link"}>
+            <FaBoxes /> <span>Inventario</span>
+          </NavLink>
+        </li>        
+        
+        {/* TALLER DESPLEGABLE (Direccionado a las nuevas rutas) */}
+        <li className={`menu-item-desplegable ${openTaller ? "open" : ""}`}>
+          <div className="menu-link" onClick={() => setOpenTaller(!openTaller)} style={{ cursor: 'pointer' }}>
+            <FaTools /> <span>Taller</span>
+            <span className="icon-arrow">
+              {openTaller ? <FaChevronUp size={12} /> : <FaChevronDown size={12} />}
+            </span>
+          </div>
+          
+          {openTaller && (
+            <ul className="submenu">
+              <li>
+                <NavLink to="/admin/taller/arquitecto" className="submenu-link">
+                  Taller Arquitecto
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/admin/taller/carpinteria" className="submenu-link">
+                  Taller Carpintería
+                </NavLink>
+              </li>
+            </ul>
+          )}
+        </li>      
+        
         <li className="cerrar-sesion">
-          <button onClick={handleLogout} className="btn-logout"><FaSignOutAlt /> <span>Cerrar Sesión</span></button>
+          <button onClick={handleLogout} className="btn-logout">
+            <FaSignOutAlt /> <span>Cerrar Sesión</span>
+          </button>
         </li>
       </ul>
     </div>

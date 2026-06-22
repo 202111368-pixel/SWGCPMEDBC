@@ -1,0 +1,129 @@
+.tab-content-i {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.kpi-row-i {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+.kpi-card-i {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.kpi-value-i {
+  display: block;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+}
+.kpi-title-i {
+  display: block;
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 600;
+  margin-top: 2px;
+}
+.kpi-sub-i {
+  display: block;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+.kpi-icon-i {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+.charts-row-i {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+@media (max-width: 992px) {
+  .charts-row-i { grid-template-columns: 1fr; }
+}
+.chart-card-i {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+.chart-title-i {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 20px;
+}
+.hbar-chart-i {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.hbar-row-i {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hbar-label-i {
+  width: 220px;
+  font-size: 12px;
+  color: #475569;
+}
+.hbar-track-i {
+  flex: 1;
+  height: 10px;
+  background: #f1f5f9;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.hbar-fill-i {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.4s ease;
+}
+.hbar-val-i {
+  width: 30px;
+  text-align: right;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+}
+.restock-section-i {
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.restock-badge-i {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  background: #e67e2218;
+  color: #e67e22;
+  padding: 14px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  margin-top: 10px;
+}
+.fade-in-i {
+  animation: fadeInI 0.4s ease-in-out;
+}
+@keyframes fadeInI {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}

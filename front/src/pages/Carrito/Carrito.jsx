@@ -1,77 +1,100 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import "./Carrito.css";
 
 const Carrito = () => {
-  const [carrito, setCarrito] = useState([]);
+  const [productosEnCarrito, setProductosEnCarrito] = useState([]);
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("carrito")) || [];
-    setCarrito(data);
+    const carritoGuardado = JSON.parse(localStorage.getItem("carrito")) || [];
+    setProductosEnCarrito(carritoGuardado);
   }, []);
 
-  const eliminarProducto = (index) => {
-    const nuevoCarrito = carrito.filter((_, i) => i !== index);
-    setCarrito(nuevoCarrito);
-    localStorage.setItem("carrito", JSON.stringify(nuevoCarrito));
+  const eliminarProducto = (indexAEliminar) => {
+    const carritoFiltrado = productosEnCarrito.filter((_, index) => index !== indexAEliminar);
+    setProductosEnCarrito(carritoFiltrado);
+    localStorage.setItem("carrito", JSON.stringify(carritoFiltrado));
     window.dispatchEvent(new Event("carritoActualizado"));
   };
 
-  const finalizarCompra = () => {
-    if (carrito.length === 0) {
-      alert("El carrito está vacío");
+  const calcularSubtotal = () => {
+    return productosEnCarrito.reduce((acumulador, item) => {
+      const cant = item.cantidad || 1;
+      return acumulador + (item.precio * cant);
+    }, 0);
+  };
+
+  const calcularCantidadTotal = () => {
+    return productosEnCarrito.reduce((acumulador, item) => acumulador + (item.cantidad || 1), 0);
+  };
+
+  const irAPagar = () => {
+    if (productosEnCarrito.length === 0) {
+      alert("Tu carrito está vacío.");
       return;
     }
 
-    const datosParaAdmin = carrito.map(item => ({
-      ...item,
-      imagen: item.imagen.startsWith('http') 
-        ? item.imagen 
-        : `http://localhost:3000${item.imagen}`
-    }));
+    // CAPTURAMOS LA DATA FIEL DEL CARRITO SIN ALTERAR NADA
+    const datosCaja = {
+      items: productosEnCarrito.map(item => ({
+        id: item.id || Date.now(),
+        producto: item.nombre || item.producto, 
+        cantidad: item.cantidad || 1,
+        precio: item.precio,
+        imagen: item.imagen // <--- ESTA ES LA IMAGEN REAL E INTACTA COMPRADA
+      })),
+      subtotal: calcularSubtotal(),
+      amountTotal: calcularCantidadTotal()
+    };
 
-    const datosCodificados = btoa(JSON.stringify(datosParaAdmin));
-
-    localStorage.removeItem("carrito");
-    window.dispatchEvent(new Event("carritoActualizado"));
-    window.location.href = `http://localhost:3001/admin/producto?data=${datosCodificados}`;
+    const dataString = encodeURIComponent(JSON.stringify(datosCaja));
+    window.location.href = `http://localhost:3000/admin/caja/administrar?data=${dataString}`;
   };
 
-  const total = carrito.reduce((acc, item) => acc + item.precio, 0);
-
   return (
-    <>
+    <div className="carrito-page-wrapper">
       <Navbar />
       <div className="carrito-container">
-        <h1>🛒 Carrito de Compras</h1>
-        {carrito.length === 0 ? (
-          <p className="carrito-vacio">Tu carrito está vacío</p>
+        <h1>Tu Carrito ({calcularCantidadTotal()} productos)</h1>
+        {productosEnCarrito.length === 0 ? (
+          <p className="carrito-vacio">No hay productos en el carrito actualmente.</p>
         ) : (
-          <>
-            <div className="carrito-lista">
-              {carrito.map((item, index) => (
+          <div className="carrito-lista">
+            {productosEnCarrito.map((item, index) => {
+              const cantidadItem = item.cantidad || 1;
+              return (
                 <div className="carrito-item" key={index}>
-                  <img src={item.imagen} alt={item.nombre} />
+                  <img src={item.imagen} alt={item.nombre || item.producto} className="img-cart" />
                   <div className="carrito-info">
-                    <h4>{item.nombre}</h4>
-                    <p>S/ {item.precio.toFixed(2)}</p>
+                    <h4>{item.nombre || item.producto}</h4>
+                    <p className="item-precio">
+                      S/ {item.precio.toFixed(2)} <span className="item-multiplicador">x {cantidadItem}</span>
+                    </p>
+                    <span className="item-subtotal-parcial">
+                      Total: S/ {(item.precio * cantidadItem).toFixed(2)}
+                    </span>
                   </div>
                   <button className="btn-eliminar" onClick={() => eliminarProducto(index)}>
                     Eliminar
                   </button>
                 </div>
-              ))}
-            </div>
-            <div className="carrito-total">
-              <h3>Total: S/ {total.toFixed(2)}</h3>
-              <button className="btn-comprar" onClick={finalizarCompra}>
-                Finalizar Compra
-              </button>
-            </div>
-          </>
+              );
+            })}
+          </div>
         )}
+        <div className="carrito-footer">
+          <div className="subtotal-container">
+            <span>Subtotal:</span>
+            <span>S/. {calcularSubtotal().toFixed(2)}</span>
+          </div>
+          <div className="acciones-carrito">
+            <button className="btn-azul" onClick={irAPagar}>
+              Ver Detalle y Pagar
+            </button>
+          </div>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -1,0 +1,142 @@
+.tab-content-u {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.kpi-row-u {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+.kpi-card-u {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.kpi-value-u {
+  display: block;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+}
+.kpi-title-u {
+  display: block;
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 600;
+  margin-top: 2px;
+}
+.kpi-sub-u {
+  display: block;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+.kpi-icon-u {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+.charts-row-u {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+@media (max-width: 992px) {
+  .charts-row-u { grid-template-columns: 1fr; }
+}
+.chart-card-u {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+.chart-title-u {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 20px;
+}
+.hbar-chart-u {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.hbar-row-u {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hbar-label-u {
+  width: 120px;
+  font-size: 13px;
+  color: #475569;
+}
+.hbar-track-u {
+  flex: 1;
+  height: 10px;
+  background: #f1f5f9;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.hbar-fill-u {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.4s ease;
+}
+.hbar-val-u {
+  width: 30px;
+  text-align: right;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+}
+.donut-wrap-u {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.donut-legend-u {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+.donut-legend-item-u {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  color: #475569;
+}
+.dot-u {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+.donut-legend-item-u strong {
+  margin-left: auto;
+  color: #1e293b;
+}
+.gauge-section-u {
+  border-top: 1px solid #f1f5f9;
+  margin-top: 20px;
+  padding-top: 16px;
+}
+.fade-in-u {
+  animation: fadeInU 0.4s ease-in-out;
+}
+@keyframes fadeInU {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}

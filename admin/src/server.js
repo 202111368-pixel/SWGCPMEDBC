@@ -7,70 +7,65 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-
-// MONGODB_URI=mongodb://127.0.0.1:27017/dbary_melamina
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/dbary_melamina";
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/admin_db";
 
 app.use(cors());
 app.use(express.json());
-//  Conexión a MongoDB
-mongoose
-  .connect(MONGODB_URI, {
-    dbName: "dbary_melamina", 
-  })
-  .then(() => console.log("✅ Conectado a MongoDB (D'Bary Company)"))
-  .catch((err) => console.error("❌ Error de conexión a MongoDB:", err.message));
 
-const genericSchema = new mongoose.Schema({}, { strict: false });
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => console.log("✅ Conexión exitosa a MongoDB (admin_db)"))
+  .catch((err) => console.error("❌ Error al conectar a Mongo:", err.message));
+
+const genericSchema = new mongoose.Schema({}, { 
+    strict: false, 
+    timestamps: true 
+});
 
 const models = {
-  almacen:
-    mongoose.models.almacen || mongoose.model("almacen", genericSchema),
-  cotizaciones:
-    mongoose.models.cotizaciones || mongoose.model("cotizaciones", genericSchema),
-  ventas:
-    mongoose.models.ventas || mongoose.model("ventas", genericSchema),
-  compras:
-    mongoose.models.compras || mongoose.model("compras", genericSchema),
-  inventario:
-    mongoose.models.inventario || mongoose.model("inventario", genericSchema),
-  produccion:
-    mongoose.models.produccion || mongoose.model("produccion", genericSchema),
-  personal:
-    mongoose.models.personal || mongoose.model("personal", genericSchema),
-  configuracion:
-    mongoose.models.configuracion || mongoose.model("configuracion", genericSchema),
+  administradores: mongoose.model("administradores", genericSchema),
+  cajeros:         mongoose.model("cajeros", genericSchema),
+  clientes:        mongoose.model("clientes", genericSchema),
+  productos:       mongoose.model("productos", genericSchema),
+  inventarios:     mongoose.model("inventarios", genericSchema),
+  configuraciones: mongoose.model("configuraciones", genericSchema),
+  reportes:        mongoose.model("reportes", genericSchema),
 };
 
-// Rutas genéricas para cada colección (GET y POST)
 Object.keys(models).forEach((nombre) => {
+  
+  app.post(`/api/${nombre}`, async (req, res) => {
+    try {
+      const nuevoRegistro = new models[nombre](req.body);
+      await nuevoRegistro.save();
+      res.status(201).json({
+        mensaje: `✅ Datos guardados con éxito en la colección ${nombre}`,
+        data: nuevoRegistro
+      });
+    } catch (error) {
+      res.status(500).json({ error: `Error al guardar en ${nombre}` });
+    }
+  });
+
   app.get(`/api/${nombre}`, async (req, res) => {
     try {
-      const data = await models[nombre].find();
-      res.json(data);
+      const lista = await models[nombre].find().sort({ createdAt: -1 });
+      res.json(lista);
     } catch (error) {
-      console.error(`❌ Error al obtener datos de ${nombre}:`, error.message);
       res.status(500).json({ error: `Error al obtener datos de ${nombre}` });
     }
   });
 
-  // Crear un nuevo registro
-  app.post(`/api/${nombre}`, async (req, res) => {
+  app.delete(`/api/${nombre}/:id`, async (req, res) => {
     try {
-      const nuevo = new models[nombre](req.body);
-      await nuevo.save();
-      res.json({
-        mensaje: `✅ Nuevo registro agregado a ${nombre}`,
-        data: nuevo,
-      });
+      await models[nombre].findByIdAndDelete(req.params.id);
+      res.json({ mensaje: "✅ Registro eliminado" });
     } catch (error) {
-      console.error(`❌ Error al guardar en ${nombre}:`, error.message);
-      res.status(500).json({ error: `Error al guardar en ${nombre}` });
+      res.status(500).json({ error: "Error al eliminar" });
     }
   });
 });
 
-// 🚀 Levantar servidor
 app.listen(PORT, () =>
-  console.log(`Servidor activo en 👉 http://localhost:${PORT}`)
+  console.log(`🚀 Servidor MongoDB listo en: http://localhost:${PORT}`)
 );
