@@ -1,46 +1,60 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import "../../styles/pages/Cajero/Cupon.css";
 
-const Cupon = () => {
+const Cupon = ({ alSiguientePaso, onAplicarDescuento, totalActual }) => {
   const [codigo, setCodigo] = useState('');
   const [mensaje, setMensaje] = useState(null);
-  const [cuponAplicado, setCuponAplicado] = useState(null);
-
-  // ✅ IDs de 6 dígitos que vienen de la tabla del Administrador
-  const cuponesValidos = {
-    'HID-101': { descuento: 1000, tipo: 'fijo',       cliente: 'Juan Quiroz',          descripcion: 'S/ 1000.00 de descuento' },
-    'HID-629': { descuento: 2000, tipo: 'fijo',       cliente: 'Geral Osorio',         descripcion: 'S/ 2000.00 de descuento' },
-    'HID-704': { descuento: 2000, tipo: 'fijo',       cliente: 'Geral Osorio',         descripcion: 'S/ 2000.00 de descuento' },
-    'HID-104': { descuento: 350,  tipo: 'fijo',       cliente: 'Carpintería Los Andes', descripcion: 'S/ 350.50 de descuento' },
-  };
+  const [mostrarBotonAceptar, setMostrarBotonAceptar] = useState(false);
+  const [cuponConfirmado, setCuponConfirmado] = useState(false);
 
   const handleChange = (e) => {
-    // Acepta letras, números y guión — máximo 7 caracteres (ej: HID-101)
     const valor = e.target.value.toUpperCase().slice(0, 7);
     setCodigo(valor);
     setMensaje(null);
-    setCuponAplicado(null);
+    setMostrarBotonAceptar(false);
+    setCuponConfirmado(false);
   };
 
   const aplicarCupon = () => {
-    if (codigo.length < 6) {
-      setMensaje({ tipo: 'error', texto: 'El código debe tener al menos 6 caracteres.' });
+    if (codigo.length < 3) {
+      setMensaje({ tipo: 'error', texto: 'El código debe tener al menos 3 caracteres.' });
       return;
     }
 
-    const cupon = cuponesValidos[codigo];
-    if (cupon) {
-      setCuponAplicado(cupon);
-      setMensaje({ tipo: 'exito', texto: `¡Cupón aplicado! ${cupon.descripcion} — Cliente: ${cupon.cliente}` });
-    } else {
-      setMensaje({ tipo: 'error', texto: 'Código inválido o no encontrado en el sistema.' });
+    const montoDescuento = 50;
+
+    if (onAplicarDescuento) {
+      onAplicarDescuento(montoDescuento);
+    }
+
+    setMostrarBotonAceptar(true);
+    setMensaje({ 
+      tipo: 'exito', 
+      texto: `¡Felicidades! Tienes un descuento aplicado para el código ${codigo}.` 
+    });
+  };
+
+  const aceptarCuponYContinuar = () => {
+    setCuponConfirmado(true);
+    setMostrarBotonAceptar(false);
+    setMensaje({ tipo: 'exito', texto: 'Cupón aceptado correctamente. Procediendo al siguiente paso...' });
+    
+    if (alSiguientePaso) {
+      setTimeout(() => {
+        alSiguientePaso();
+      }, 1500);
     }
   };
 
   const eliminarCupon = () => {
     setCodigo('');
-    setCuponAplicado(null);
+    setCuponConfirmado(false);
+    setMostrarBotonAceptar(false);
     setMensaje(null);
+    
+    if (onAplicarDescuento) {
+      onAplicarDescuento(0);
+    }
   };
 
   return (
@@ -49,7 +63,7 @@ const Cupon = () => {
 
       <div className="cupon-card">
         <div className="cupon-header">
-          <div className="cupon-icono">🏷️</div>
+          <div className="cupon-icono">&#127991;</div>
           <p className="cupon-pregunta">¿Tienes un cupón de descuento?</p>
           <p className="cupon-subtexto">Ingresa el código del cupón para aplicar el descuento a tu compra</p>
         </div>
@@ -61,22 +75,22 @@ const Cupon = () => {
               value={codigo}
               onChange={handleChange}
               placeholder="Ej: HID-101"
-              className={`modal-input cupon-input ${cuponAplicado ? 'input-success' : ''}`}
+              className={`modal-input cupon-input ${mostrarBotonAceptar || cuponConfirmado ? 'input-success' : ''}`}
               maxLength={7}
-              disabled={!!cuponAplicado}
+              disabled={cuponConfirmado || mostrarBotonAceptar}
             />
             <span className="cupon-counter">{codigo.length}/7</span>
           </div>
 
-          {cuponAplicado ? (
+          {cuponConfirmado ? (
             <button className="btn-eliminar-cupon" onClick={eliminarCupon}>
-              ✕ QUITAR
+              &#10005; QUITAR
             </button>
           ) : (
             <button
               className="btn-aplicar"
               onClick={aplicarCupon}
-              disabled={codigo.length === 0}
+              disabled={codigo.length === 0 || mostrarBotonAceptar}
             >
               APLICAR
             </button>
@@ -85,19 +99,27 @@ const Cupon = () => {
 
         {mensaje && (
           <div className={`cupon-mensaje ${mensaje.tipo}`}>
-            {mensaje.tipo === 'exito' ? '✓' : '✕'} {mensaje.texto}
+            {mensaje.tipo === 'exito' ? '&#10003;' : '&#10005;'} {mensaje.texto}
           </div>
         )}
 
-        {cuponAplicado && (
+        {mostrarBotonAceptar && (
+          <div className="contenedor-accion-aceptar">
+            <button className="btn-aceptar-cupon" onClick={aceptarCuponYContinuar}>
+              &#10003; ACEPTAR Y CONTINUAR
+            </button>
+          </div>
+        )}
+
+        {cuponConfirmado && (
           <div className="cupon-aplicado-detalle">
             <span className="cupon-tag-badge">#{codigo}</span>
-            <span className="cupon-descuento-texto">{cuponAplicado.descripcion}</span>
+            <span className="cupon-descuento-texto">Descuento Especial — listo</span>
           </div>
         )}
 
         <p className="cupon-tip">
-          💡 <strong>Tip:</strong> Los cupones pueden ofrecerte descuentos en el total de tu compra o envío gratuito.
+          &#128161; <strong>Tip:</strong> Los cupones válidos te permiten reducir costes operativos de fabricación al instante.
         </p>
       </div>
     </div>

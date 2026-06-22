@@ -13,6 +13,7 @@ const AdministrarCaja = () => {
   const [totalOrden, setTotalOrden] = useState(0);
   const [cantidadTotalProductos, setCantidadTotalProductos] = useState(0);
   const [pasoActual, setPasoActual] = useState(2); 
+  const [descuento, setDescuento] = useState(0);
   const distritosPeru = ["Lima", "Miraflores", "San Isidro", "Comas", "Los Olivos", "Surco", "Ate", "Callao", "La Molina", "San Miguel"];
 
   useEffect(() => {
@@ -43,7 +44,11 @@ const AdministrarCaja = () => {
     }, 2000);
   };
 
-  const totalCalculado = totalOrden;
+  const manejarDescuentoAplicado = (montoDescuento) => {
+    setDescuento(montoDescuento);
+  };
+
+  const totalCalculado = Math.max(0, totalOrden - descuento);
   const subtotal = totalCalculado / 1.18;
   const igv = totalCalculado - subtotal;
   const estaCerrada = status === 'CERRADA';
@@ -52,14 +57,13 @@ const AdministrarCaja = () => {
     if (pasoActual < 5) {
       setPasoActual(pasoActual + 1); 
     } else if (pasoActual === 5) {
-      // ENVIAR SIN ALTERAR NADA HACIA LA GESTIÓN DE PRODUCTOS
       const datosFinales = {
         items: itemsEnOrden.map((item, idx) => ({
           id: item.id || Date.now() + idx,
           producto: item.producto || item.nombre,
           cantidad: item.cantidad || 1,
           precio: item.precio,
-          imagen: item.imagen // Mantenemos viva la cadena/URL original de la imagen
+          imagen: item.imagen 
         })),
         subtotal: totalCalculado,
         cantidadTotal: cantidadTotalProductos
@@ -121,7 +125,7 @@ const AdministrarCaja = () => {
               </div>
             )}
             {pasoActual === 3 && <Facturacion />}
-            {pasoActual === 4 && <Cupon />}
+            {pasoActual === 4 && <Cupon onAplicarDescuento={manejarDescuentoAplicado} totalActual={totalOrden} />}
             {pasoActual === 5 && (
               <Pago 
                 itemAPagar={primerItemSeguro} 
@@ -137,6 +141,11 @@ const AdministrarCaja = () => {
             <h3>Resumen</h3>
             <div className="resumen-line"><span>Subtotal</span><span>S/ {subtotal.toFixed(2)}</span></div>
             <div className="resumen-line"><span>IGV 18%</span><span>S/ {igv.toFixed(2)}</span></div>
+            {descuento > 0 && (
+              <div className="resumen-line descuento" style={{ color: '#00b074' }}>
+                <span>Descuento</span><span>- S/ {descuento.toFixed(2)}</span>
+              </div>
+            )}
             <div className="resumen-line total"><span>Total</span><span>S/ {totalCalculado.toFixed(2)}</span></div>
             <div className="resumen-actions">
               <button className="btn-atras" onClick={irAtras} disabled={pasoActual === 2}>ATRÁS</button>

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom"; 
+import { Link, useNavigate } from "react-router-dom"; 
 import { FaEye, FaExternalLinkAlt, FaDraftingCompass, FaArrowLeft, FaClipboardList } from "react-icons/fa";
 import "../../styles/pages/Diseñador/Arquitecto.css"; 
 import plano2Img from "../../img/DiseñadorImg/plano2.jpg";
 import plano3Img from "../../img/DiseñadorImg/plano3.jpg";
 
 const Arquitecto = () => {
+  const navigate = useNavigate();
   const [mostrarGaleria, setMostrarGaleria] = useState(false);
   const [modalAbierto, setModalAbierto] = useState(false);
   
@@ -31,13 +32,13 @@ const Arquitecto = () => {
   }
 
   const despieceCocina = [
-    { nombre: "LATERALES", cantidad: 2, largo: 750, ancho: 580, espesor: "18MM" },
-    { nombre: "PISO", cantidad: 1, largo: 864, ancho: 580, espesor: "18MM" },
-    { nombre: "ZÓCALO", cantidad: 2, largo: 864, ancho: 100, espesor: "18MM" },
-    { nombre: "LAZOS DE AMARRE (Techo)", cantidad: 2, largo: 864, ancho: 70, espesor: "18MM" },
-    { nombre: "LATERAL CAJÓN OLLERO", cantidad: 4, largo: 200, ancho: 500, espesor: "18MM" },
-    { nombre: "HORIZ. CAJÓN OLLERO", cantidad: 4, largo: 200, ancho: 806, espesor: "18MM" },
-    { nombre: "TAPAS DE CAJÓN", cantidad: 3, largo: 247, ancho: 896, espesor: "18MM" },
+    { nombre: "LATERALES", cantidad: 2, largo: 750, ancho: 580, thickness: "18MM", espesor: "18MM" },
+    { nombre: "PISO", cantidad: 1, largo: 864, ancho: 580, thickness: "18MM", espesor: "18MM" },
+    { nombre: "ZÓCALO", cantidad: 2, largo: 864, ancho: 100, thickness: "18MM", espesor: "18MM" },
+    { nombre: "LAZOS DE AMARRE (Techo)", cantidad: 2, largo: 864, ancho: 70, thickness: "18MM", espesor: "18MM" },
+    { nombre: "LATERAL CAJÓN OLLERO", cantidad: 4, largo: 200, ancho: 500, thickness: "18MM", espesor: "18MM" },
+    { nombre: "HORIZ. CAJÓN OLLERO", cantidad: 4, largo: 200, ancho: 806, thickness: "18MM", espesor: "18MM" },
+    { nombre: "TAPAS DE CAJÓN", cantidad: 3, largo: 247, ancho: 896, thickness: "18MM", espesor: "18MM" },
   ];
 
   const handleInputChange = (e) => {
@@ -48,6 +49,14 @@ const Arquitecto = () => {
   const handleEnviarEncuesta = (e) => {
     e.preventDefault();
     setModalAbierto(false);
+
+    const rutaActual = window.location.pathname;
+
+    if (rutaActual.includes("/taller")) {
+      navigate(`/admin/disenador/arquitecto`);
+    } else {
+      navigate(`/admin/taller/arquitecto`);
+    }
   };
 
   return (
@@ -167,7 +176,7 @@ const Arquitecto = () => {
               </div>
 
               <div className="seccion-pregunta-modal">
-                <p>2. ¿Está dispuesto(a) a pagar por un diseño personalizado?</p>
+                <p>2. ¿Está dispuesto(a) a pagar por un design personalizado?</p>
                 <div className="contenedor-radios-flex">
                   <label><input type="radio" name="planoPersonalizado" value="Si" checked={respuestas.planoPersonalizado === "Si"} onChange={handleInputChange} /> Sí</label>
                   <label><input type="radio" name="planoPersonalizado" value="No" checked={respuestas.planoPersonalizado === "No"} onChange={handleInputChange} /> No</label>
